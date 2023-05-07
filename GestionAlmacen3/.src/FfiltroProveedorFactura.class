@@ -1,0 +1,67 @@
+' Gambas class file
+
+Public Sub Form_Open()
+
+  Titulos.tituloFfiltroProveedorFactura()
+  BorradosDatosIniciales.dibujogrid11()
+
+End
+
+Public Sub TextBox1_KeyPress()
+
+  If Key.code = Key.enter Or Key.code = Key.Return Or Key.CODE = Key.TAB Then
+    Button1.SetFocus
+  End If
+
+End
+
+Public Sub GridView1_Click()
+
+  Button2_Click()
+
+End
+
+Public Sub Button2_Click()
+
+  If gridview1.row <> -1 Then
+
+    FMain.ComboBoxProvFact.TEXT = gridview1[GridView1.row, 1].text
+    'correccion
+  End If
+
+  Me.Close
+
+End
+
+Public Sub Button3_Click()
+
+  Me.Close
+
+End
+
+Public Sub GridView1_ColumnClick(Column As Integer)
+
+  If var.ordenfiltroProveedorFactura = 0 Then
+    OrdenacionGridview.ord_AZ(GridView1, Column)
+    var.ordenfiltroProveedorFactura = 1
+  Else
+    var.ordenfiltroProveedorFactura = 0
+    OrdenacionGridview.ord_ZA(GridView1, Column)
+  Endif
+
+End
+
+Public Sub Button1_Click()
+
+  Dim resultado As Integer
+
+  resultado = buscar.ProveedorFiltrofacturas(Upper(TextBox1.text), CheckBoxFiltroProveedorfm.Value)
+  If RESULTADO = 1 Then
+    GridView1.Background = Color.Cyan
+  Else
+    GridView1.Background = Color.White
+  End If
+
+  TextBox1.SetFocus
+
+End

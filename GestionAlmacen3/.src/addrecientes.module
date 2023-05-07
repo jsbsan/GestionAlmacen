@@ -1,0 +1,117 @@
+' Gambas module file
+
+Public Sub add(ruta As String) As String
+
+  'Propiedades de proyecto / Opciones / compilacion /
+  'simbolos en modulos son publicos por defecto: si
+  'los controles de formulario son publico: si
+
+  If FMain.reciente0.caption = "(sin recientes)" Then
+    FMain.reciente0.caption = ruta
+    Return
+  Endif
+
+  'no adjuntar si el elemento esta repetido
+  If FMain.reciente0.caption = ruta Then
+    Return
+  Endif
+  If FMain.reciente1.caption = ruta Then
+    Return
+  Endif
+  If FMain.reciente2.caption = ruta Then
+    Return
+  Endif
+  If FMain.reciente3.caption = ruta Then
+    Return
+  Endif
+  If FMain.reciente4.caption = ruta Then
+    Return
+  Endif
+
+  If FMain.reciente1.caption = "(vacio)" Then
+    FMain.reciente1.caption = ruta
+    FMain.reciente1.Visible = True
+    Return
+  Endif
+
+  If FMain.reciente2.caption = "(vacio)" Then
+    FMain.reciente2.caption = ruta
+    FMain.reciente2.Visible = True
+    Return
+  Endif
+
+  If FMain.reciente3.caption = "(vacio)" Then
+    FMain.reciente3.caption = ruta
+    FMain.reciente3.Visible = True
+    Return
+  Endif
+
+  If FMain.reciente4.caption = "(vacio)" Then
+    FMain.reciente4.caption = ruta
+    FMain.reciente4.Visible = True
+    Return
+  Endif
+
+  'si llega hasta aqui quiere decir que tenemos relleno los 5 recientes,
+  'por lo tanto debemos trasladar todos los caption y añadir al ultimo el nuevo
+
+  FMain.reciente0.caption = FMain.reciente1.caption
+  FMain.reciente1.caption = FMain.reciente2.caption
+  FMain.reciente2.caption = FMain.reciente3.caption
+  FMain.reciente3.caption = FMain.reciente4.caption
+  FMain.reciente4.caption = ruta
+
+End
+
+Public Sub salva()
+
+  Dim lineas As String
+  Dim ruta As String
+
+  lineas = "************** Contenido de Doc. Recientes ***" & "\n"
+  lineas &= "documentosrecientes" & "\n"
+  lineas &= "v.0.0.1" & "\n"
+  lineas &= FMain.reciente0.caption & "\n"
+  lineas &= FMain.reciente1.caption & "\n"
+  lineas &= FMain.reciente2.caption & "\n"
+  lineas &= FMain.reciente3.caption & "\n"
+  lineas &= FMain.reciente4.caption & "\n"
+  lineas &= "************* Fin ************" & "\n"
+
+  ruta = User.Home
+
+  File.Save(ruta & "/gestionalmacen.DocRec", lineas)
+
+End
+
+Public Sub abre()
+
+  Dim arr_cadenas As String[]
+
+  Try arr_cadenas = Split(File.LOAD(User.home & "/gestionalmacen.DocRec"), "\n")
+  If Error Then Return
+  'si se produce un error vuelve al programa, no encuentra el archivo documentosrecientes.DocRec
+
+  FMain.reciente0.caption = arr_cadenas[3]
+  FMain.reciente1.caption = arr_cadenas[4]
+  FMain.reciente2.caption = arr_cadenas[5]
+  FMain.reciente3.caption = arr_cadenas[6]
+  FMain.reciente4.caption = arr_cadenas[7]
+
+  If FMain.reciente1.caption <> "(vacio)" Then
+    FMain.reciente1.Visible = True
+  Endif
+
+  If FMain.reciente2.caption <> "(vacio)" Then
+    FMain.reciente2.Visible = True
+  Endif
+
+  If FMain.reciente3.caption <> "(vacio)" Then
+    FMain.reciente3.Visible = True
+  Endif
+
+  If FMain.reciente4.caption <> "(vacio)" Then
+    FMain.reciente4.Visible = True
+  Endif
+
+End

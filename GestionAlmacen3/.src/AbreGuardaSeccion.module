@@ -1,0 +1,471 @@
+' Gambas module file
+
+Public Sub salva()
+
+  Dim lineas As String
+  Dim destino As String
+  Dim numArchivo As Integer
+  Dim a As Integer
+  Dim codigofinline As String
+
+  ' FMain.TextBoxRutaConcepto.text = destino
+
+  'salva proveedores
+
+  AbreGuardaProveedores.salva(FMain.TextBoxRutaProveedores.text)
+
+espera1:
+  If var.esperaprov = "si" Then Goto espera1
+
+  'salva conceptos
+  AbreGuardaConcepto.salva(FMain.TextBoxRutaConcepto.text)
+espera2:
+  If var.esperaconcepto = "si" Then Goto espera2
+
+  'salva facturas y albaranes
+  AbreGuardaAlbFact.salva(FMain.TextBoxRutaAlbFact.text)
+
+espera3:
+  If var.esperaalb = "si" Then Goto espera3
+
+inicio:
+  Dialog.Title = "Escriba  un nombre de archivo para guardar las rutas de la seccion"
+  Dialog.Filter = ["", ""]
+  Dialog.Path = User.Name
+
+  Dialog.Filter = ["*.seccion", "Datos de seccion"]
+  a = Dialog.SaveFile()
+  If a = -1 Then Goto fins
+  If Right$(Dialog.Path, Len(".seccion")) <> ".seccion" Then
+    destino = Dialog.Path & ".seccion"
+  Else
+    destino = Dialog.Path
+  End If
+
+  'Comprueba si existe el archivo, en tal caso pide confirmacion de sobreescritura
+  If AbreGuardaProveedores.compruebaexistencia(DESTINO, "Seccion") = 2 Then
+    Goto inicio
+  End If
+
+  codigofinline = "|"
+  lineas = "v0.0.1" & codigofinline 'informo version
+  Lineas &= "gestionalmacen.090409" & codigofinline ' programa que ha echo el archivo
+  Lineas &= FMain.TextBoxRutaProveedores.Text & codigofinline 'numero de proveedores que contiene el archivo
+  Lineas &= FMain.TextBoxRutaAlbFact.text & codigofinline
+  Lineas &= FMain.TextBoxRutaConcepto.Text & codigofinline
+  Lineas &= FMain.ComboBoxObras.Text & codigofinline
+  File.Save(destino, lineas)
+  var.seccion = destino
+
+  Message.Info("Archivos salvados", "Aceptar")
+  FMain.TextBoxRutaSeccion.Text = var.seccion
+
+fins:
+
+End
+
+'--------------------------------------------------------------------------------
+'
+Public Sub abrir()
+
+  Dim c As String
+  Dim arr_cadenas As String[]
+  Dim a As Integer
+  Dim b As Integer
+  Dim codigofinline As String
+
+  codigofinline = "|"
+  Dialog.Title = "Seleccione un archivo de seccion para abrir"
+  Dialog.Filter = ["", ""]
+  Dialog.Path = User.Name
+  Dialog.Filter = ["*.seccion", "Datos de seccion"]
+
+  If Not Dialog.OpenFile() Then
+    var.seccion = Dialog.Path
+    arr_cadenas = Split(File.LOAD(Dialog.Path), codigofinline)
+    var.esperaprov = "si"
+    var.esperaconcepto = "si"
+    var.esperaalb = "si"
+
+    If arr_cadenas[0] = "v0.0.1" Then
+      If arr_cadenas[2] <> "" Then abrirrutaproveedores(arr_cadenas[2])
+
+      'esperar
+    espera11:
+      If var.esperaprov = "si" Then Goto espera11
+
+      If arr_cadenas[4] <> "" Then abrirrutaconceptos(arr_cadenas[4])
+      'esperar
+    espera22:
+      If var.esperaconcepto = "si" Then Goto espera22
+
+      If arr_cadenas[3] <> "" Then AbreGuardaAlbFact(arr_cadenas[3])
+      'esperar
+    espera33:
+      If var.esperaalb = "si" Then Goto espera33
+
+      FMain.ComboBoxObras.tag = arr_cadenas[5]
+    Else
+      Message.Error("Archivo no compatible con esta version", "Aceptar")
+      Goto finabrir
+    Endif
+
+  End If
+
+finabrir:
+
+End
+' ----------------------------------------------------------------------------------
+
+Public Sub abrirrutaproveedores(ruta As String)
+
+  Dim c As String
+  Dim arr_cadenas As String[]
+  Dim a As Integer
+  Dim b As Integer
+  Dim codigofinline As String
+
+  codigofinline = "|"
+
+  Try arr_cadenas = Split(File.LOAD(ruta), codigofinline)
+
+  If Error Then
+    Message.Info("Error producido en la lectura del archivo")
+    Goto finabreproveedor
+  End If
+
+  If arr_cadenas[0] = "v0.0.1" Then
+    FMain.TextBoxRutaProveedores.text = ruta
+    var.Prov_numero = Val(arr_cadenas[2]) 'numero de proveedores que contiene el archivo
+    b = 2
+    'amplio memoria de los proveedores
+    var.Prov_id.resize(var.Prov_numero)
+    var.Prov_nombre.resize(var.Prov_numero)
+    var.Prov_Nif.resize(var.Prov_numero)
+    var.Prov_pc.resize(var.Prov_numero)   'persona de contacto
+    var.Prov_telf.resize(var.Prov_numero)
+    var.Prov_Fax.resize(var.Prov_numero)   'fax
+    var.Prov_Movil.resize(var.Prov_numero)
+    var.Prov_Correo.resize(var.Prov_numero)   'correo electronico
+    var.Prov_fp.resize(var.Prov_numero)   'forma de pago
+    var.Prov_Fecha.resize(var.Prov_numero)  'fecha del dato que introducimos
+    var.Prov_Direccion.resize(var.Prov_numero)
+    var.Prov_cp.resize(var.Prov_numero)
+    var.Prov_Ciudad.resize(var.Prov_numero)
+    var.Prov_Provincia.resize(var.Prov_numero)
+    var.Prov_observaciones.resize(var.Prov_numero)
+    var.provmemoria.resize(var.Prov_numero)
+
+    'escribo datos de proveedores
+    For a = 0 To var.Prov_numero - 1
+      b += 1
+      var.Prov_id[a] = arr_cadenas[b]
+      b += 1
+      var.Prov_nombre[a] = arr_cadenas[b]
+      b += 1
+      var.Prov_Nif[a] = arr_cadenas[b]
+      b += 1
+      var.Prov_pc[a] = arr_cadenas[b]
+      b += 1
+      var.Prov_telf[a] = arr_cadenas[b]
+      b += 1
+      var.Prov_Fax[a] = arr_cadenas[b]
+      b += 1
+      var.Prov_Movil[a] = arr_cadenas[b]
+      b += 1
+      var.Prov_Correo[a] = arr_cadenas[b]
+      b += 1
+      var.Prov_fp[a] = arr_cadenas[b]
+      b += 1
+      var.Prov_Fecha[a] = Val(arr_cadenas[b])
+      b += 1
+      var.Prov_Direccion[a] = arr_cadenas[b]
+      b += 1
+      var.Prov_cp[a] = arr_cadenas[b]
+      b += 1
+      var.Prov_Ciudad[a] = arr_cadenas[b]
+      b += 1
+      var.Prov_Provincia[a] = arr_cadenas[b]
+      b += 1
+      var.Prov_observaciones[a] = arr_cadenas[b]
+    Next
+    'muestro en gridproveedores
+    BorradosDatosIniciales.dibujogridProveedores()
+  Else
+    Message.Error("Archivo no compatible con esta version", "Aceptar")
+    Goto finabreproveedor
+  Endif
+
+finabreproveedor:
+  var.esperaprov = "no"
+
+End
+
+'---------------------------------------------------------------------------------
+Public Sub AbreGuardaAlbFact(ruta As String)
+
+  Dim c As String
+  Dim arr_cadenas As String[]
+  Dim a As Integer
+  Dim b As Integer
+  Dim codigofinline As String
+
+  codigofinline = "|"
+
+  Try arr_cadenas = Split(File.LOAD(ruta), codigofinline)
+  If Error Then
+    Message.Info("Error producido en la lectura del archivo ")
+    Goto finabreconcepto
+  End If
+
+  If arr_cadenas[0] = "v0.0.1" Then
+    FMain.TextBoxRutaAlbFact.text = ruta
+    var.alb_numero = Val(arr_cadenas[2]) 'numero de conceptos que contiene el archivo
+    b = 2
+    'amplio memoria de los albaranes
+    'redimensiono
+    var.alb_id.Resize(var.alb_numero) 'id automatico del programa
+    var.alb_numeroprov.resize(var.alb_numero) 'numro que tiene el albaran (lo pone el proveedor)
+    var.alb_prov.resize(var.alb_numero)  'proveedor de este albaran
+    var.alb_fecha.resize(var.alb_numero) 'fecha del albaran
+    var.alb_idobra.Resize(var.alb_numero)
+    var.alb_imp.Resize(var.alb_numero)
+    var.alb_fechaEnt.resize(var.alb_numero)   'entrada en obra
+    var.albmemoria.resize(var.alb_numero)
+    var.alb_valor.resize(var.alb_numero)
+    'escribo datos de proveedores
+    For a = 0 To var.alb_numero - 1
+      b += 1
+      var.alb_id[a] = arr_cadenas[b]
+      b += 1
+      var.alb_numeroprov[a] = arr_cadenas[b]
+      b += 1
+      var.alb_prov[a] = arr_cadenas[b]
+      b += 1
+      var.alb_fecha[a] = arr_cadenas[b]
+      b += 1
+      var.alb_idobra[a] = arr_cadenas[b]
+      b += 1
+      var.alb_imp[a] = arr_cadenas[b]
+      b += 1
+      var.alb_fechaEnt[a] = arr_cadenas[b]
+      b += 1
+      var.albmemoria[a] = arr_cadenas[b]
+      b += 1
+      var.alb_valor[a] = arr_cadenas[b]
+    Next
+    'entradas de conceptos en albaranes
+    b += 1
+    var.entrada_numero = Val(arr_cadenas[b])
+
+    'conceptos dentro de albaranes
+    var.entrada_id.resize(var.entrada_numero)
+    var.entrada_idconcepto.resize(var.entrada_numero)
+    var.entrada_medidaconcepto.resize(var.entrada_numero) 'le ponga la medida del concepto que tiene el albaran
+    var.entrada_precio.resize(var.entrada_numero) 'precio del cooncepto
+    var.entrada_tipoprecio.resize(var.entrada_numero) ' contrado, estimacion, oferta
+    var.entrada_memoria.resize(var.entrada_numero)
+    var.entrada_salida.Resize(var.entrada_numero)
+
+    For a = 0 To var.entrada_numero - 1
+      b += 1
+      var.entrada_id[a] = arr_cadenas[b]
+      b += 1
+      var.entrada_idconcepto[a] = arr_cadenas[b]
+      b += 1
+      var.entrada_medidaconcepto[a] = arr_cadenas[b]
+      b += 1
+      var.entrada_precio[a] = arr_cadenas[b]
+      b += 1
+      var.entrada_tipoprecio[a] = arr_cadenas[b]
+      b += 1
+      var.entrada_memoria[a] = arr_cadenas[b]
+      b += 1
+      var.entrada_salida[a] = arr_cadenas[b]
+    Next
+
+    'facturas
+
+    b += 1
+    var.fact_numero = Val(arr_cadenas[b])
+
+    var.fact_id.Resize(var.fact_numero) 'id dado por el programa a cada factura introducida
+    var.fact_prov.Resize(var.fact_numero) 'nombre del proveedor de esta factura
+    var.fact_nprov.Resize(var.fact_numero) 'numero de factura que da n ºfacturadadaproveedor   (nº de factura que le da el proveedor)
+    var.fact_idobra.Resize(var.fact_numero) 'obra a la que pertenece la factura
+    var.fact_fecha.Resize(var.fact_numero) 'fecha de la factura (la que tiene la factura)
+    var.fact_fecha_imp.Resize(var.fact_numero) 'fecha de imputacion factura
+    var.fact_valor.Resize(var.fact_numero)
+
+    For a = 0 To var.fact_numero - 1
+      b += 1
+      var.fact_id[a] = arr_cadenas[b]
+      b += 1
+      var.fact_prov[a] = arr_cadenas[b]
+      b += 1
+      var.fact_nprov[a] = arr_cadenas[b]
+      b += 1
+      var.fact_idobra[a] = arr_cadenas[b]
+      b += 1
+      var.fact_fecha[a] = arr_cadenas[b]
+      b += 1
+      var.fact_fecha_imp[a] = arr_cadenas[b]
+      b += 1
+      var.fact_valor[a] = arr_cadenas[b]
+    Next
+    '------------------------------------------------------------------
+    ' final de lectura de archivo
+    '-------------------------------------------------------------------
+
+    FMain.TS1[2].Enabled = True
+    FMain.TS1[3].Enabled = True 'albaranes
+    FMain.TS1[4].Enabled = True 'salidas
+    FMain.TS1[5].Enabled = True 'facturas
+    FMain.TS1[6].enabled = True 'informes 'bug corregido 007
+
+    'Message.Info("Archivo leido", "Aceptar")
+
+  Else
+    Message.Error("Archivo no compatible con esta version", "Aceptar")
+    Goto finabreconcepto
+  Endif
+
+finabreconcepto:
+  var.esperaalb = "no"
+
+End
+
+' --------------------------------------------------------------------------------
+Public Sub abrirrutaconceptos(ruta As String)
+
+  Dim c As String
+  Dim arr_cadenas As String[]
+  Dim a As Integer
+  Dim b As Integer
+  Dim codigofinline As String
+
+  codigofinline = "|"
+
+  Try arr_cadenas = Split(File.LOAD(ruta), codigofinline)
+
+  If Error Then
+    Message.Info("Error producido en la lectura del archivo de update en el servidor")
+    Goto finabreconcepto
+  End If
+
+  If arr_cadenas[0] = "v0.0.1" Then
+    FMain.TextBoxRutaConcepto.text = ruta
+    var.concepto_numero = Val(arr_cadenas[2]) 'numero de conceptos que contiene el archivo
+    b = 2
+    'amplio memoria de los proveedores
+    'conceptos
+    var.concepto_id.Resize(var.concepto_numero)
+    var.concepto_idudobra.resize(var.concepto_numero) 'unidad de obra donde se encuentra
+    var.concepto_nombre.resize(var.concepto_numero) 'nombre descriptivo unidad
+    var.concepto_ud.Resize(var.concepto_numero)
+    var.concepto_med.resize(var.concepto_numero) 'medicion
+    var.concepto_precio.resize(var.concepto_numero)   'precio de contrato
+    var.conceptomemoria.resize(var.concepto_numero)
+    var.conceptotipo.resize(var.concepto_numero)
+    var.concepto_Obra.resize(var.concepto_numero)
+
+    'escribo datos de proveedores
+    For a = 0 To var.concepto_numero - 1
+      b += 1
+      var.concepto_id[a] = arr_cadenas[b]
+      b += 1
+      var.concepto_idudobra[a] = arr_cadenas[b]
+      b += 1
+      var.concepto_nombre[a] = arr_cadenas[b]
+      b += 1
+      var.concepto_ud[a] = arr_cadenas[b]
+      b += 1
+      var.concepto_med[a] = Escribe.comadecimal(arr_cadenas[b])
+      b += 1
+      var.concepto_precio[a] = Escribe.comadecimal(arr_cadenas[b])
+      b += 1
+      var.conceptotipo[a] = arr_cadenas[b]
+      b += 1
+      var.concepto_Obra[a] = arr_cadenas[b]
+    Next
+    FMain.TS1[2].Enabled = True
+
+    'muestro en gridproveedores
+
+  Else
+    Message.Error("Archivo no compatible con esta version", "Aceptar")
+    Goto finabreconcepto
+  Endif
+
+  'abrir ruta albaranes y facturas
+finabreconcepto:
+  var.esperaconcepto = "no"
+
+End
+
+'-----------------------------------------------------------
+
+Public Sub abreseccionrutaconocida(rutareciente As String)
+
+  Dim a As Integer
+  Dim b As Integer
+  Dim c As String
+  Dim arr_cadenas As String[]
+  Dim codigofinline As String
+
+  codigofinline = "|"
+
+  var.seccion = rutareciente
+  arr_cadenas = Split(File.LOAD(var.seccion), codigofinline)
+
+  If arr_cadenas[0] = "v0.0.1" Then
+    If arr_cadenas[2] <> "" Then abrirrutaproveedores(arr_cadenas[2])
+
+    'esperar
+  espera11:
+    If var.esperaprov = "si" Then Goto espera11
+
+    If arr_cadenas[4] <> "" Then abrirrutaconceptos(arr_cadenas[4])
+    'esperar
+  espera22:
+    If var.esperaconcepto = "si" Then Goto espera22
+
+    If arr_cadenas[3] <> "" Then AbreGuardaAlbFact(arr_cadenas[3])
+    'esperar
+  espera33:
+    If var.esperaalb = "si" Then Goto espera33
+
+    FMain.ComboBoxObras.tag = arr_cadenas[5]
+  Else
+    Message.Error("Archivo no compatible con esta version", "Aceptar")
+    Goto finabrir3
+  Endif
+
+  ''finabrir:
+
+  If var.concepto_numero = 0 And var.Prov_numero = 0 Then Goto finabrir2
+  ' codigo: obras de conceptos añadirlas a combo de obra...
+  'repetir tanta veces como conceptos haya
+  If fmain.ComboBoxObras.CounT = 0 Then
+    fmain.ComboBoxObras.Add(var.concepto_Obra[0])
+  End If
+
+  For a = 0 To var.concepto_numero - 1
+    For b = 0 To fmain.ComboBoxObras.Count - 1
+      If Upper$(var.concepto_Obra[a]) = Upper$(fmain.ComboBoxObras[b].text) Then Goto finnextobrasconceptos22
+    Next
+    fmain.ComboBoxObras.Add(var.concepto_Obra[a])
+  finnextobrasconceptos22:
+  Next
+
+  'si no coincide con la lista de obra exitente, se incluye en la lista
+  fmain.ComboBoxObras.text = FMain.ComboBoxObras.tag
+  fmain.TextBoxRutaSeccion.Text = var.seccion
+  fmain.salvadatosseccionactual.enabled = True
+  var.inicioalbaranes = 0
+  var.inicioconcepto = 0
+  addrecientes.add(var.seccion)
+finabrir2:
+finabrir3:
+
+End

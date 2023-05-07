@@ -1,0 +1,60 @@
+' Gambas module file
+
+Public Sub copiaraportapapeles(rejilla As GridView)
+
+  Dim texto As String
+  Dim a As Integer
+  Dim b As Integer
+
+  If rejilla.header = 1 Or rejilla.header = 3 Then
+
+    For a = 0 To rejilla.Columns.count - 1
+
+      texto &= rejilla.Columns[a].Title & "\t"
+    Next
+    texto &= "\n"
+  Endif
+
+  For a = 0 To rejilla.Rows.Count - 1
+
+    For b = 0 To rejilla.Columns.count - 1
+      texto &= revisa(rejilla[a, b].text) & "\t"
+    Next ' b
+
+    texto &= "\n"
+
+  Next 'a
+
+  Clipboard.Copy(texto)
+
+End
+
+'---------------------------------------------------------------------
+Public Sub revisa(cadena As String) As String
+
+  Dim a As Integer
+  Dim letra As String
+  Dim devuelta As String
+  Dim prueba As Integer
+
+  'compruebo si tiene solo numero
+  For a = 1 To Len(cadena)
+    letra = Mid$(cadena, a, 1)
+    prueba = InStr("0123456789.", letra)
+    If prueba = 0 Then
+      Return cadena
+      'contiene letras
+
+    Endif
+  Next
+
+  For a = 1 To Len(cadena)
+    letra = Mid$(cadena, a, 1)
+    If letra = "." Then
+      letra = ","
+    Endif
+    devuelta &= letra
+  Next
+  Return devuelta
+
+End

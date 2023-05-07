@@ -1,0 +1,15 @@
+# Gambas Project File 3.0
+Title=Gestion de Almacen
+Startup=FMain
+Icon=ico52consigna.gif
+Version=0.0.33
+Component=gb.image
+Component=gb.gui
+Component=gb.form
+Description="0.0.7.2: salvado desde cualquier lugar de los ficheros de datos\ntry y error, a la hora de abrir los archivos de datos\ngrid muestra el ultimo valor metido (de albaranes, de conceptos, de proveedores)\nrevision de update\ninforme de acopios con totales finales"
+TabSize=2
+Translate=1
+Language=es
+ControlPublic=1
+SourcePath=/home/uno/00 Licuas/PROGRAMA
+Packager=1

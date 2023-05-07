@@ -1,0 +1,68 @@
+' Gambas module file
+
+Public Sub nuevo()
+
+  Dim a As Integer
+  Dim nombrenuevo As String
+
+  If (fmain.TextBoxNFactura.text = "") Then
+    Message.Info("Numero de factura en blanco, debe introducir uno")
+    Goto finnuevo
+  Else
+
+    For a = 0 To Var.fact_numero - 1
+      If fmain.TextBoxNFactura.text = var.fact_nprov[a] And var.fact_prov[a] = fmain.ComboBoxProvFact.text Then
+        Message.Info("Ya exite una factura con el mismo numero del mismo proveedor")
+        Goto finnuevo
+      End If
+    Next
+
+  End If
+
+  var.fact_numero += 1
+  a = var.fact_numero - 1
+
+  'redimensiono var. .Resize(a + 1)
+  var.fact_id.Resize(a + 1) 'id dado por el programa a cada factura introducida
+  var.fact_prov.Resize(a + 1) 'nombre del proveedor de esta factura
+  var.fact_nprov.Resize(a + 1) 'numero de factura que da n ºfacturadadaproveedor   (nº de factura que le da el proveedor)
+  var.fact_idobra.Resize(a + 1) 'obra a la que pertenece la factura
+  var.fact_fecha.Resize(a + 1) 'fecha de la factura (la que tiene la factura)
+  var.fact_fecha_imp.Resize(a + 1) 'fecha de imputacion factura
+  var.fact_valor.Resize(a + 1) ' suma de los valores de los albaranes de la factura
+
+  'almacenos datos
+  var.fact_id[a] = "Idfac" & Str$(Now) 'LabelIdFactura.text 'contiene el id de la factura dado por el programa
+  var.fact_prov[a] = fmain.Comboboxprovfact.text 'contiene el proveedor 'nombre del proveedor de esta factura
+  var.fact_nprov[a] = fmain.textboxnfactura.text 'contiene el numero de factura que le da el proveedor 'numero de factura que da n ºfacturadadaproveedor   (nº de factura que le da el proveedor)
+  var.fact_idobra[a] = fmain.ComboBoxObraFactura.text 'obra de la factura 'obra a la que pertenece la factura
+  var.fact_fecha[a] = fmain.ValueBoxFFact.value ' fecha factura 'fecha de la factura (la que tiene la factura)
+  var.fact_fecha_imp[a] = fmain.ValueBoxFImp.value 'fecha de imputacion'fecha de imputacion factura
+  var.fact_valor[a] = 0 ' suma de los valores de los albaranes de la factura
+
+  ABNuevaFactura.muestra()
+  ABNuevafactura.enblanco()
+
+finnuevo:
+
+End
+
+Public Sub muestra()
+
+  Dim a As Integer
+
+  a = var.fact_numero - 1
+  FMain.GridViewFactura.Rows.count = a + 1
+  BorradosDatosIniciales.dibujogridFactura(fmain.ComboBoxProvFact.Text, fmain.ComboBoxObraFactura.text)
+
+End
+
+Public Sub enblanco()
+
+  fmain.LabelIdFactura.text = ""
+  fmain.Comboboxprovfact.text = ""
+  fmain.textboxnfactura.text = ""
+  fmain.ValueBoxFFact.value = 0
+  fmain.ValueBoxFImp.value = 0
+
+End

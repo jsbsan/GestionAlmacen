@@ -1,0 +1,180 @@
+' Gambas module file
+
+'FUNCIONES PARA CREAR EL CODIGO .HTML
+
+Public textohtml As String
+
+'convertir caracteres especiales
+Public Function CaracteresEspeciales(texto As String) As String
+
+  'al estar implemntado el codigo que hace que la pagina se lea como UT-8 no es necesaria ninguna transformacion
+
+  Return texto
+
+End
+
+'******************************************************************
+
+Public Function TituloventanaHtml(texto As String) As String
+
+  Dim cabecera As String
+
+  cabecera = textohtml & Chr(13) & "<TITLE>" & CaracteresEspeciales(texto) & "</TITLE>" & Chr$(13)
+
+  Return cabecera
+
+End
+
+Public Function LineaHorizontal() As String
+
+  Dim linea As String
+
+  linea = textohtml & "<HR>" & Chr$(13)
+  Return linea
+
+End
+
+Public Function TitularCentrado(textoeF As String) As String
+  'DIM textoeF AS String
+
+  textoeF = textohtml & "<H1> <CENTER>" & CaracteresEspeciales(textoeF) & "</CENTER> </H1>" & Chr$(13)
+  Return textoeF
+
+End
+
+Public Function lineaBlanco() As String
+
+  Dim linea As String
+
+  linea = textohtml & "<BR>" & Chr$(13)
+  Return linea
+
+End
+
+Public Function ponermarca(marca As String) As String
+
+  Dim linea As String
+
+  linea = textohtml & "<A NAME=" & Chr$(34) & marca & Chr$(34) & "></A>" & Chr$(13)
+  Return linea
+
+End
+
+Public Function IraMarca(marca As String, textohiperenlace As String) As String
+
+  Dim linea As String
+
+  linea = textohtml & "<A HREF=" & Chr$(34) & "#" & marca & Chr$(34) & ">" & CaracteresEspeciales(textohiperenlace) & "</A>" & Chr$(13)
+  Return linea
+
+End
+
+Public Function DescargaArchivo(destinomarca As String, textohiperenlace As String) As String
+
+  Dim linea As String
+
+  linea = "<A HREF=" & destinomarca & ">" & CaracteresEspeciales(textohiperenlace) & "</A>"
+
+  Return linea
+
+End
+
+Public Function correo(direccion As String, textohiperenlace As String) As String
+
+  Dim linea As String
+
+  linea = textohtml & "<A HREF=" & Chr$(34) & "mailto:" & direccion & "?subject = Duda del proyecto......" & Chr$(34) & ">" & CaracteresEspeciales(textohiperenlace) & "</A>" & Chr$(13)
+  Return linea
+
+End
+
+Public Function lineaTextoCR(texto As String) As String
+
+  Dim linea As String
+
+  linea = textohtml & CaracteresEspeciales(texto) & "<BR>" & Chr$(13)
+  Return linea
+
+End
+
+Public Function negrita(texto As String) As String
+
+  Dim linea As String
+
+  linea = textohtml & "<B>" & CaracteresEspeciales(texto) & "</B>"
+  Return linea
+
+End
+
+Public Function cursiva(texto As String) As String
+
+  Dim linea As String
+
+  linea = textohtml & "<I>" & CaracteresEspeciales(texto) & "</I>"
+  Return linea
+
+End
+
+Public Function subrayado(texto As String) As String
+
+  Dim linea As String
+
+  linea = textohtml & "<U>" & CaracteresEspeciales(texto) & "</U>"
+  Return linea
+
+End
+
+Public Function textotamanno(tamano As Integer, texto As String) As String
+
+  Dim linea As String
+  'TAMANO DEBE DE ESTAR ENTRE 1 Y 7
+  linea = textohtml & "<FONT SIZE=+" & Str$(tamano) & ">" & CaracteresEspeciales(texto) & "</FONT>"
+  Return linea
+
+End
+
+Public Function textocentrado(textoEA As String) As String
+
+  Dim linea As String
+
+  linea = textohtml & "<CENTER>" & CaracteresEspeciales(textoEA) & "<CENTER>"
+  Return linea
+
+End
+
+Public Function caracteresUTF8_2() As String
+  ' obtenido de la pagina web: http://www.w3c.es/divulgacion/guiasbreves/internacionalizacion
+
+  Dim linea As String
+
+  linea = textohtml & "<meta http-equiv=" & Chr$(34) & "Content-Type" & Chr$(34) & " content =" & Chr$(34) & "text/html;charset =utf-8" & Chr$(34) & " />" & Chr$(13)
+  Return linea
+
+End
+
+'---------------------------------------------------
+Public Function parrafo(cadena As String) As String
+
+  Dim a As Integer
+  Dim subcadena As String
+  Dim letra As String
+
+inicio:
+  For a = 1 To Len(cadena)
+
+    letra = Mid$(cadena, a, 1)
+    If letra = "\r" Then
+      subcadena &= "<BR>" & "\r"
+    Else
+      If letra = " " And Mid$(cadena, a + 1, 1) = " " Then
+        letra = "&nbsp"
+        subcadena &= letra
+      Else
+        subcadena &= letra
+      Endif
+    Endif
+  Next
+
+  Return textohtml & subcadena
+
+End

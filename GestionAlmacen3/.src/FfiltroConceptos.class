@@ -1,0 +1,136 @@
+' Gambas class file
+
+Public Sub ButtonFiltroConcepto_Click()
+
+  Dim c As String
+  Dim resultado As Integer
+  Dim patrones As New String[]
+  Dim numero_patrones As Integer
+
+  numero_patrones = 0
+
+  patrones = Split(Upper$(TextBoxFiltroConcepto.text), ",")
+
+  For Each c In patrones
+    numero_patrones = numero_patrones + 1
+  Next
+  patrones.Resize(3)
+
+  If numero_patrones = 0 Then
+    patrones.resize(3)
+
+    patrones[0] = "*"
+    patrones[1] = " "
+    patrones[2] = " "
+
+  End If
+
+  If numero_patrones = 1 Then
+    patrones.resize(3)
+    patrones[1] = " "
+    patrones[2] = " "
+  End If
+
+  If numero_patrones = 2 Then
+    patrones[2] = " "
+  End If
+  If numero_patrones > 3 Then
+    Message.Info("solo se admiten 3 patrones de busqueda")
+    TextBoxFiltroConcepto.SetFocus
+    Goto finfiltro
+  End If
+
+  resultado = buscar.ConceptoFiltro2(var.obraEntradaFiltroAlbaran, patrones[0], patrones[1], patrones[2])
+
+  If RESULTADO = 1 Then
+    GridViewfiltroconcepto.Background = Color.Cyan
+  Else
+    GridViewfiltroconcepto.Background = Color.White
+  End If
+finfiltro:
+  TextBoxFiltroConcepto.SetFocus
+
+End
+
+Public Sub TextBoxFiltroConcepto_KeyPress()
+
+  If Key.code = Key.enter Or Key.code = Key.Return Or Key.CODE = Key.TAB Then
+    ButtonFiltroConcepto.SetFocus
+  End If
+
+End
+
+Public Sub Form_Open()
+
+  Me.Center
+  BorradosDatosIniciales.dibujogridConceptos2(var.obraEntradaFiltroAlbaran)
+  'aplico filtro anterior
+
+  If var.filtroanterior <> "" Then
+    TextBoxFiltroConcepto.text = var.filtroanterior
+    'aplico filtro
+    ButtonFiltroConcepto_Click()
+  Endif
+
+End
+
+Public Sub Button3_Click()
+
+  var.filtroanterior = TextBoxFiltroConcepto.text
+  Me.Close
+
+End
+
+Public Sub Button2_Click()
+  'aumento el numero de fentradas
+  'cogo el concepto y se lo a ñado al albaran para definir su medicion y precio
+  'añado al concepto a la lista de conceptos que tenga el albaran
+  'debo de crear una grupo de  variables que contenega el idalbaran,idconcepto,medicion,precio
+  'por cada concepto que añado
+  'DIM idalbaran AS String 'es el id del albaran que estoy editando
+  '  var.introduceentrada.idconceptoes el id del concepto donde he echo click
+  'abro un nuevo formulario para insertar la medicion, precio y tipo (contrato, estimacion, oferta)
+  'si es correcto lo añado al albaran
+  '
+  'ABNuevoConceptoenAlbaran.nuevo(FfiltroConceptos.TAG, var.introduceentrada_idconcepto)
+  '  ME.Close
+
+End
+
+Public Sub GridViewfiltroconcepto_Click()
+
+  Dim idalbaran As String
+
+  var.filaelegida = GridViewfiltroconcepto[GridViewfiltroconcepto.row, 0].text
+  FentradaconceptoMedionPrecio.tag = 0
+  FentradaconceptoMedionPrecio.caption = var.filaelegida
+  FentradaconceptoMedionPrecio.showMODAL
+
+  If var.FentradaconceptoMedion <> 0 And var.FentradaconceptoMedionPrecio <> 0 Then
+    var.introduceentrada_idconcepto = var.filaelegida
+    ABNuevoConceptoenAlbaran.nuevo(FfiltroConceptos.TAG, var.introduceentrada_idconcepto)
+    var.filtroanterior = TextBoxFiltroConcepto.text
+    Me.Close
+  Else
+    Message.Info("Debe de introducir una medicion y un precio, distintos a Cero")
+  Endif
+
+End
+
+Public Sub GridViewfiltroconcepto_ColumnClick(Column As Integer)
+
+  If var.ordenfiltroconcepto = 0 Then
+    OrdenacionGridview.ord_AZ(GridViewfiltroconcepto, Column)
+    var.ordenfiltroconcepto = 1
+  Else
+    var.ordenfiltroconcepto = 0
+    OrdenacionGridview.ord_ZA(GridViewfiltroconcepto, Column)
+  Endif
+
+End
+
+Public Sub copiarportapaepelesGridViewAlbaran_Click()
+
+  GambasAOpenoffice.copiaraportapapeles(GridViewfiltroconcepto)
+
+End

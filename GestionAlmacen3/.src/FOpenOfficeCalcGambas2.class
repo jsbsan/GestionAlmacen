@@ -1,0 +1,103 @@
+' Gambas class file
+
+Public Sub _new()
+
+End
+
+Public Sub Form_Open()
+
+  GridView1.rows.count = 101
+  GridView1.Columns.count = 20
+
+End
+
+Public Sub leerportapapeles_Click()
+
+  Dim titulos As Boolean
+
+  If CheckBox1.value = -1 Then
+    FOpenOfficeCalcGambas2.GridView1.Header = 1
+    titulos = -1
+  Else
+    FOpenOfficeCalcGambas2.GridView1.Header = 0
+    titulos = 0
+  Endif
+  GridView1.rows.count = 0
+  GridView1.Columns.count = 0
+
+  GridView1.rows.count = 50
+  GridView1.Columns.count = 20
+  OpenOfficeCalcGambas2.leer(FOpenOfficeCalcGambas2.GridView1, titulos)
+
+End
+
+Public Sub Button2_Click()
+
+  Me.Close()
+
+End
+
+Public Sub Button1_Click()
+
+  Dim a As Integer
+  Dim repite As Integer
+
+  If CheckBox1.Value = True Then
+    'la primera linea contiene titulos
+    a = 1
+  Endif
+
+  For repite = a To 100
+    If comprobarvacio(repite) <> 1 Then
+      var.concepto_numero += 1
+      var.concepto_Obra.Add(FMain.ComboBoxObras.text)
+      var.concepto_id.add("concepto" & Str$(var.concepto_numero) & Str$(Now))
+      var.concepto_idudobra.add("concepto" & Str$(var.concepto_numero) & Str$(Now))
+      'unidad
+      var.concepto_ud.add(BC3aConceptos.convierteud(GridView1[repite, 0].text))
+      var.concepto_nombre.add(GridView1[repite, 1].text)
+      var.conceptotipo.Add("")
+
+      If Val(GridView1[repite, 2].text) = Null Then
+        var.concepto_med.Add(0)
+      Else
+        var.concepto_med.add(Val(GridView1[repite, 2].text))
+      Endif
+
+      If Val(GridView1[repite, 3].text) = Null Then
+        var.concepto_precio.Add(0)
+      Else
+        var.concepto_precio.add(Val(GridView1[repite, 3].text))
+      Endif
+
+    Else
+      Goto finlectura
+    Endif
+  Next
+
+finlectura:
+  ' AbreGuardaConcepto.salva()
+  Message.info("Datos cargados")
+  FMain.TS1[2].Enabled = True
+  If fmain.ComboBoxObras.CounT = 0 Then
+    fmain.ComboBoxObras.Add(Upper$(var.concepto_Obra[0]))
+  End If
+  var.inicioconcepto = 0
+  Me.Close
+
+End
+
+Public Function comprobarvacio(fila As Integer) As Integer
+
+  Dim b As Integer
+
+  For b = 0 To 3
+    If GridView1[fila, b].text <> "" Then
+      Return 0
+    Endif
+
+  Next
+
+  Return 1
+
+End

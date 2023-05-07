@@ -1,0 +1,161 @@
+' Gambas module file
+
+Public Sub abrir()
+
+  Dim c As String
+  Dim arr_cadenas As String[]
+  Dim a As Integer
+  Dim b As Integer
+  Dim codigofinline As String
+  Dim cuentaConcepto As Integer
+
+  codigofinline = "|"
+  Dialog.Title = "Seleccione un archivo para abrir"
+  Dialog.Filter = ["", ""]
+  Dialog.Path = User.Name
+  Dialog.Filter = ["*.conceptos", "Datos de Conceptos"]
+
+  If Not Dialog.OpenFile() Then
+    Try arr_cadenas = Split(File.LOAD(Dialog.Path), codigofinline)
+    If Error Then
+      Message.Info("Error producido en la lectura del archivo ")
+      Goto finabreconcepto
+    End If
+
+    If arr_cadenas[0] = "v0.0.1" Then
+      FMain.TextBoxRutaConcepto.text = Dialog.Path
+      var.concepto_numero = Val(arr_cadenas[2]) 'numero de conceptos que contiene el archivo
+      b = 2
+      'amplio memoria de los proveedores
+      'conceptos
+      var.concepto_id.Resize(var.concepto_numero)
+      var.concepto_idudobra.resize(var.concepto_numero) 'unidad de obra donde se encuentra
+      var.concepto_nombre.resize(var.concepto_numero) 'nombre descriptivo unidad
+      var.concepto_ud.Resize(var.concepto_numero)
+      var.concepto_med.resize(var.concepto_numero) 'medicion
+      var.concepto_precio.resize(var.concepto_numero)   'precio de contrato
+      var.conceptomemoria.resize(var.concepto_numero)
+      var.conceptotipo.resize(var.concepto_numero)
+      var.concepto_Obra.resize(var.concepto_numero)
+
+      'escribo datos de proveedores
+      For a = 0 To var.concepto_numero - 1
+        b += 1
+        var.concepto_id[a] = arr_cadenas[b]
+        b += 1
+        var.concepto_idudobra[a] = arr_cadenas[b]
+        b += 1
+        var.concepto_nombre[a] = arr_cadenas[b]
+        b += 1
+        var.concepto_ud[a] = arr_cadenas[b]
+        b += 1
+        var.concepto_med[a] = arr_cadenas[b]
+        b += 1
+        var.concepto_precio[a] = arr_cadenas[b]
+        b += 1
+        var.conceptotipo[a] = arr_cadenas[b]
+        b += 1
+        var.concepto_Obra[a] = arr_cadenas[b]
+      Next
+      FMain.TS1[2].Enabled = True
+      Message.Info("Archivo leido", "Aceptar")
+
+    Else
+      Message.Error("Archivo no compatible con esta version", "Aceptar")
+      Goto finabreconcepto
+    Endif
+
+  End If
+finabreconcepto:
+
+End
+
+'--------------------------------------------------------------------------------
+Public Sub salva(Optional ruta As String, Optional sobreescribe As String)
+
+  Dim lineas As String
+  Dim destino As String
+  Dim numArchivo As Integer
+  Dim a As Integer
+  Dim codigofinline As String
+  Dim cuentaConcepto As Integer
+
+inicio:
+  var.esperaconcepto = "si"
+  If ruta = "" Then
+    Dialog.Title = "Escriba  un nombre de archivo para guardar los datos"
+    Dialog.Filter = ["", ""]
+    Dialog.Path = User.Name
+
+    Dialog.Filter = ["*.conceptos", "Datos de conceptos"]
+    a = Dialog.SaveFile()
+    If a = -1 Then Goto fins
+
+    If Right$(Dialog.Path, Len(".conceptos")) <> ".conceptos" Then
+      destino = Dialog.Path & ".conceptos"
+    Else
+      destino = Dialog.Path
+    End If
+
+  Else
+    destino = ruta
+  Endif
+
+  If sobreescribe = "sobreescribe" Then
+    Goto finsobreescribe
+  Endif
+
+  'Comprueba si existe el archivo, en tal caso pide confirmacion de sobreescritura
+  If AbreGuardaProveedores.compruebaexistencia(DESTINO, "Conceptos") = 2 Then
+    Goto inicio
+  End If
+
+finsobreescribe:
+
+  codigofinline = "|"
+  lineas = "v0.0.1" & codigofinline 'informo version
+  Lineas &= "gestionalmacen.090409" & codigofinline ' programa que ha echo el archivo
+  cuentaConcepto = 0
+  For a = 0 To var.concepto_numero - 1
+    If var.concepto_id[a] <> "IdB" Then cuentaConcepto += 1
+  Next
+
+  Lineas &= Str$(cuentaConcepto) & codigofinline 'numero de conceptos que contiene el archivo sin estar borrados
+
+  'escribo datos de proveedores
+  For a = 0 To var.concepto_numero - 1
+    'PRINT var.Prov_id[a]; "IdB"; var.Prov_id[a] = "IdB"
+    If var.concepto_id[a] <> "IdB" Then
+      'los datos borrados no los salvo
+      Lineas &= var.concepto_id[a] & codigofinline
+      Lineas &= var.concepto_idudobra[a] & codigofinline
+      Lineas &= var.concepto_nombre[a] & codigofinline
+      Lineas &= var.concepto_ud[a] & codigofinline
+      Lineas &= var.concepto_med[a] & codigofinline
+      Lineas &= var.concepto_precio[a] & codigofinline
+      'Lineas &= var.conceptomemoria[a] & codigofinline
+      Lineas &= var.conceptotipo[a] & codigofinline
+      Lineas &= var.concepto_Obra[a] & codigofinline
+
+    End If
+  Next
+
+  If destino = "" Then
+    Message.Info("No se pudo salvar")
+    Goto fins
+  Endif
+  File.Save(destino, lineas)
+
+  FMain.TextBoxRutaConcepto.text = destino
+
+  If sobreescribe = "sobreescribe" Then
+    FMain.ProgressBarGuardar.value = FMain.ProgressBarGuardar.value + 0.33
+    Goto fins
+  Endif
+
+  If ruta <> "" Then Message.Info("Archivo salvado", "Aceptar")
+
+fins:
+  var.esperaconcepto = ""
+
+End

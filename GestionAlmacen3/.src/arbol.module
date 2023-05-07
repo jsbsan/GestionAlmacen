@@ -1,0 +1,91 @@
+' Gambas module file
+
+Public Sub rellena()
+
+  Dim a As Integer
+  Dim texto As String
+
+  Dim elementos As Integer
+  Dim lista As New String[]
+  Dim c As Integer
+  Dim numeracion As New Integer[]
+  Dim esquema As String
+  Dim datos As String
+  Dim tipos As String
+
+  Farbol.TreeView1.Add("obra", "Obra")
+
+  'repite tantas veces como obra haya
+
+  For a = 0 To FMain.ComboBoxObras.Count - 1
+    Farbol.TreeView1.Add(FMain.comboboxobras[a].text, FMain.comboboxobras[a].text,, "obra")
+    Farbol.TreeView1.Add(FMain.comboboxobras[a].text & "alb", "Albaranes",, FMain.comboboxobras[a].text)
+    Farbol.TreeView1.Add(FMain.comboboxobras[a].text & "fac", "Facturas",, FMain.comboboxobras[a].text)
+  Next
+
+  '*************************************************************************
+  ' Presentacion de albaranes
+  '*************************************************************************
+
+  'Mostrar datos ordenadamente:
+  elementos = var.alb_numero
+  lista.Resize(elementos)
+  For a = 0 To elementos - 1
+    lista[a] = var.alb_prov[a] & var.alb_numeroprov[a]
+  Next
+
+  numeracion = OrdenacionLista.listaOrd(lista, elementos)
+
+  'presentacion ordenada de los datos
+  esquema = " Proveedor      Nº       Fecha             Valor         Imputado"
+
+  'repite tantas veces como albaranes haya
+  For c = 0 To var.alb_numero - 1
+    a = numeracion[c]
+    If c = 1 Then
+      Farbol.TreeView1.Add(var.alb_id[a] & " ", esquema,, var.alb_idobra[a] & "alb")
+
+    Endif
+
+    datos = var.alb_prov[a]
+    datos &= "|" & var.alb_numeroprov[a]
+    datos &= "|" & var.alb_fecha[a]
+    datos &= "|" & var.alb_valor[a]
+    datos &= "|" & var.alb_imp[a]
+    Tipos = "   #   "
+    texto = Escribe.esquemaGenerico(esquema, datos, TIPOS)
+    Farbol.TreeView1.Add(var.alb_id[a], texto,, var.alb_idobra[a] & "alb")
+  Next
+
+  '*****************************************************
+  ' presentacion de fatura
+  '*****************************************************
+  'Mostrar datos ordenadamente:
+  elementos = var.fact_numero
+  lista.Resize(elementos)
+  For a = 0 To elementos - 1
+    lista[a] = var.fact_prov[a] & var.fact_nprov[a] & var.fact_fecha_imp[a] ' ordenar por proveedor, nº de factura y nº de factura
+  Next
+
+  numeracion = OrdenacionLista.listaOrd(lista, elementos)
+
+  'presentacion ordenada de los datos
+  esquema = " Proveedor      Nº       Fecha_Imputado          Valor      "
+
+  For c = 0 To var.fact_numero - 1
+    a = numeracion[c]
+    If c = 1 Then
+      Farbol.TreeView1.Add(var.fact_id[a] & " ", esquema,, var.fact_idobra[a] & "fac")
+    Endif
+
+    datos = var.fact_prov[a]
+    datos &= "|" & var.fact_nprov[a]
+    datos &= "|" & var.fact_fecha_imp[a]
+    datos &= "|" & var.fact_valor[a]
+    Tipos = "   #   "
+    texto = Escribe.esquemaGenerico(esquema, datos, TIPOS)
+    Farbol.TreeView1.Add(var.fact_id[a], texto,, var.fact_idobra[a] & "fac")
+
+  Next
+
+End

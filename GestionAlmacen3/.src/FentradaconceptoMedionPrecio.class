@@ -1,0 +1,81 @@
+' Gambas class file
+
+Public Sub Button1_Click()
+
+  var.FentradaconceptoMedion = ValueBoxmed.Value
+  var.FentradaconceptoMedionPrecio = ValueBoxprecio.Value
+
+  If RadioButtonEstimacion.value = True Then VAR.FentradaconceptoPrecoTipo = "Estimacion"
+  If RadioButtonOferta.value = True Then VAR.FentradaconceptoPrecoTipo = "Oferta"
+  If RadioButtonContrato.value = True Then VAR.FentradaconceptoPrecoTipo = "Contrato"
+
+  Me.Close
+
+End
+
+Public Sub Button2_Click()
+
+  var.FentradaconceptoMedion = 0
+  var.FentradaconceptoMedionPrecio = 0
+
+  Me.Close
+
+End
+
+Public Sub Form_Open()
+
+  Dim titulo As String
+
+  Me.Center
+
+  titulo = FentradaconceptoMedionPrecio.caption
+  FentradaconceptoMedionPrecio.caption = buscar.buscaDenoConcepto(titulo)
+
+  RadioButtonContrato.Text = "Contrato: " & buscar.precioConcepto(titulo) & ""
+  RadioButtonContrato.tag = Escribe.comadecimal(buscar.precioConcepto(titulo))
+  ValueBoxmed.SetFocus
+
+End
+
+Public Sub RadioButtonContrato_Click()
+
+  If RadioButtonContrato.value = True Then
+    var.FentradaconceptoMedionPrecio = RadioButtonContrato.tag
+    ValueBoxprecio.Value = RadioButtonContrato.tag
+  End If
+
+End
+
+'----------------------- enter return tab ------------------------
+
+Public Sub ValueBoxmed_KeyPress()
+
+  If (key.Code = Asc(".")) Then
+    ValueBoxmed.Insert(",")
+  End If
+
+  If Key.code = Key.enter Or Key.code = Key.Return Or Key.CODE = Key.TAB Then
+    ValueBoxprecio.SetFocus
+  End If
+
+End
+
+Public Sub ValueBoxprecio_KeyPress()
+
+  If (key.Code = Asc(".")) Then
+    ValueBoxprecio.Insert(",")
+  End If
+
+  If Key.code = Key.enter Or Key.code = Key.Return Or Key.CODE = Key.TAB Then
+    RadioButtonEstimacion.SetFocus
+  End If
+
+End
+
+Public Sub RadioButtonEstimacion_KeyPress()
+
+  If Key.code = Key.enter Or Key.code = Key.Return Or Key.CODE = Key.TAB Then
+    Button1.SetFocus
+  End If
+
+End

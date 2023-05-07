@@ -1,0 +1,15 @@
+# Gambas Project File 2.0
+# Compiled with Gambas 2.20.1
+Title=Gestion de Almacen
+Startup=FMain
+Icon=ico52consigna.gif
+Version=0.0.33
+Library=gb.gui
+Library=gb.form
+Description=0.0.7.2: salvado desde cualquier lugar de los ficheros de datos\ntry y error, a la hora de abrir los archivos de datos\ngrid muestra el ultimo valor metido (de albaranes, de conceptos, de proveedores)\nrevision de update\ninforme de acopios con totales finales
+TabSize=2
+Translate=1
+Language=es
+ControlPublic=1
+ExecPath=/home/uno/gambas/GestionAlmacen.gambas
+SourcePath=/home/uno/00 Licuas/PROGRAMA

@@ -1,0 +1,119 @@
+' Gambas module file
+
+Public Function ConceptoFiltroSalidas(patron As String, Optional patron1 As String, Optional patron2 As String, obra As String) As Integer
+
+  Dim lineas As String
+  Dim a As Integer
+  Dim numero As Integer
+  Dim c As Integer
+  Dim sumaentrada As Float
+  Dim sumasalida As Float
+  'FMain.GridViewProveedor.Clear
+  'FMain.GridViewConceptosSalidas.Rows.count = 0
+
+  numero = 0 'contador de filas validas (sin estar borradas)
+  If var.entrada_numero = 0 Then Return 0 'no existen descompuestos de albaranes
+
+  If patron = "*" Or patron = "" Then
+    BorradosDatosIniciales.dibujogridConceptosSalidas(obra)
+    Return 0
+  Endif
+
+  If fMain.GridViewConceptosSalidas.Rows.count = 0 Then
+    Goto finfiltrosalida
+
+  End If
+
+  If patron1 = "" Then patron1 = " "
+  If patron2 = "" Then patron2 = " "
+
+  For a = 0 To var.concepto_numero - 1
+    sumaentrada = 0
+    sumasalida = 0
+    For c = 0 To var.entrada_numero - 1
+      If var.entrada_idconcepto[c] <> "IdB" And var.concepto_id[a] = var.entrada_idconcepto[c] Then
+        sumaentrada += var.entrada_medidaconcepto[c]
+      Endif
+    Next
+
+    If sumaentrada = 0 Then Goto finnext
+
+    If var.concepto_id[a] <> "IdB" Then
+      Lineas = var.concepto_id[a]
+      Lineas &= var.concepto_idudobra[a]
+      Lineas &= var.concepto_nombre[a]
+      Lineas &= var.concepto_ud[a]
+      Lineas &= var.concepto_med[a]
+      Lineas &= var.concepto_precio[a]
+      'Lineas &= var.conceptomemoria[a]
+      Lineas &= var.conceptotipo[a]
+      Lineas &= var.concepto_Obra[a]
+
+      If dentro(Upper$(var.concepto_Obra[a]), obra) And dentro(Upper$(lineas), patron) And dentro(Upper$(lineas), patron1) And dentro(Upper$(lineas), patron2) Then
+        numero += 1
+
+        FMain.GridViewConceptosSalidas.Rows.count = numero
+        FMain.GridViewConceptosSalidas[numero - 1, 0].text = var.concepto_id[a]
+        ' FMain.GridViewConceptosSalidas[numero - 1, 1].text = var.concepto_id[a]
+        FMain.GridViewConceptosSalidas[numero - 1, 2].text = var.concepto_Obra[a]
+        FMain.GridViewConceptosSalidas[numero - 1, 3].text = var.concepto_idudobra[a]
+        FMain.GridViewConceptosSalidas[numero - 1, 4].text = var.concepto_ud[a]
+        FMain.GridViewConceptosSalidas[numero - 1, 5].text = var.concepto_nombre[a]
+        'entradas de medicones
+        sumaentrada = 0
+        For c = 0 To var.entrada_numero - 1
+          If var.entrada_idconcepto[c] <> "IdB" And var.concepto_id[a] = var.entrada_idconcepto[c] Then
+            sumaentrada += var.entrada_medidaconcepto[c]
+
+          Endif
+        Next
+        FMain.GridViewConceptosSalidas[numero - 1, 6].text = redondea.numero(sumaentrada)
+        FMain.GridViewConceptosSalidas[numero - 1, 6].Alignment = 2
+        'salidas anteriores de mediciones
+        'salidas anteriores de mediciones
+        sumasalida = 0
+        For c = 0 To var.entrada_numero - 1
+          If var.entrada_idconcepto[c] <> "IdB" And var.concepto_id[a] = var.entrada_idconcepto[c] Then
+            sumasalida += var.entrada_salida[c]
+          Endif
+        Next
+
+        FMain.GridViewConceptosSalidas[numero - 1, 7].text = redondea.numero(sumasalida)
+        FMain.GridViewConceptosSalidas[numero - 1, 7].Alignment = 2
+        'pendiente
+        FMain.GridViewConceptosSalidas[numero - 1, 8].text = redondea.numero(sumaentrada - sumasalida)
+        FMain.GridViewConceptosSalidas[numero - 1, 8].Alignment = 2
+        sumaentrada = 0
+        sumasalida = 0
+      End If
+
+    End If
+
+    'salidas anteriores de mediciones
+
+    'FMain.GridViewConceptosSalidasnumero - 1, 6].text = var.concepto_precio[a]
+    'FMain.GridViewConceptosSalidas[numero - 1, 7].text = var.conceptotipo[a]
+
+  finnext:
+
+  Next
+
+finfiltrosalida:
+
+  If numero > 0 Then
+    'SE HA ENCONTRADO PARECIDOS
+    Return 1
+  Else
+    Return 0
+  Endif
+
+End
+'--------------------------------------------------------------------------------------------------
+'busquda dentro de una cadena
+'--------------------------------------------------------------------------------------------------
+
+Sub dentro(frase As String, patron As String) As Boolean
+
+  Return InStr(frase, patron)
+
+End

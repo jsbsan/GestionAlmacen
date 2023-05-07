@@ -1,0 +1,15 @@
+# Gambas Form File 3.0
+{ Form Form 
+  Move(0,0,464,512)
+  #Scaled = False
+  Icon = Picture["icon:/16/indent"]
+  { TreeView1 TreeView 
+    Move(8,40,448,464)
+    Font = Font["Courier,-1"]
+  }
+  { actualizar_arbol Button 
+    Move(144,8,160,24)
+    Font = Font["Times,-1"]
+    Text = ("Actualizar")
+  }
+}

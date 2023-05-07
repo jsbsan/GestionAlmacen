@@ -1,0 +1,78 @@
+' Gambas module file
+
+Public Sub nuevo()
+
+  Dim a As Integer
+  Dim nombrenuevo As String
+  Dim idudobra As String 'unidad de obra en la que esta incluida este concepto
+
+  idudobra = Upper$(fmain.textboxidudobra.text)
+  nombrenuevo = Upper$(fmain.textboxconcepto.text)
+
+  'comprobar si el nombre esta en blanco o la unidad de obra
+  If (nombrenuevo = "" Or idudobra = "") Then
+    Message.Info("Nombre en blanco del concepto o unidad de obra donde esta incluido")
+    Goto finnuevo
+  End If
+
+  var.concepto_numero += 1
+  a = var.concepto_numero - 1
+
+  'redimensiono
+  var.concepto_id.Resize(a + 1)
+  var.concepto_Obra.resize(a + 1)
+  var.concepto_idudobra.resize(a + 1) 'unidad de obra donde se encuentra
+  var.concepto_ud.resize(a + 1)
+  var.concepto_nombre.resize(a + 1) 'nombre descriptivo unidad
+
+  var.concepto_med.resize(a + 1) 'medicion
+  var.concepto_precio.resize(a + 1)   'precio de contrato
+  var.conceptomemoria.resize(a + 1)
+  var.conceptotipo.resize(a + 1)
+
+  'almacenos datos
+  var.concepto_id[a] = "Idcon" & Str$(Now)
+  var.concepto_Obra[a] = fmain.ComboBoxObrasConceptos.text
+  var.concepto_idudobra[a] = idudobra 'unidad de obra donde se encuentra
+  var.concepto_ud[a] = fmain.comboboxud.text
+  var.concepto_nombre[a] = nombrenuevo 'nombre descriptivo unidad
+  var.concepto_med[a] = fmain.valueboxmedconcepto.value 'medicion
+  var.concepto_precio[a] = fmain.valueboxprecioconcepto.value 'precio de contrato
+  var.conceptotipo[a] = fmain.ComboBoxtipoconcepto.Text
+
+  var.conceptomemoria[a] = a
+
+  ABNuevoconcepto.muestra(fmain.ComboBoxObrasConceptos.text)
+  ABNuevoconcepto.enblanco()
+
+  'FMain.TextBoxIdUdObra.SetFocus
+
+finnuevo:
+
+End
+
+Public Sub muestra(obra As String)
+
+  Dim a As Integer
+
+  a = var.concepto_numero - 1
+  FMain.GridViewConceptos.Rows.count = a + 1
+
+  BorradosDatosIniciales.dibujogridConceptos(obra)
+  Goto finmuestra
+
+finmuestra:
+
+End
+
+Public Sub enblanco()
+
+  fmain.labelidconcepto.text = ""
+  fmain.textboxidudobra.text = ""
+  fmain.textboxconcepto.text = ""
+  fmain.valueboxmedconcepto.value = 0
+  fmain.valueboxprecioconcepto.value = 0
+  fmain.comboboxud.text = "ud."
+  fmain.ComboBoxtipoconcepto.text = "materiales"
+
+End

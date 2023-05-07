@@ -1,0 +1,67 @@
+' Gambas module file
+
+Public Sub variables()
+  'proveedor
+
+  var.Prov_id.resize(0)
+  var.Prov_nombre.resize(0)
+  var.Prov_Nif.resize(0)
+  var.Prov_pc.resize(0)   'persona de contacto
+  var.Prov_Telf.resize(0)   'telefono
+  var.Prov_Fax.resize(0)   'fax
+  var.Prov_Movil.resize(0)
+  var.Prov_Correo.resize(0)   'correo electronico
+  var.Prov_fp.resize(0)   'forma de pago
+  var.Prov_Fecha.resize(0)  'fecha del dato que introducimos
+  var.Prov_Direccion.resize(0)
+  var.Prov_cp.resize(0)
+  var.Prov_Ciudad.resize(0)
+  var.Prov_Provincia.resize(0)
+  var.Prov_observaciones.resize(0)
+  var.Prov_numero = 0
+
+  'conceptos
+  var.concepto_id.Resize(0)
+  var.concepto_idudobra.resize(0) 'unidad de obra donde se encuentra
+  var.concepto_nombre.resize(0) 'nombre descriptivo unidad
+  var.concepto_ud.Resize(0)
+  var.concepto_med.resize(0) 'medicion
+  var.concepto_precio.resize(0)   'precio de contrato
+  var.conceptomemoria.resize(0)
+  var.conceptotipo.resize(0)
+  var.concepto_id.Resize(0)
+  var.concepto_Obra.resize(0)
+
+  'conceptos dentro de albaranes
+  var.entrada_id.resize(0)
+  var.entrada_idconcepto.resize(0)
+  var.entrada_medidaconcepto.resize(0)  'le ponga la medida del concepto que tiene el albaran
+  var.entrada_precio.resize(0) 'precio del cooncepto
+  var.entrada_tipoprecio.resize(0) ' contrado, estimacion, oferta
+  var.entrada_memoria.resize(0)
+  var.entrada_salida.Resize(0)
+
+  'facturas
+  var.fact_id.Resize(0) 'id dado por el programa a cada factura introducida
+  var.fact_prov.Resize(0) 'nombre del proveedor de esta factura
+  var.fact_nprov.Resize(0) 'numero de factura que da n ºfacturadadaproveedor   (nº de factura que le da el proveedor)
+  var.fact_idobra.Resize(0) 'obra a la que pertenece la factura
+  var.fact_fecha.Resize(0) 'fecha de la factura (la que tiene la factura)
+  var.fact_fecha_imp.Resize(0) 'fecha de imputacion factura
+  var.fact_valor.Resize(0)
+
+  'Otras actuaciones
+  FMain.ValueBoxFechaTrabajo.value = Date
+  Titulos.titulosproveedores()
+  Titulos.titulosalbaranes()
+  Titulos.titulosconceptos()
+  Titulos.entradas()
+  Titulos.salidas()
+  Titulos.facturas()
+  Titulos.titulosproveedores1()
+  titulos.filtroconceptos() 'grid para introducir filtrado entrada a albaranes
+  titulos.Fgridsalidas()
+  titulos.titulosalbaranesProvFactura()
+  FMain.GridViewProveedor.mode = 1 'seleccion de uno solo
+
+End

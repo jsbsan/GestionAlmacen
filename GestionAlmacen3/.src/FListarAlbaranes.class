@@ -1,0 +1,47 @@
+' Gambas class file
+
+Public Sub Form_Open()
+
+  Dim a As Integer
+
+  Me.caption = "Listado Diario de Albaranes por Proveedor"
+  comboboxproveedores.Clear
+
+  For a = 0 To var.Prov_numero - 1
+    comboboxproveedores.Add(var.prov_nombre[a])
+  Next
+
+End
+
+Public Sub mostraralbaranes_Click()
+
+  ' comprobar todos los albaranes del dia elegido en el calendario, y del proveedor
+  ' y listar en la rejilla albaranes, y descompuestos del mismo.
+  Dim a As Integer
+  Dim mostrado As String
+
+  mostrado = "no"
+
+  For a = 0 To var.alb_numero - 1
+
+    If var.alb_prov[a] = comboboxproveedores.Text And var.alb_fecha[a] = DateChooser1.Value Then
+      'coincide con el criterio
+      'hay que escribirlo en la rejilla
+      Message.info(comboboxproveedores.text & " " & DateChooser1.value)
+      mostrado = "si"
+
+      GridViewListaAlbaran.row &= 1
+      GridViewListaAlbaran.Column = 3
+
+      GridViewListaAlbaran[GridViewListaAlbaran.Row - 1, 1] = "Albaran:"
+      GridViewListaAlbaran[GridViewListaAlbaran.row - 1, 2].text = var.alb_numeroprov
+
+    Endif
+
+  Next
+
+  If mostrado = "no" Then
+    Message.Info("No existen albaranes del proveedor: " & comboboxproveedores.text & " en la fecha " & Format(DateChooser1.value, "ddd mmm yyyy"))
+  Endif
+
+End

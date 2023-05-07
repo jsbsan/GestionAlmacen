@@ -1,0 +1,92 @@
+' Gambas module file
+
+Public Sub nuevo()
+
+  Dim a As Integer
+  Dim nombrenuevo As String
+  ' DIM idudobra AS String 'unidad de obra en la que esta incluida este concepto
+
+  'textboxnalb= Upper$(fmain.textboxidudobra.text)
+
+  'comprobar si el numero de albaran  esta en blanco
+  If (fmain.textboxnalb.text = "") Then
+    Message.Info("Numero de albaran en blanco, debe introducir uno")
+    Goto finnuevo
+  Else
+    If (fmain.ComboBoxALBPROV.text = "") Then
+      Message.Info("Proveedor de albaran en blanco, debe de introducir uno")
+      Goto finnuevo
+    Endif
+  Endif
+
+  For a = 0 To Var.alb_numero - 1
+    If fmain.textboxnalb.text = var.alb_numeroprov[a] And var.alb_prov[a] = fmain.ComboBoxALBPROV.text Then
+      Message.Info("Ya exite un albaran con el mismo numero del mismo proveedor")
+      Goto finnuevo
+    End If
+  Next
+
+  var.alb_numero += 1
+  a = var.alb_numero - 1
+
+  'redimensiono
+  var.alb_id.Resize(a + 1) 'id automatico del programa
+  var.alb_numeroprov.resize(a + 1) 'numro que tiene el albaran (lo pone el proveedor)
+  var.alb_prov.resize(a + 1)  'proveedor de este albaran
+  var.alb_fecha.resize(a + 1) 'fecha del albaran
+  var.alb_idobra.Resize(a + 1)
+  var.alb_imp.Resize(a + 1)
+  var.alb_fechaEnt.resize(a + 1)   'entrada en obra
+  var.albmemoria.resize(a + 1)
+  var.alb_valor.resize(a + 1)
+
+  'almacenos datos
+  var.alb_id[a] = "Idalb" & Str$(Now)
+  var.alb_numeroprov[a] = fmain.textboxnalb.text
+  var.alb_prov[a] = fmain.ComboBoxALBPROV.text 'proveedor de este albaran
+  var.alb_fecha[a] = fmain.ValueBoxFAlb.value 'fecha del albaran
+  var.alb_idobra[a] = fmain.ComboBoxObraAlbaran.text
+  var.alb_imp[a] = fmain.LabelImputadoAlb.text
+  var.alb_fechaEnt[a] = fmain.ValueBoxFEAlb.value  'entrada en obra
+
+  'var.alb_valor[a] = fmain.LabelVALORALBARAN.text
+
+  'tengo que revisar el descompuesto de albaranes para añadirle el valor
+
+  var.albmemoria[a] = a
+
+  ABNuevoalbaran.muestra(fmain.ComboBoxObraAlbaran.text)
+  ABNuevoalbaran.enblanco()
+
+  'FMain.TextBoxNAlb.SetFocus
+
+finnuevo:
+
+End
+
+Public Sub muestra(obra As String)
+
+  Dim a As Integer
+
+  a = var.alb_numero - 1
+  FMain.GridViewAlbaran.Rows.count = a + 1
+
+  BorradosDatosIniciales.dibujogridAlbaran(obra)
+  Goto finmuestra
+
+finmuestra:
+
+End
+
+Public Sub enblanco()
+
+  fmain.LabelIdAlb.text = ""
+  fmain.textboxnalb.text = ""
+  'fmain.ComboBoxALBPROV.text'proveedor de este albaran
+  fmain.ValueBoxFAlb.value = 0 'fecha del albaran
+  ' fmain.ComboBoxObraAlbaran.text
+  fmain.LabelImputadoAlb.text = ""
+  fmain.ValueBoxFEAlb.value = fmain.ValueBoxFechaTrabajo.value 'entrada en obra
+  fmain.LabelVALORALBARAN.text = ""
+
+End

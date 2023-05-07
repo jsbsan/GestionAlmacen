@@ -1,0 +1,63 @@
+' Gambas class file
+
+Public Sub Form_Open()
+
+  Dim c As Integer
+
+  Me.Center
+
+  c = var.salir
+  RadioButtonTodo.Text = "Sale todo: " & Str$(var.entrada_medidaconcepto[c] - var.entrada_salida[c])
+
+End
+
+Public Sub ButtonAcepta_Click()
+
+  If RadioButtonCantidad.Value = True Then
+    If (var.entrada_salida[var.salir] + ValueBoxSaleCantidad.Value) > var.entrada_medidaconcepto[var.salir]
+      Message.Info("La salida de materiales supera a la entrada, no es posible realizar esto")
+    Else
+      var.entrada_salida[var.salir] += ValueBoxSaleCantidad.Value
+    Endif
+  Endif
+  If RadioButtonQueda.value = True Then
+    If (var.entrada_medidaconcepto[var.salir] - valueboxquedacantidad.value) < 0 Then
+      Message.Info("No puede quedar mas de lo que ha entrado")
+    Else
+      var.entrada_salida[var.salir] = var.entrada_medidaconcepto[var.salir] - valueboxquedacantidad.value
+    Endif
+  Endif
+  If RadioButtonTodo.value = True Then var.entrada_salida[var.salir] = var.entrada_medidaconcepto[var.salir]
+  Me.close
+
+End
+
+Public Sub ButtonCancela_Click()
+  'no sale nada
+
+  Me.Close
+
+End
+
+Public Sub ValueBoxSaleCantidad_KeyPress()
+
+  If (key.Code = Asc(".")) Then
+    ValueBoxSaleCantidad.Insert(",")
+  End If
+
+  If Key.code = Key.enter Or Key.code = Key.Return Then
+    ButtonAcepta.SetFocus
+  Endif
+
+End
+
+Public Sub ValueBoxQuedaCantidad_KeyPress()
+
+  If (key.Code = Asc(".")) Then
+    ValueBoxQuedaCantidad.Insert(",")
+  End If
+  If Key.code = Key.enter Or Key.code = Key.Return Then
+    ButtonAcepta.SetFocus
+  Endif
+
+End

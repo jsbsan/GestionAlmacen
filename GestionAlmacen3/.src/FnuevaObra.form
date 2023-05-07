@@ -1,0 +1,24 @@
+# Gambas Form File 3.0
+{ Form Form 
+  Move(0,0,448,112)
+  #Scaled = False
+  { Label1 Label 
+    Move(8,0,200,40)
+    Font = Font["Times,-1"]
+    Text = ("Nombre de Nueva Obra:")
+  }
+  { TextBoxNombre TextBox 
+    Move(8,32,424,24)
+    Font = Font["Times,-1"]
+  }
+  { ButtonAceptar Button 
+    Move(72,72,88,32)
+    Font = Font["Times,-1"]
+    Text = ("Aceptar")
+  }
+  { ButtonCancelar Button 
+    Move(256,72,88,32)
+    Font = Font["Times,-1"]
+    Text = ("Cancelar")
+  }
+}

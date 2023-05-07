@@ -1,0 +1,359 @@
+' Gambas module file
+
+Public Sub esquemaGenerico(esquema As String, entradadatos As String, tipos As String) As String
+  'la cadena tipo puede contener estos caracteres e indica si es un texto, un numero o un fecha
+  'en el orde de aparicion de los datos
+  'tipos: " " espacio texto O FECHA
+  '       "#" numero
+  '       "&" fecha
+
+  Dim tipologia As String
+  Dim espacio As String
+  Dim devolver As String
+  Dim conta As Integer
+  Dim pos As Integer
+  Dim posicion As New Integer[]
+  Dim anterior As String
+  Dim letra As String
+  Dim linea As String
+  Dim arr_cadenas As New String[]
+  Dim repite As Integer
+  Dim cantidad As Integer
+  Dim c As String
+  Dim numero As Float 'numero con coma decimal
+  Dim cadenaNumero As String
+  ' analiza el esquema
+  esquema = esquema & "#"
+  tipos &= "                   "
+  anterior = " "
+  For conta = 1 To Len(esquema) - 1
+    letra = Mid$(esquema, conta, 1)
+    If letra = " " Then
+      anterior = " "
+      Goto finnext1
+    Else
+      ' letra es un caracter
+      If anterior = " " Then
+        pos += 1
+        posicion.resize(pos)
+        posicion[pos - 1] = conta 'donde estoy leyendo los caracteres
+        anterior = "L"
+      End If
+    Endif
+  finnext1:
+  Next
+
+  'con esto tengo todas las posiciones para los texto
+
+  linea = Space(Len(esquema))
+  espacio = Space(Len(esquema))
+  devolver = linea & linea
+  'contamos el numero de datos que contiene  entradadatos
+  arr_cadenas = Split(entradadatos, "|")
+
+  cantidad = 0
+  For Each c In arr_cadenas
+    cantidad += 1
+  Next
+
+  If cantidad > pos Then
+    'pos: posiciones en el esquema
+    'cantidad: numero de datos presentados
+    Message.Warning("Error entre esquema y tipo pasado a subrrutina")
+    ' hay mas datos del que indica el esquema
+    Goto errorEsquemaTipo
+  Endif
+
+  For repite = 0 To cantidad - 1
+    tipologia = Mid$(tipos, repite + 1, 1)
+
+    If tipologia = " " Then
+      'texto normal
+      If repite = 0 Then
+        If posicion[repite] = 1 Then
+          devolver = arr_cadenas[repite] & espacio
+          Goto finnext
+        Else
+          devolver = Left(devolver, posicion[repite] - 2) & arr_cadenas[repite] & espacio
+          Goto finnext
+        Endif
+
+      Else
+        devolver = Left(devolver, posicion[repite] - 2) & " " & arr_cadenas[repite] & espacio
+        Goto finnext
+      Endif
+    Endif
+
+    If tipologia = "#" Then
+      '........... 'numero
+      numero = comadecimal(arr_cadenas[repite])
+      If repite + 1 < pos Then
+        cadenaNumero = Right$("                       " & Format$(numero, "#,###.#0"), posicion[repite + 1] - 1 - posicion[repite] - 1)
+      Else
+        cadenaNumero = Right$("                       " & Format$(numero, "#,###.#0"), 10)
+      End If
+      If repite = 0 Then
+        devolver = Left(devolver, posicion[repite] - 1) & cadenaNumero & espacio
+        Goto finnext
+      Else
+        devolver = Left(devolver, posicion[repite]) & cadenaNumero & espacio
+        Goto finnext
+      Endif
+    Endif
+
+    '   IF tipologia = "&" THEN
+    '... '........ 'fecha
+    '      devolver = Left(devolver, posicion[repite] - 1) & arr_cadenas[repite] & espacio
+    '     GOTO finnext1
+    '    ENDIF
+  finnext:
+  Next
+  devolver = Left(devolver, Len(espacio))
+  Return devolver
+
+errorEsquemaTipo:
+  Return "Error: Esquema / Tipo "
+
+End
+
+' --------------------------------------------------------------------------------------
+' ESQUEMA CONCEPTO
+'-----------------------------------------------------------------------------------------
+
+' PUBLIC SUB esquemaConcepto(esquema AS String, a AS String, b AS String, c AS String, d AS String, e AS String, f AS String) AS String
+'
+'   'dado de un esquema de como lo queremos representar, y las variables rellenamos los datos
+'
+'   'leo el esquema y saco donde estan los simbolos " "+letra
+'   'esquema = "Id:        Ud.  Nombre                 Medicion  Precio  Tipo"
+'   DIM espacio AS String
+'   DIM devolver AS String
+'   DIM conta AS Integer
+'   DIM pos AS Integer
+'   DIM posicion AS NEW Integer[]
+'   DIM anterior AS String
+'   DIM letra AS String
+'   DIM linea AS String
+'
+'
+'   anterior = " "
+'   FOR conta = 1 TO Len(esquema) - 1
+'           letra = Mid$(esquema, conta, 1)
+'           IF letra = " " THEN
+'               anterior = " "
+'               GOTO finnext1
+'               ELSE
+'               ' letra es un caracter
+'                   IF anterior = " " THEN
+'                   pos += 1
+'                   posicion.resize(pos)
+'                   posicion[pos - 1] = conta 'donde estoy leyendo los caracteres
+'                   anterior = "L"
+'                   END IF
+'               ENDIF
+'   finnext1:
+'   NEXT
+'
+'   'con esto tengo todas las posiciones para los texto
+'
+'   linea = Space(Len(esquema))
+'   espacio = Space(Len(esquema))
+'   devolver = Left(linea, posicion[0] - 1) & a & espacio
+'     devolver = Left(devolver, posicion[1] - 1) & b & espacio
+'     devolver = Left(devolver, posicion[2] - 1) & c & espacio
+'     devolver = Left(devolver, posicion[3] - 1) & Formato(d) & espacio
+'     devolver = Left(devolver, posicion[4] - 1) & Formato(e) & espacio
+'     devolver = Left(devolver, posicion[5] - 1) & f & espacio
+'     devolver = Left(devolver, Len(espacio))
+'
+'   RETURN devolver
+'
+' END
+
+Public Function Formato(cadena As String) As String
+
+  Dim a As Integer
+  Dim devolver As String
+  Dim letra As String
+
+  devolver = ""
+
+  For a = 1 To Len(cadena)
+    letra = Mid$(cadena, a, 1)
+    If letra = "." Then
+      letra = "," 'convierto coma decimal en punto decimal
+    Endif
+    devolver &= letra
+  Next
+  Return Format$(Val(devolver), "#,###.##")
+  'RETURN Right$("                  " & Format$(Val(devolver), "#,###.##"), 13)
+  'RETURN Right("            " & Formatea(Val(devolver)), 12) & " "
+
+End
+
+' '----------------------------------------------- ESCRIBE ALBARAN -----------------------
+' 'Escribe.esquemaAlbaran(esquema, alb_prov[a], alb_numeroprov[a], alb_valor[a], alb_fecha[a], alb_fechaEnt[a], alb_imp[a])
+'
+' PUBLIC SUB esquemaAlbaran(esquema AS String, a AS String, b AS String, c AS String, d AS String, e AS String, f AS String) AS String
+'
+'   DIM espacio AS String
+'   DIM devolver AS String
+'   DIM conta AS Integer
+'   DIM pos AS Integer
+'   DIM posicion AS NEW Integer[]
+'   DIM anterior AS String
+'   DIM letra AS String
+'   DIM linea AS String
+'
+'
+'   anterior = " "
+'   FOR conta = 1 TO Len(esquema) - 1
+'           letra = Mid$(esquema, conta, 1)
+'           IF letra = " " THEN
+'               anterior = " "
+'               GOTO finnext1
+'               ELSE
+'               ' letra es un caracter
+'                   IF anterior = " " THEN
+'                   pos += 1
+'                   posicion.resize(pos)
+'                   posicion[pos - 1] = conta 'donde estoy leyendo los caracteres
+'                   anterior = "L"
+'                   END IF
+'               ENDIF
+'   finnext1:
+'   NEXT
+'
+'   'con esto tengo todas las posiciones para los texto
+'
+'   linea = Space(Len(esquema))
+'   espacio = Space(Len(esquema))
+'   devolver = Left(linea, posicion[0] - 1) & a & espacio
+'     devolver = Left(devolver, posicion[1] - 1) & b & espacio
+'     devolver = Left(devolver, posicion[2] - 1) & Formato(c) & espacio
+'     devolver = Left(devolver, posicion[3] - 1) & d & espacio
+'     devolver = Left(devolver, posicion[4] - 1) & e & espacio
+'     devolver = Left(devolver, posicion[5] - 1) & f & espacio
+'     devolver = Left(devolver, Len(espacio))
+'
+'   RETURN devolver
+'
+'
+'
+'
+' END
+
+'--------------------------------------------------------------------------------
+Public Function comadecimal(cadena As String) As Float
+
+  Dim a As Integer
+  Dim letra As String
+  Dim devolver As String
+
+  devolver = ""
+
+  For a = 1 To Len(cadena)
+    letra = Mid$(cadena, a, 1)
+    If letra = "." Then
+      letra = "," 'convierto coma decimal en punto decimal
+    Endif
+    devolver &= letra
+  Next
+
+  If IsNull(Val(devolver)) Then
+    Message.Error("Error: val devuelve un NULL en Modulo Escribe: (" & devolver & ")")
+    Return
+  Endif
+
+  Return Val(devolver)
+
+End
+'-----------------------------------------------------------------------------
+'Formatea numero con coma decimal
+'------------------------------------------------------------------------------
+
+Function Formatea(numero As Float) As String
+
+  Dim a As Integer
+  Dim devolver As String
+  Dim letra As String
+  Dim cadena As String
+  Dim coma As Integer
+  Dim cuenta As Integer
+  Dim contandodecimales As String
+  Dim masdecimales As String
+  Dim redondeo As Integer
+  Dim numeroredondeo As Integer
+  Dim parteentera As Integer
+  Dim partedecimal2 As String
+  Dim tercerdecimal As Integer
+  Dim partedecimal2n As Integer
+
+  cadena = Str$(numero)
+
+  devolver = ""
+
+  For a = 1 To Len(cadena)
+    letra = Mid$(cadena, a, 1)
+    If letra = "," Then
+      coma = a
+      contandodecimales = "si"
+    Endif
+    If contandodecimales = "si" Then
+      cuenta += 1
+      If cuenta > 3 Then masdecimales &= letra
+    Endif
+
+    devolver &= letra
+  Next
+
+  If coma = 0 Then
+    'el numero no contiene decimales
+    Return devolver & ",00"
+  Endif
+
+  'el numero contiene decimales
+  If cuenta = 2 Then
+    'tiene un decimal
+    Return devolver & "0"
+  Endif
+  If cuenta = 3 Then
+    'tiene dos decimales, no redondeo
+    Return devolver
+  Endif
+
+  If cuenta > 3 Then
+    parteentera = Val(Mid$(devolver, 1, Len(devolver) - cuenta))
+    partedecimal2 = Mid$(devolver, coma + 1, 2)
+    tercerdecimal = Val(Mid$(devolver, coma + 1 + 2, 1))
+  Endif
+  If tercerdecimal > 5 Then
+    partedecimal2n = Val(partedecimal2) + 1
+  Else
+    partedecimal2n = Val(partedecimal2)
+  Endif
+
+  If partedecimal2n = 100 Then parteentera += 1
+
+  devolver = Str$(parteentera) & "," & Str$(Right("0000" & partedecimal2n, 2))
+
+  Return devolver
+
+End
+'--------------------------------------------------------------------------------
+' subrayar esquema
+'--------------------------------------------------------------------------------
+
+Public Function subraya(esquema As String) As String
+
+  Dim nuevacadena As String
+  Dim conta As Integer
+  Dim letra As String
+
+  nuevacadena = String(Len(esquema), "-")
+
+  esquema &= "\r" & nuevacadena
+
+  Return esquema
+
+End

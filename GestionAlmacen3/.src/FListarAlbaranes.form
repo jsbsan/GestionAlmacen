@@ -1,0 +1,37 @@
+# Gambas Form File 3.0
+{ Form Form 
+  Move(0,0,588,602)
+  #Scaled = False
+  { DateChooser1 DateChooser 
+    Move(7,14,322,161)
+    Font = Font["-1"]
+  }
+  { GridViewListaAlbaran GridView 
+    Move(7,182,567,413)
+    Font = Font["-1"]
+  }
+  { ComboBoxProveedores ComboBox 
+    Move(336,63,231,21)
+    Font = Font["-1"]
+    Text = ("ComboBoxProveedores")
+    ReadOnly = True
+    Sorted = True
+  }
+  { Label1 Label 
+    Move(392,28,112,14)
+    Text = ("Proveedor:")
+  }
+  { copiarportapaepelesGridViewAlbaran ToolButton 
+    Move(336,147,231,21)
+    Font = Font["-1"]
+    Text = ("Copiar al Portapapeles")
+    Picture = Picture["icon:/16/copy"]
+    Border = True
+  }
+  { mostraralbaranes ToggleButton 
+    Move(336,105,231,21)
+    Font = Font["-1"]
+    Text = ("Mostrar Albaranes")
+    Picture = Picture["icon:/16/wizard"]
+  }
+}

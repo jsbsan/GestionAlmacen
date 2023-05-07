@@ -1,0 +1,106 @@
+' Gambas module file
+
+Public Sub nuevo()
+
+  Dim a As Integer
+  Dim nombrenuevo As String
+  Dim nifnuevo As String
+
+  nifnuevo = Upper$(Right(" " & fmain.textboxnifletra.text, 1) & "-" & Str$(fmain.valueboxnifnumero.value))
+  nombrenuevo = Upper$(fmain.textboxnombreproveedor.text)
+  'comprobar si el nombre esta en blanco o el nif
+  If (nombrenuevo = "" Or nifnuevo = " -0") Then
+    Message.Info("Nombre en blanco del proveedor o nif")
+    Goto finnuevo
+  End If
+
+  'hacer comprobacion si existe otro proveedor con el mismo nombre o el mismo nif
+  For a = 0 To var.Prov_numero - 1
+    If (nombrenuevo = var.Prov_nombre[a] Or var.Prov_Nif[a] = nifnuevo) Then
+      Message.Info("Existe otro proveedor con el mismo nombre o nif")
+      Goto finnuevo
+    End If
+  Next
+
+  var.Prov_numero += 1
+  a = var.Prov_numero - 1
+
+  'redimensiono
+
+  var.Prov_id.resize(a + 1)
+  var.Prov_nombre.resize(a + 1)
+  var.Prov_Nif.resize(a + 1)
+  var.Prov_pc.resize(a + 1)   'persona de contacto
+  var.Prov_telf.resize(a + 1)
+  var.Prov_Fax.resize(a + 1)   'fax
+  var.Prov_Movil.resize(a + 1)
+  var.Prov_Correo.resize(a + 1)   'correo electronico
+  var.Prov_fp.resize(a + 1)   'forma de pago
+  var.Prov_Fecha.resize(a + 1)  'fecha del dato que introducimos
+  var.Prov_Direccion.resize(a + 1)
+  var.Prov_cp.resize(a + 1)
+  var.Prov_Ciudad.resize(a + 1)
+  var.Prov_Provincia.resize(a + 1)
+  var.Prov_observaciones.resize(a + 1)
+  var.provmemoria.resize(a + 1)
+
+  'almacenos datos
+  var.Prov_id[a] = "Idprov" & Str(Now)
+  var.Prov_nombre[a] = fmain.textboxnombreproveedor.text
+  var.Prov_Nif[a] = Right(" " & fmain.textboxnifletra.text, 1) & "-" & Str$(fmain.valueboxnifnumero.value)
+  var.Prov_pc[a] = fmain.textboxcontacto.text  'persona de contacto
+  var.Prov_telf[a] = fmain.textboxtelf.text
+  var.Prov_Fax[a] = fmain.textboxfax.text 'fax
+  var.Prov_Movil[a] = fmain.textboxmovil.text
+  var.Prov_Correo[a] = fmain.textboxcorreo.text   'correo electronico
+  var.Prov_fp[a] = fmain.textboxfp.text   'forma de pago
+  var.Prov_Fecha[a] = fmain.valueboxfdatos.value  'fecha del dato que introducimos
+  var.Prov_Direccion[a] = fmain.textboxdireccion.text
+  var.Prov_cp[a] = fmain.textboxcp.value
+  var.Prov_Ciudad[a] = fmain.textboxciudad.text
+  var.Prov_Provincia[a] = fmain.textboxprov.text
+  var.Prov_observaciones[a] = fmain.textboxobs.text
+  var.Provmemoria[a] = a
+  ABNuevoProveedor.muestra()
+  ABNuevoProveedor.enblanco()
+  fmain.textboxnombreproveedor.SetFocus
+
+finnuevo:
+
+End
+
+Public Sub muestra()
+
+  Dim a As Integer
+
+  a = var.Prov_numero - 1
+  FMain.GridViewProveedor.Rows.count = a + 1
+
+  BorradosDatosIniciales.dibujogridProveedores()
+  Goto finmuestra
+
+finmuestra:
+
+End
+
+Public Sub enblanco()
+
+  fmain.labelidprov.text = ""
+  fmain.textboxnombreproveedor.text = ""
+  fmain.textboxnifletra.text = ""
+  fmain.valueboxnifnumero.value = 0
+  fmain.textboxcontacto.text = ""
+  fmain.textboxtelf.text = ""
+  fmain.textboxfax.text = ""
+  fmain.textboxmovil.text = ""
+  fmain.textboxcorreo.text = ""
+  fmain.textboxfp.text = ""
+  fmain.valueboxfdatos.value = 0
+  fmain.textboxdireccion.text = ""
+  fmain.textboxcp.value = ""
+  fmain.textboxciudad.text = ""
+  fmain.textboxprov.text = ""
+  fmain.textboxobs.text = ""
+  fmain.TextBoxNombreProveedor.SetFocus
+
+End

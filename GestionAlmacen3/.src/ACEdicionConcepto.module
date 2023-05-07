@@ -1,0 +1,46 @@
+' Gambas module file
+
+Public Sub edicion(fila As Integer)
+
+  Dim a As Integer
+
+  a = fila
+  fmain.labelidconcepto.text = var.concepto_id[a]
+  fmain.ComboBoxObrasConceptos.text = var.concepto_Obra[a]
+  fmain.textboxidudobra.text = var.concepto_idudobra[a]
+  fmain.textboxconcepto.text = var.concepto_nombre[a]
+  fmain.valueboxmedconcepto.value = var.concepto_med[a]
+  fmain.valueboxprecioconcepto.value = var.concepto_precio[a]
+  fmain.comboboxud.text = var.concepto_ud[a]
+  fmain.ComboBoxtipoconcepto.text = var.conceptotipo[a]
+
+End
+
+Public Sub reescriboConceptoMemoria(posmemoria As Integer)
+
+  Dim A As Integer
+
+  A = posmemoria
+  var.concepto_id[a] = fmain.labelIDconcepto.text
+  var.concepto_Obra[a] = fmain.ComboBoxObrasConceptos.text
+  var.concepto_idudobra[a] = fmain.textboxidudobra.text 'unidad de obra donde se encuentra
+  var.concepto_ud[a] = fmain.comboboxud.text
+  var.concepto_nombre[a] = fmain.textboxconcepto.text 'nombre descriptivo unidad
+  var.concepto_med[a] = fmain.valueboxmedconcepto.value 'medicion
+  var.concepto_precio[a] = fmain.valueboxprecioconcepto.value 'precio de contrato
+  var.conceptotipo[a] = fmain.ComboBoxtipoconcepto.Text
+
+End
+
+Public Sub subreescriboGridConcepto(posregilla As Integer, posmemoria As Integer)
+
+  FMain.GridViewConceptos[posregilla, 0].text = var.concepto_id[posmemoria]
+  FMain.GridViewConceptos[posregilla, 1].text = var.concepto_Obra[posmemoria]
+  FMain.GridViewConceptos[posregilla, 2].text = var.concepto_idudobra[posmemoria]
+  FMain.GridViewConceptos[posregilla, 3].text = var.concepto_ud[posmemoria]
+  FMain.GridViewConceptos[posregilla, 4].text = var.concepto_nombre[posmemoria]
+  FMain.GridViewConceptos[posregilla, 5].text = var.concepto_med[posmemoria]
+  FMain.GridViewConceptos[posregilla, 6].text = var.concepto_precio[posmemoria]
+  FMain.GridViewConceptos[posregilla, 7].text = var.conceptotipo[posmemoria]
+
+End

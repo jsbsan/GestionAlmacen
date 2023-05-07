@@ -1,0 +1,23 @@
+' Gambas class file
+
+Public Sub ButtonAceptar_Click()
+
+  FMain.ComboBoxObras.add(Upper(TextBoxNombre.text))
+
+  Me.close
+
+End
+
+Public Sub ButtonCancelar_Click()
+
+  Me.close
+
+End
+
+Public Sub TextBoxNombre_KeyPress()
+
+  If (Key.code = Key.enter Or Key.code = Key.Return Or Key.CODE = Key.TAB) And (TextBoxNombre.text <> "") Then
+    ButtonAceptar.setfocus
+  End If
+
+End
