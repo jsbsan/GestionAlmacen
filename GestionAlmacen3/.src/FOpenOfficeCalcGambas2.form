@@ -1,47 +1,55 @@
 # Gambas Form File 3.0
-{ Form Form 
+
+{ Form Form
   Move(0,0,630,490)
   #Scaled = False
-  { leerportapapeles Button 
+  { leerportapapeles Button
     Move(28,21,287,28)
-    Font = Font["Tarablus,-1"]
+    Font = Font["Arial,+1"]
     Text = ("Pulse para leer del portapapeles")
   }
-  { GridView1 GridView 
+  { GridView1 GridView
     Move(28,77,574,364)
+    Font = Font["Arial,+1"]
   }
-  { CheckBox1 CheckBox 
+  { CheckBox1 CheckBox
     Move(364,28,217,21)
+    Font = Font["Arial,+1"]
     Text = ("primera fila contiene titulos")
   }
-  { Button1 Button 
-    Move(35,455,210,21)
-    Font = Font["Tarablus,-1"]
-    Text = ("A\xC3\xB1ada datos a Conceptos")
+  { Button1 Button
+    Move(35,448,210,28)
+    Font = Font["Arial,+1"]
+    Text = ("Añada datos a Conceptos")
   }
-  { Button2 Button 
-    Move(392,455,210,21)
-    Font = Font["Tarablus,-1"]
+  { Button2 Button
+    Move(392,448,210,28)
+    Font = Font["Arial,+1"]
     Text = ("Cancelar")
+    Picture = Picture["icon:/16/cancel"]
   }
-  { Label1 Label 
+  { Label1 Label
     Move(28,63,105,14)
+    Font = Font["Arial,+1"]
+    Border = Border.Plain
     Text = ("Unidad")
-    Border = Border.Plain
   }
-  { Label2 Label 
+  { Label2 Label
     Move(133,63,105,14)
+    Font = Font["Arial,+1"]
+    Border = Border.Plain
     Text = ("Denominacion")
-    Border = Border.Plain
   }
-  { Label3 Label 
+  { Label3 Label
     Move(238,63,105,14)
-    Text = ("Medici\xC3\xB3n")
+    Font = Font["Arial,+1"]
     Border = Border.Plain
+    Text = ("Medición")
   }
-  { Label4 Label 
+  { Label4 Label
     Move(343,63,105,14)
-    Text = ("Precio")
+    Font = Font["Arial,+1"]
     Border = Border.Plain
+    Text = ("Precio")
   }
 }

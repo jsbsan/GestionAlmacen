@@ -20,7 +20,7 @@ Public Sub Form_Open()
   LabelFechaTrabajoInforme.text = Str$(ValueBoxFechaTrabajo.Value)
   salidaanterior = "no"
   addrecientes.abre()
-  Me.Show
+  Me.Show()
 
 End
 
@@ -2064,5 +2064,9 @@ Public Sub ToolButtonTabInformesDescompuestoAlbaranes3_Click()
 
   info.caption = "Descomposicion Albaranes Por Dia" & " Proveedor: " & ComboProvInforme.text & " Obra: " & ComboBoxObras.Text
   info.Show
+
+End
+
+Public Sub ToolButtonBorradoFactura_Click()
 
 End

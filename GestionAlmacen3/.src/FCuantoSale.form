@@ -1,38 +1,41 @@
 # Gambas Form File 3.0
-{ Form Form 
-  MoveScaled(0,0,52,19)
-  { RadioButtonTodo RadioButton 
-    MoveScaled(9,6,24,3)
-    Font = Font["Times,-1"]
+
+{ Form Form
+  MoveScaled(0,0,56,29)
+  { RadioButtonTodo RadioButton
+    MoveScaled(7,8,24,3)
+    Font = Font["Arial,+1"]
     Text = ("Sale Todo")
   }
-  { ButtonAcepta Button 
-    MoveScaled(35,13,12,3)
-    Font = Font["Times,-1"]
+  { ButtonAcepta Button
+    MoveScaled(33,22,12,4)
+    Font = Font["Arial,+1"]
     Text = ("Aceptar")
+    Picture = Picture["icon:/16/ok"]
   }
-  { RadioButtonQueda RadioButton 
-    MoveScaled(9,9,20,3)
-    Font = Font["Times,-1"]
+  { RadioButtonQueda RadioButton
+    MoveScaled(7,13,20,3)
+    Font = Font["Arial,+1"]
     Text = ("Queda:")
   }
-  { ValueBoxQuedaCantidad ValueBox 
-    MoveScaled(18,9,13,3)
-    Font = Font["Times,-1"]
+  { ValueBoxQuedaCantidad ValueBox
+    MoveScaled(31,13,11,3)
+    Font = Font["Arial,+1"]
   }
-  { RadioButtonCantidad RadioButton 
-    MoveScaled(9,3,21,3)
-    Font = Font["Times,-1"]
+  { RadioButtonCantidad RadioButton
+    MoveScaled(7,3,21,3)
+    Font = Font["Arial,+1"]
     Text = ("Sale la cantidad de:")
     Value = True
   }
-  { ValueBoxSaleCantidad ValueBox 
-    MoveScaled(24,3,11,3)
-    Font = Font["Times,-1"]
+  { ValueBoxSaleCantidad ValueBox
+    MoveScaled(31,3,11,3)
+    Font = Font["Arial,+1"]
   }
-  { ButtonCancela Button 
-    MoveScaled(10,13,12,3)
-    Font = Font["Times,-1"]
+  { ButtonCancela Button
+    MoveScaled(7,22,16,4)
+    Font = Font["Arial,+1"]
     Text = ("Cancela")
+    Picture = Picture["icon:/16/cancel"]
   }
 }

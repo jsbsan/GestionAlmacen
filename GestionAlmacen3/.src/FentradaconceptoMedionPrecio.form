@@ -1,52 +1,56 @@
 # Gambas Form File 3.0
-{ Form Form 
-  MoveScaled(0,0,50,18)
-  { ValueBoxmed ValueBox 
-    MoveScaled(14,2,15,4)
-    Font = Font["Times,-1"]
+
+{ Form Form
+  MoveScaled(0,0,81,34)
+  { ValueBoxmed ValueBox
+    MoveScaled(21,9,15,4)
+    Font = Font["Arial,+1"]
   }
-  { ValueBoxprecio ValueBox 
-    MoveScaled(14,7,15,4)
-    Font = Font["Times,-1"]
+  { ValueBoxprecio ValueBox
+    MoveScaled(21,14,15,4)
+    Font = Font["Arial,+1"]
   }
-  { RadioButtonEstimacion RadioButton 
-    MoveScaled(34,4,24,3)
-    Font = Font["Times,-1"]
+  { RadioButtonEstimacion RadioButton
+    MoveScaled(47,9,24,3)
+    Font = Font["Arial,+1"]
     Text = ("Estimacion")
     Value = True
   }
-  { RadioButtonOferta RadioButton 
-    MoveScaled(34,7,21,3)
-    Font = Font["Times,-1"]
+  { RadioButtonOferta RadioButton
+    MoveScaled(47,12,21,3)
+    Font = Font["Arial,+1"]
     Text = ("Oferta")
   }
-  { RadioButtonContrato RadioButton 
-    MoveScaled(34,10,13,3)
-    Font = Font["Times,-1"]
+  { RadioButtonContrato RadioButton
+    MoveScaled(47,15,13,3)
+    Font = Font["Arial,+1"]
     Text = ("Contrato")
   }
-  { Label1 Label 
-    MoveScaled(3,7,9,4)
-    Font = Font["Times,-1"]
+  { Label1 Label
+    MoveScaled(10,14,9,4)
+    Font = Font["Arial,+1"]
     Text = ("Precio:")
   }
-  { Label2 Label 
-    MoveScaled(3,2,9,4)
-    Font = Font["Times,-1"]
+  { Label2 Label
+    MoveScaled(10,9,9,4)
+    Font = Font["Arial,+1"]
     Text = ("Medicion:")
   }
-  { Button1 Button 
-    MoveScaled(29,13,16,3)
-    Font = Font["Times,-1"]
+  { Button1 Button
+    MoveScaled(47,27,18,4)
+    Font = Font["Arial,+1"]
     Text = ("Aceptar")
+    Picture = Picture["icon:/16/ok"]
   }
-  { Button2 Button 
-    MoveScaled(8,13,14,3)
-    Font = Font["Times,-1"]
+  { Button2 Button
+    MoveScaled(19,27,20,4)
+    Font = Font["Arial,+1"]
     Text = ("Cancelar")
+    Picture = Picture["icon:/16/cancel"]
   }
-  { Label3 Label 
-    MoveScaled(33,1,10,3)
+  { Label3 Label
+    MoveScaled(46,6,10,3)
+    Font = Font["Arial,+1"]
     Text = ("Precio:")
   }
 }

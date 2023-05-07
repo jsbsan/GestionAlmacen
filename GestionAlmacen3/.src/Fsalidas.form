@@ -1,18 +1,21 @@
 # Gambas Form File 3.0
-{ Form Form 
-  MoveScaled(0,0,76,44)
-  { Label1 Label 
-    MoveScaled(3,2,21,3)
+
+{ Form Form
+  MoveScaled(0,0,103,58)
+  { Label1 Label
+    MoveScaled(3,2,27,3)
+    Font = Font["Arial,+1"]
     Text = ("Salidas de materiales:")
   }
-  { Button1 Button 
-    MoveScaled(60,2,12,3)
-    Font = Font["Times,-1"]
+  { Button1 Button
+    MoveScaled(80,52,17,5)
+    Font = Font["Arial,+1"]
     Text = ("Aceptar")
+    Picture = Picture["icon:/16/apply"]
   }
-  { GridViewS GridView 
-    MoveScaled(1,6,73,34)
-    Font = Font["Times,-1"]
+  { GridViewS GridView
+    MoveScaled(2,7,99,44)
+    Font = Font["Arial,+1"]
     Mode = Select.Single
   }
 }

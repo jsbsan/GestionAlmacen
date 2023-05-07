@@ -1,1112 +1,1115 @@
 # Gambas Form File 3.0
-{ Form Form 
-  Move(0,0,616,427)
+
+{ Form Form
+  Move(0,0,798,532)
   #Scaled = False
   Icon = Picture["ico52consigna.gif"]
-  Border = False
   Minimized = True
-  { Fichero Menu 
-    Text = ("&Fichero")
+  Centered = True
+  { Fichero Menu
+    Text = Shortcut(("Fichero"), "F")
     Shortcut = "Ctrl+F"
-    { Menu5 Menu 
+    { Menu5 Menu
       Text = ("Abrir")
       Picture = Picture["icon:/16/directory"]
-      { abrirproveedor Menu 
+      { abrirproveedor Menu
         Text = ("Proveerdor")
       }
-      { Menu2 Menu 
+      { Menu2 Menu
         Text = ("Conceptos")
       }
-      { abriralbaran Menu 
+      { abriralbaran Menu
         Text = ("Albaranes/Facturas")
       }
-      { Menu3 Menu 
+      { Menu3 Menu
         Text = ("Seccion")
       }
     }
-    { Menu10 Menu 
+    { Menu10 Menu
     }
-    { guardar Menu 
+    { guardar Menu
       Text = ("Guardar")
       Picture = Picture["icon:/16/save"]
-      { Menu4 Menu 
+      { Menu4 Menu
         Text = ("Proveedor")
       }
-      { Menu8 Menu 
+      { Menu8 Menu
         Text = ("Conceptos")
       }
-      { Menu9 Menu 
+      { Menu9 Menu
         Text = ("Albaranes/Facturas")
       }
-      { Menu7 Menu 
+      { Menu7 Menu
         Text = ("Seccion")
       }
     }
-    { Menu11 Menu 
+    { Menu11 Menu
     }
-    { salir Menu 
+    { salir Menu
       Text = ("Salir")
       Picture = Picture["icon:/16/quit"]
     }
   }
-  { Menu6 Menu 
-    Text = ("&Secciones Recientes")
+  { Menu6 Menu
+    Text = Shortcut(("Secciones Recientes"), "S")
     Shortcut = "Ctrl+S"
-    { reciente0 Menu 
+    { reciente0 Menu
       Text = ("(sin recientes)")
     }
-    { reciente1 Menu 
+    { reciente1 Menu
       Text = ("(vacio)")
       Visible = False
     }
-    { reciente2 Menu 
+    { reciente2 Menu
       Text = ("(vacio)")
       Visible = False
     }
-    { reciente3 Menu 
+    { reciente3 Menu
       Text = ("(vacio)")
       Visible = False
     }
-    { reciente4 Menu 
+    { reciente4 Menu
       Text = ("(vacio)")
       Visible = False
     }
-    { Menu12 Menu 
+    { Menu12 Menu
     }
   }
-  { Menu1 Menu 
-    Text = ("&Ver")
+  { Menu1 Menu
+    Text = Shortcut(("Ver"), "V")
     Shortcut = "Ctrl+V"
-    { Vista_Arbol Menu 
+    { Vista_Arbol Menu
       Text = ("Arbol")
       Picture = Picture["icon:/16/indent"]
     }
-    { MiniCalendario Menu 
+    { MiniCalendario Menu
       Text = ("MiniCalendario")
       Picture = Picture["calendario.jpg"]
     }
   }
-  { ayuda Menu 
-    Text = ("&Ayuda")
+  { ayuda Menu
+    Text = Shortcut(("Ayuda"), "A")
     Shortcut = "Ctrl+A"
-    { Update Menu 
+    { Update Menu
       Text = ("Actualizar Version (Update...)")
       Picture = Picture["icon:/32/refresh"]
     }
-    { Version Menu 
+    { Version Menu
       Text = ("Version Beta 0.0.7.4.3r07")
     }
   }
-  { TS1 TabStrip 
-    Move(14,21,595,378)
-    Font = Font["Times,-1"]
+  { TS1 TabStrip
+    Move(7,35,770,448)
+    Font = Font["Arial,+1"]
     Count = 7
     Index = 0
     Text = ("Inicio")
-    { Label4 Label 
-      Move(21,203,105,21)
-      Font = Font["Times,-1"]
+    { Label4 Label
+      Move(21,203,140,21)
       Text = ("Fecha de Trabajo:")
     }
-    { Label3 Label 
-      Move(42,175,91,21)
-      Font = Font["Times,-1"]
+    { Label3 Label
+      Move(21,175,91,21)
       Text = ("Obra Actual:")
     }
-    { Label1 Label 
-      Move(7,14,175,21)
-      Font = Font["Times,-1"]
+    { Label1 Label
+      Move(14,14,133,21)
       Text = ("Archivo Proveedores:")
     }
-    { Label2 Label 
+    { Label2 Label
       Move(7,91,140,14)
-      Font = Font["Times,-1"]
       Text = ("Archivo Alb, y Fact:")
     }
-    { TextBoxRutaProveedores TextBox 
-      Move(105,14,294,21)
+    { TextBoxRutaProveedores TextBox
+      Move(154,14,287,28)
     }
-    { TextBoxRutaAlbFact TextBox 
-      Move(105,84,294,21)
+    { TextBoxRutaAlbFact TextBox
+      Move(154,84,287,28)
     }
-    { ValueBoxFechaTrabajo ValueBox 
-      Move(112,203,98,21)
+    { ValueBoxFechaTrabajo ValueBox
+      Move(168,203,147,21)
       Type = ValueBox.Date
     }
-    { Label34 Label 
-      Move(14,49,112,28)
-      Font = Font["Times,-1"]
+    { Label34 Label
+      Move(14,49,133,28)
       Text = ("Archivo Conceptos:")
     }
-    { TextBoxRutaConcepto TextBox 
-      Move(105,49,294,21)
+    { TextBoxRutaConcepto TextBox
+      Move(154,49,287,28)
     }
-    { ToolButton7 ToolButton 
-      Move(448,126,21,21)
+    { ToolButton7 ToolButton
+      Move(490,126,21,21)
       ToolTip = ("guardar seccion")
       Picture = Picture["icon:/16/save"]
       Border = True
     }
-    { ToolButton8 ToolButton 
-      Move(406,126,21,21)
+    { ToolButton8 ToolButton
+      Move(448,126,21,21)
       ToolTip = ("abrir seccion")
       Picture = Picture["icon:/16/open"]
       Border = True
     }
-    { ToolButtonABREPROVEEDORES ToolButton 
-      Move(406,14,21,21)
+    { ToolButtonABREPROVEEDORES ToolButton
+      Move(448,14,21,21)
       ToolTip = ("abrir proveedores")
       Picture = Picture["icon:/16/open"]
       Border = True
     }
-    { ToolButton10 ToolButton 
-      Move(406,84,21,21)
+    { ToolButton10 ToolButton
+      Move(448,84,21,21)
       ToolTip = ("abrir facturas/albaranes")
       Picture = Picture["icon:/16/open"]
       Border = True
     }
-    { ToolButtonAbreconcepto ToolButton 
-      Move(406,49,21,21)
+    { ToolButtonAbreconcepto ToolButton
+      Move(448,49,21,21)
       ToolTip = ("abrir conceptos")
       Picture = Picture["icon:/16/open"]
       Border = True
     }
-    { ToolButtonSALVAPROVEEDORES ToolButton 
-      Move(448,14,21,21)
+    { ToolButtonSALVAPROVEEDORES ToolButton
+      Move(490,14,21,21)
       ToolTip = ("guardar proveedores")
       Picture = Picture["icon:/16/save"]
       Border = True
     }
-    { ToolButtonGuardaAlbFact ToolButton 
-      Move(448,84,21,21)
+    { ToolButtonGuardaAlbFact ToolButton
+      Move(490,84,21,21)
       ToolTip = ("guardar albaranes/facturas")
       Picture = Picture["icon:/16/save"]
       Border = True
     }
-    { ToolButtonGuardaConcepto ToolButton 
-      Move(448,49,21,21)
+    { ToolButtonGuardaConcepto ToolButton
+      Move(490,49,21,21)
       ToolTip = ("guardar conceptos")
       Picture = Picture["icon:/16/save"]
       Border = True
     }
-    { ComboBoxObras ComboBox 
+    { ComboBoxObras ComboBox
       Move(112,175,294,21)
       ReadOnly = True
       Sorted = True
     }
-    { ToolButtonNuevaObra ToolButton 
-      Move(420,175,77,21)
+    { ToolButtonNuevaObra ToolButton
+      Move(420,175,168,21)
       Text = ("Nueva Obra")
       Picture = Picture["icon:/16/add"]
       Border = True
     }
-    { ToggleButton1 ToggleButton 
-      Move(203,287,182,42)
-      Font = Font["Times,-1"]
+    { ToggleButton1 ToggleButton
+      Move(322,357,182,35)
+      Font = Font["Arial,+1"]
       Expand = True
-      Text = ("    Salir de la aplicaci\xC3\xB3n")
+      Text = ("    Salir de la aplicación")
       Picture = Picture["icon:/16/quit"]
     }
-    { ButtonBC3 Button 
-      Move(476,35,84,21)
+    { ButtonBC3 Button
+      Move(546,14,140,21)
       Text = ("BC3 > Conceptos")
     }
-    { TextBoxRutaSeccion TextBox 
-      Move(105,126,294,21)
+    { TextBoxRutaSeccion TextBox
+      Move(154,126,287,28)
     }
-    { Label29 Label 
-      Move(56,126,42,21)
-      Text = ("Secci\xC3\xB3n:")
+    { Label29 Label
+      Move(63,126,77,28)
+      Alignment = Align.Right
+      Text = ("Sección:")
     }
-    { ButtonCalcConcepto Button 
-      Move(476,63,84,21)
+    { ButtonCalcConcepto Button
+      Move(546,49,140,21)
       Text = ("Calc > Conceptos")
     }
     Index = 1
     Text = ("Proveedores")
-    { Label16 Label 
-      Move(14,112,84,14)
+    { Label16 Label
+      Move(14,119,84,14)
       Font = Font["Times,-1"]
       Text = ("Observaciones:")
     }
-    { Label15 Label 
-      Move(245,63,105,14)
+    { Label15 Label
+      Move(245,63,84,28)
       Font = Font["Times,-1"]
       Text = ("Forma de Pago:")
     }
-    { Label17 Label 
-      Move(421,42,35,14)
+    { Label17 Label
+      Move(469,35,35,28)
       Font = Font["Times,-1"]
       Text = ("Movil:")
     }
-    { Label13 Label 
-      Move(294,77,42,14)
+    { Label13 Label
+      Move(378,98,42,14)
       Font = Font["Times,-1"]
       Text = ("Ciudad")
     }
-    { Label10 Label 
-      Move(322,35,28,28)
+    { Label10 Label
+      Move(357,35,28,28)
       Font = Font["Times,-1"]
       Text = ("Fax:")
     }
-    { Label18 Label 
-      Move(245,77,28,14)
+    { Label18 Label
+      Move(280,91,28,28)
       Font = Font["Times,-1"]
       Text = ("C.P.")
     }
-    { Label11 Label 
-      Move(14,77,63,14)
+    { Label11 Label
+      Move(7,91,49,21)
       Font = Font["Times,-1"]
-      Text = ("Direcci\xC3\xB3n:")
+      Text = ("Dirección:")
     }
-    { Label12 Label 
-      Move(14,63,49,14)
+    { Label12 Label
+      Move(7,63,56,28)
       Font = Font["Times,-1"]
       Text = ("Correo @:")
     }
-    { Label14 Label 
-      Move(399,77,70,14)
+    { Label14 Label
+      Move(539,98,70,14)
       Font = Font["Times,-1"]
       Text = ("Provincia:")
     }
-    { Label9 Label 
-      Move(189,42,21,14)
+    { Label9 Label
+      Move(210,35,28,28)
       Font = Font["Times,-1"]
       Text = ("Telf:")
     }
-    { Label8 Label 
-      Move(14,42,49,14)
+    { Label8 Label
+      Move(14,35,49,28)
       Font = Font["Times,-1"]
       Text = ("Contacto:")
     }
-    { Label7 Label 
+    { Label7 Label
       Move(280,14,28,14)
       Font = Font["Times,-1"]
       Text = ("Nif:")
     }
-    { Label6 Label 
+    { Label6 Label
       Move(91,14,56,14)
       Font = Font["Times,-1"]
       Expand = True
       AutoResize = True
       Text = ("Nombre:")
     }
-    { Label5 Label 
+    { Label5 Label
       Move(14,14,14,14)
       Font = Font["Times,-1"]
       Text = ("Id:")
     }
-    { TextBoxNombreProveedor TextBox 
-      Move(133,14,140,14)
+    { TextBoxNombreProveedor TextBox
+      Move(133,7,140,28)
       Font = Font["Times,-1"]
     }
-    { TextBoxNifLetra TextBox 
+    { TextBoxNifLetra TextBox
       Move(301,14,21,14)
       Font = Font["Times,-1"]
       MaxLength = 1
     }
-    { ValueBoxNifNumero ValueBox 
-      Move(329,14,70,14)
+    { ValueBoxNifNumero ValueBox
+      Move(322,7,77,28)
       Font = Font["Times,-1"]
     }
-    { TextBoxContacto TextBox 
-      Move(56,42,126,14)
+    { TextBoxContacto TextBox
+      Move(63,35,147,28)
       Font = Font["Times,-1"]
     }
-    { TextBoxTelf TextBox 
-      Move(210,42,105,14)
+    { TextBoxTelf TextBox
+      Move(238,35,105,28)
       Font = Font["Times,-1"]
     }
-    { TextBoxFax TextBox 
-      Move(350,42,70,14)
+    { TextBoxFax TextBox
+      Move(385,35,70,28)
       Font = Font["Times,-1"]
     }
-    { TextBoxMovil TextBox 
-      Move(462,42,84,14)
+    { TextBoxMovil TextBox
+      Move(504,35,84,28)
       Font = Font["Times,-1"]
     }
-    { TextBoxCorreo TextBox 
-      Move(63,63,175,14)
+    { TextBoxCorreo TextBox
+      Move(63,63,175,28)
       Font = Font["Times,-1"]
     }
-    { TextBoxFP TextBox 
-      Move(315,63,70,14)
+    { TextBoxFP TextBox
+      Move(336,63,70,28)
       Font = Font["Times,-1"]
     }
-    { ValueBoxFdatos ValueBox 
-      Move(469,63,63,14)
+    { ValueBoxFdatos ValueBox
+      Move(511,63,70,28)
+    }
+    { TextBoxDireccion TextBox
+      Move(63,91,210,28)
       Font = Font["Times,-1"]
     }
-    { TextBoxDireccion TextBox 
-      Move(14,91,210,14)
+    { TextBoxCiudad TextBox
+      Move(427,91,98,28)
       Font = Font["Times,-1"]
     }
-    { TextBoxCiudad TextBox 
-      Move(294,91,84,14)
+    { TextBoxProv TextBox
+      Move(0,-35,98,14)
       Font = Font["Times,-1"]
     }
-    { TextBoxProv TextBox 
-      Move(399,91,98,14)
+    { TextBoxObs TextBox
+      Move(14,140,532,21)
       Font = Font["Times,-1"]
     }
-    { TextBoxObs TextBox 
-      Move(14,126,532,14)
-      Font = Font["Times,-1"]
-    }
-    { GridViewProveedor GridView 
-      Move(14,168,532,147)
+    { GridViewProveedor GridView
+      Move(14,189,721,182)
       Font = Font["Times,-1"]
       ToolTip = ("Clip: Editar el proveedor seleccionado")
     }
-    { LabelIDProv Label 
+    { LabelIDProv Label
       Move(28,14,56,14)
       Font = Font["Times,-1"]
       Border = Border.Plain
     }
-    { ToolButtonAceptarProveedor ToolButton 
-      Move(427,14,21,21)
+    { ToolButtonAceptarProveedor ToolButton
+      Move(595,14,21,21)
       Enabled = False
-      ToolTip = ("Ok edici\xC3\xB3n")
+      ToolTip = ("Ok edición")
       Picture = Picture["icon:/16/apply"]
       Border = True
     }
-    { ToolButtonCancelarProveedor ToolButton 
-      Move(462,14,21,21)
+    { ToolButtonCancelarProveedor ToolButton
+      Move(637,14,21,21)
       Enabled = False
-      ToolTip = ("Cancelar...")
+      ToolTip = ("Cancelar") & "..."
       Picture = Picture["icon:/16/cancel"]
       Border = True
     }
-    { ButtonNuevoProveedor Button 
+    { ButtonNuevoProveedor Button
       Move(497,14,21,7)
       Font = Font["Bold,+1"]
-      ToolTip = ("Nuevo...")
+      ToolTip = ("Nuevo") & "..."
       Text = ("*")
     }
-    { Label66 Label 
-      Move(14,147,42,14)
+    { Label66 Label
+      Move(14,168,42,21)
       Font = Font["Times,-1"]
       Text = ("Filtrado:")
     }
-    { ButtonFiltroProveedor Button 
-      Move(161,147,42,14)
+    { ButtonFiltroProveedor Button
+      Move(84,168,42,21)
       Font = Font["Times,-1"]
       ToolTip = ("similares")
       Text = ("Filtrar")
     }
-    { TextBoxFiltroProv TextBox 
+    { TextBoxFiltroProv TextBox
       Move(63,147,91,14)
       Font = Font["Times,-1"]
     }
-    { Label67 Label 
-      Move(406,63,56,14)
+    { Label67 Label
+      Move(427,63,84,28)
       Font = Font["Times,-1"]
       Text = ("Fecha datos:")
     }
-    { ToolButtonBorrar ToolButton 
-      Move(532,14,21,21)
+    { ToolButtonBorrar ToolButton
+      Move(714,14,21,21)
       Enabled = False
       ToolTip = ("Borrar Proveedor")
       Picture = Picture["icon:/16/delete"]
       Border = True
     }
-    { estadoprov Label 
-      Move(357,322,210,14)
-      Text = ("(Estado en Proveedores:  Modo A\xC3\xB1adir Nuevo)")
+    { estadoprov Label
+      Move(378,385,378,14)
+      Text = ("(Estado en Proveedores:  Modo Añadir Nuevo)")
     }
-    { CheckBoxFiltroProveedor CheckBox 
+    { CheckBoxFiltroProveedor CheckBox
       Move(210,147,98,14)
       Text = ("(proveedor o nif)")
     }
-    { textboxcp ValueBox 
-      Move(231,91,56,14)
+    { textboxcp ValueBox
+      Move(315,91,56,28)
     }
-    { ToolButtonInformeProv ToolButton 
-      Move(532,91,21,21)
+    { ToolButtonInformeProv ToolButton
+      Move(707,91,21,21)
       ToolTip = ("realizar informe")
       Picture = Picture["icon:/16/printer"]
       Border = True
     }
-    { copiarportapaepelesGridViewProveedor ToolButton 
-      Move(77,315,147,21)
+    { copiarportapaepelesGridViewProveedor ToolButton
+      Move(84,378,210,21)
       Text = ("Copiar al Portapapeles")
       Picture = Picture["icon:/16/copy"]
       Border = True
     }
     Index = 2
     Text = ("Conceptos")
-    { Label43 Label 
-      Move(7,0,63,28)
-      Font = Font["Times,-1"]
+    { Label43 Label
+      Move(7,0,91,28)
+      Font = Font["Arial,+1"]
       Text = ("Idconcepto:")
     }
-    { Label44 Label 
-      Move(168,21,70,28)
-      Font = Font["Times,-1"]
+    { Label44 Label
+      Move(231,28,91,21)
+      Font = Font["Arial,+1"]
       Text = ("IdUd.de Obra:")
     }
-    { Label45 Label 
-      Move(301,21,21,28)
-      Font = Font["Times,-1"]
+    { Label45 Label
+      Move(392,21,21,28)
+      Font = Font["Arial,+1"]
       Text = ("Ud:")
     }
-    { Label46 Label 
-      Move(21,42,70,28)
-      Font = Font["Times,-1"]
+    { Label46 Label
+      Move(7,49,119,21)
+      Font = Font["Arial,+1"]
       Text = ("Denominacion:")
     }
-    { LabelIDconcepto Label 
-      Move(63,7,140,14)
-      Font = Font["Times,-1"]
+    { LabelIDconcepto Label
+      Move(98,7,203,21)
+      Font = Font["Arial,+1"]
       Border = Border.Plain
     }
-    { TextBoxIdUdObra TextBox 
-      Move(231,28,63,14)
+    { TextBoxIdUdObra TextBox
+      Move(329,21,56,28)
       Font = Font["Times,-1"]
     }
-    { ComboBoxUd ComboBox 
-      Move(322,28,77,14)
-      Font = Font["Times,-1"]
-      Text = ("ComboBox2")
+    { ComboBoxUd ComboBox
+      Move(420,21,147,28)
+      Font = Font["Arial,+1"]
       ReadOnly = True
       List = [("ud."), ("m.l."), ("m2."), ("m3."), ("kg."), ("tn."), ("mu."), ("litros"), ("hora"), ("DiN Dia Natural"), ("DiL Dia Laboral"), ("semana"), ("mes"), ("P.A."), ("otra")]
+      Text = ("ComboBox2")
     }
-    { TextBoxConcepto TextBox 
-      Move(91,49,434,14)
+    { TextBoxConcepto TextBox
+      Move(126,49,476,21)
       Font = Font["Times,-1"]
     }
-    { ValueBoxPrecioConcepto ValueBox 
-      Move(182,70,42,14)
+    { ValueBoxPrecioConcepto ValueBox
+      Move(252,77,42,28)
     }
-    { ToolButtonAceptarConcepto ToolButton 
-      Move(427,14,21,21)
+    { ToolButtonAceptarConcepto ToolButton
+      Move(595,14,21,21)
       Enabled = False
-      ToolTip = ("Aceptar...")
+      ToolTip = ("Aceptar") & "..."
       Picture = Picture["icon:/16/apply"]
       Border = True
     }
-    { ToolButtonCancelarConcepto ToolButton 
-      Move(462,14,21,21)
+    { ToolButtonCancelarConcepto ToolButton
+      Move(637,14,21,21)
       Enabled = False
-      ToolTip = ("Cancelar...")
+      ToolTip = ("Cancelar") & "..."
       Picture = Picture["icon:/16/cancel"]
       Border = True
     }
-    { ButtonNuevoConcepto Button 
-      Move(497,14,21,21)
+    { ButtonNuevoConcepto Button
+      Move(679,14,21,21)
       Font = Font["Bold,+1"]
-      ToolTip = ("Nuevo...")
+      ToolTip = ("Nuevo") & "..."
       Text = ("*")
     }
-    { GridViewConceptos GridView 
-      Move(14,126,532,196)
+    { GridViewConceptos GridView
+      Move(14,168,735,210)
       Font = Font["Times,-1"]
       Mode = Select.Single
     }
-    { Label71 Label 
-      Move(147,70,35,14)
+    { Label71 Label
+      Move(196,77,49,21)
+      Font = Font["Arial,+1"]
       Text = ("Precio:")
     }
-    { Label78 Label 
-      Move(7,28,42,14)
-      Font = Font["Times,-1"]
+    { Label78 Label
+      Move(7,28,63,14)
+      Font = Font["Arial,+1"]
       Text = ("IdObra:")
     }
-    { ToolButton27 ToolButton 
-      Move(532,14,21,21)
+    { ToolButton27 ToolButton
+      Move(721,14,21,21)
       Enabled = False
       Picture = Picture["icon:/16/delete"]
       Border = True
     }
-    { LabelMedConcepto Label 
-      Move(7,70,84,14)
-      Text = ("Medici\xC3\xB3n Prevista:")
+    { LabelMedConcepto Label
+      Move(7,77,133,21)
+      Text = ("Medición Prevista:")
     }
-    { ValueBoxMedConcepto ValueBox 
-      Move(91,70,42,14)
+    { ValueBoxMedConcepto ValueBox
+      Move(140,77,49,28)
     }
-    { Label48 Label 
-      Move(231,70,168,14)
+    { Label48 Label
+      Move(329,77,273,21)
+      Font = Font["Arial,+1"]
+      Alignment = Align.Right
       Text = ("(sera considerado como el contratado)")
     }
-    { estadoconcepto Label 
-      Move(364,322,196,14)
-      Text = ("(Estado en Concepto:  Modo A\xC3\xB1adir Nuevo)")
+    { estadoconcepto Label
+      Move(427,392,308,14)
+      Text = ("(Estado en Concepto:  Modo Añadir Nuevo)")
     }
-    { ComboBoxtipoconcepto ComboBox 
-      Move(406,70,98,7)
-      Font = Font["Times,-1"]
-      Text = ("ComboBox4")
+    { ComboBoxtipoconcepto ComboBox
+      Move(609,70,98,28)
+      Font = Font["Arial,+1"]
       ReadOnly = True
       List = [("materiales"), ("subcontratas"), ("mano de obra"), ("maq.med.aux"), ("otros")]
+      Text = ("ComboBox4")
     }
-    { Label58 Label 
-      Move(21,98,56,14)
+    { Label58 Label
+      Move(21,126,56,28)
       Text = ("Filtrado:")
     }
-    { TextBoxFiltroConcepto TextBox 
-      Move(63,98,98,14)
+    { TextBoxFiltroConcepto TextBox
+      Move(84,126,196,28)
     }
-    { ButtonFiltroConcepto Button 
-      Move(182,98,231,14)
+    { ButtonFiltroConcepto Button
+      Move(294,126,357,28)
       ToolTip = ("busca conceptos que contengan la palabra del filtro")
-      Text = ("MFiltrar (m\xC3\xA1ximo 3 palabras separadas por coma)")
+      Text = ("MFiltrar (máximo 3 palabras separadas por coma)")
     }
-    { ComboBoxObrasConceptos ComboBox 
-      Move(42,21,106,14)
-      Text = ("ComboBox4")
+    { ComboBoxObrasConceptos ComboBox
+      Move(98,28,105,21)
+      Font = Font["Arial,+1"]
       ReadOnly = True
+      Text = ("ComboBox4")
       Sorted = True
     }
-    { ToolButtonInformeConcepto ToolButton 
-      Move(532,91,21,21)
+    { ToolButtonInformeConcepto ToolButton
+      Move(721,98,21,21)
       ToolTip = ("realizar informe")
       Picture = Picture["icon:/16/printer"]
       Border = True
     }
-    { copiarportapaepelesGridViewConceptos ToolButton 
-      Move(70,322,147,21)
+    { copiarportapaepelesGridViewConceptos ToolButton
+      Move(77,385,203,21)
       Text = ("Copiar al Portapapeles")
       Picture = Picture["icon:/16/copy"]
       Border = True
     }
     Index = 3
     Text = ("Albaranes")
-    { Label28 Label 
-      Move(14,84,91,14)
+    { Label28 Label
+      Move(14,84,91,28)
       Font = Font["Times,-1"]
       Text = ("Lista de Albaranes:")
     }
-    { Label19 Label 
+    { Label19 Label
       Move(14,7,21,28)
       Font = Font["Times,-1"]
       Text = ("Id:")
     }
-    { Label21 Label 
+    { Label21 Label
       Move(77,7,77,28)
       Font = Font["Times,-1"]
-      Text = ("N\xC2\xBA Albaran:")
+      Text = ("Nº Albaran:")
     }
-    { Label22 Label 
+    { Label22 Label
       Move(196,7,77,28)
       Font = Font["Times,-1"]
       Text = ("Proveedor:")
     }
-    { Label23 Label 
-      Move(350,14,49,14)
+    { Label23 Label
+      Move(385,7,77,21)
       Font = Font["Times,-1"]
-      Text = ("Fecha Alb:")
       Border = Border.Raised
+      Text = ("Fecha Alb:")
     }
-    { Label24 Label 
+    { Label24 Label
       Move(294,35,63,14)
       Font = Font["Times,-1"]
-      Text = ("Fecha Entrada:")
       Border = Border.Raised
+      Text = ("Fecha Entrada:")
     }
-    { Label26 Label 
+    { Label26 Label
       Move(14,28,42,28)
       Font = Font["Times,-1"]
       Text = ("IdObra:")
     }
-    { TextBoxNAlb TextBox 
+    { TextBoxNAlb TextBox
       Move(133,14,49,14)
       Font = Font["Times,-1"]
     }
-    { ComboBoxALBPROV ComboBox 
-      Move(252,14,77,14)
-      Text = ("ComboBox4")
+    { ComboBoxALBPROV ComboBox
+      Move(252,7,126,21)
       ReadOnly = True
+      Text = ("ComboBox4")
       Sorted = True
     }
-    { Button4 Button 
+    { Button4 Button
       Move(329,14,14,14)
       Font = Font["Times,-1"]
       ToolTip = ("similares")
       Text = ("S")
     }
-    { ValueBoxFAlb ValueBox 
-      Move(399,14,49,14)
+    { ValueBoxFAlb ValueBox
+      Move(469,7,154,21)
       Font = Font["Times,-1"]
       Type = ValueBox.Date
     }
-    { ComboBoxObraAlbaran ComboBox 
+    { ComboBoxObraAlbaran ComboBox
       Move(50,28,119,1)
-      Text = ("ComboBox4")
       ReadOnly = True
+      Text = ("ComboBox4")
       Sorted = True
     }
-    { ValueBoxFEAlb ValueBox 
+    { ValueBoxFEAlb ValueBox
       Move(364,35,49,14)
       Font = Font["Times,-1"]
       Type = ValueBox.Date
     }
-    { ButtonDescompuesto Button 
+    { ButtonDescompuesto Button
       Move(364,56,126,21)
       Enabled = False
       Font = Font["Times,-1"]
       Text = ("Descompuesto")
     }
-    { LabelIdAlb Label 
+    { LabelIdAlb Label
       Move(28,14,42,14)
       Font = Font["Times,-1"]
       Border = Border.Plain
     }
-    { Label25 Label 
+    { Label25 Label
       Move(196,35,49,14)
       Font = Font["Times,-1"]
       Text = ("Imputado:")
     }
-    { LabelImputadoAlb Label 
+    { LabelImputadoAlb Label
       Move(252,35,28,14)
       Font = Font["Times,-1"]
       Border = Border.Plain
     }
-    { ToolButtonAceptarAlbaran ToolButton 
-      Move(455,7,21,21)
+    { ToolButtonAceptarAlbaran ToolButton
+      Move(644,7,21,21)
       Enabled = False
-      ToolTip = ("Aceptar...")
+      ToolTip = ("Aceptar") & "..."
       Picture = Picture["icon:/16/apply"]
       Border = True
     }
-    { ToolButtonCancelarAlbaran ToolButton 
-      Move(490,7,21,21)
+    { ToolButtonCancelarAlbaran ToolButton
+      Move(693,7,21,21)
       Enabled = False
-      ToolTip = ("Cancelar...")
+      ToolTip = ("Cancelar") & "..."
       Picture = Picture["icon:/16/cancel"]
       Border = True
     }
-    { ButtonNuevoAlbaran Button 
+    { ButtonNuevoAlbaran Button
       Move(525,7,21,7)
       Font = Font["Bold,+1"]
-      ToolTip = ("Nuevo...")
+      ToolTip = ("Nuevo") & "..."
       Text = ("*")
     }
-    { GridViewAlbaran GridView 
-      Move(14,105,532,224)
+    { GridViewAlbaran GridView
+      Move(14,112,742,259)
       Font = Font["Times,-1"]
-      ToolTip = ("Editar el albaran: solo para a\xC3\xB1adir descompuestos")
+      ToolTip = ("Editar el albaran: solo para añadir descompuestos")
       Mode = Select.Single
     }
-    { ToolButtonBorrarAlbaran ToolButton 
-      Move(525,35,21,21)
+    { ToolButtonBorrarAlbaran ToolButton
+      Move(735,35,21,21)
       Visible = False
       Enabled = False
       Picture = Picture["icon:/16/delete"]
       Border = True
     }
-    { Lab Label 
-      Move(14,56,63,14)
+    { Lab Label
+      Move(14,56,98,21)
       Text = ("Valor Albaran:")
     }
-    { estadoalbaran Label 
-      Move(350,329,280,14)
-      Text = ("(Estado en Albaran:  Modo A\xC3\xB1adir Nuevo)")
+    { estadoalbaran Label
+      Move(462,385,280,14)
+      Text = ("(Estado en Albaran:  Modo Añadir Nuevo)")
     }
-    { LabelVALORALBARAN Label 
-      Move(91,56,84,14)
+    { LabelVALORALBARAN Label
+      Move(119,56,140,21)
       Border = Border.Plain
     }
-    { ToolButtonInformeAlb ToolButton 
-      Move(525,63,21,21)
+    { ToolButtonInformeAlb ToolButton
+      Move(735,63,21,21)
       ToolTip = ("realizar informe")
       Picture = Picture["icon:/16/printer"]
       Border = True
     }
-    { TextBoxFiltroAlbaranes TextBox 
-      Move(112,84,98,14)
+    { TextBoxFiltroAlbaranes TextBox
+      Move(112,84,161,28)
     }
-    { ButtonFiltroAlbaranes Button 
-      Move(217,84,231,14)
+    { ButtonFiltroAlbaranes Button
+      Move(280,84,357,28)
       ToolTip = ("busca conceptos que contengan la palabra del filtro")
-      Text = ("MFiltrar (m\xC3\xA1ximo 3 palabras separadas por coma)")
+      Text = ("MFiltrar (máximo 3 palabras separadas por coma)")
     }
-    { copiarportapaepelesGridViewAlbaran ToolButton 
-      Move(98,329,147,14)
+    { copiarportapaepelesGridViewAlbaran ToolButton
+      Move(105,378,203,21)
       Text = ("Copiar al Portapapeles")
       Picture = Picture["icon:/16/copy"]
       Border = True
     }
-    { ToolButton2 ToolButton 
-      Move(476,84,28,21)
+    { ToolButton2 ToolButton
+      Move(651,84,28,28)
       Visible = False
+      ToolTip = ("Filtrar Albaranes")
       Picture = Picture["icon:/16/view-detail"]
       Border = True
     }
     Index = 4
     Text = ("Salidas Materiales")
-    { GridViewConceptosSalidas GridView 
-      Move(14,77,539,238)
+    { GridViewConceptosSalidas GridView
+      Move(21,91,742,287)
       Font = Font["Times,-1"]
       Ignore = True
       Mode = Select.Single
     }
-    { ToolButton21 ToolButton 
-      Move(476,322,63,21)
+    { ToolButton21 ToolButton
+      Move(630,385,119,21)
       Visible = False
-      ToolTip = ("Aceptar...")
+      ToolTip = ("Aceptar") & "..."
       Text = ("Aceptar")
       Picture = Picture["icon:/16/apply"]
       Border = True
     }
-    { Label57 Label 
-      Move(14,49,98,14)
+    { Label57 Label
+      Move(28,63,98,21)
       Font = Font["Times,-1"]
       Text = ("Filtrado de conceptos:")
     }
-    { TextBoxFiltroSalida TextBox 
-      Move(112,42,217,21)
+    { TextBoxFiltroSalida TextBox
+      Move(161,63,217,28)
       Font = Font["Times,-1"]
     }
-    { Buttonfiltrosalidas Button 
-      Move(343,42,210,21)
+    { Buttonfiltrosalidas Button
+      Move(406,63,280,28)
       Font = Font["Times,-1"]
       ToolTip = ("similares")
       Text = ("Mfiltro (hasta 3 criterios,separados por coma)")
     }
-    { Label74 Label 
-      Move(350,7,35,14)
+    { Label74 Label
+      Move(434,7,42,21)
       Font = Font["Times,-1"]
       Text = ("IdObra:")
     }
-    { LabelIdObraSalida Label 
-      Move(343,21,161,14)
+    { LabelIdObraSalida Label
+      Move(357,35,210,21)
       Font = Font["Times,-1"]
       Border = Border.Plain
     }
-    { ToolButtonInformeSalidas ToolButton 
-      Move(525,14,21,21)
+    { ToolButtonInformeSalidas ToolButton
+      Move(728,14,21,21)
       ToolTip = ("realizar informe")
       Picture = Picture["icon:/16/printer"]
       Border = True
     }
-    { TextLabel1 TextLabel 
-      Move(14,7,329,14)
+    { TextLabel1 TextLabel
+      Move(21,7,301,49)
       Text = ("Acopio de materiales:\nSolo se visualizan los conceptos tipo MATERIALES. ")
     }
-    { copiarportapaepelesGridViewAlbaran2 ToolButton 
-      Move(70,322,147,14)
+    { copiarportapaepelesGridViewAlbaran2 ToolButton
+      Move(91,385,217,21)
       Text = ("Copiar al Portapapeles")
       Picture = Picture["icon:/16/copy"]
       Border = True
     }
     Index = 5
     Text = ("Facturas")
-    { ToolButtonPasa ToolButton 
-      Move(287,112,28,21)
+    { ToolButtonPasa ToolButton
+      Move(385,133,28,21)
       Enabled = False
       Picture = Picture["icon:/16/right"]
       Border = True
     }
-    { ToolButtonBorra ToolButton 
-      Move(287,140,21,21)
+    { ToolButtonBorra ToolButton
+      Move(385,175,28,21)
       Visible = False
       Enabled = False
       Picture = Picture["icon:/16/erase"]
       Border = True
     }
-    { Label35 Label 
-      Move(14,56,119,21)
+    { Label35 Label
+      Move(21,56,119,21)
       Font = Font["Times,-1"]
       Text = ("Albaranes sin imputar:")
     }
-    { Label36 Label 
-      Move(322,63,126,14)
+    { Label36 Label
+      Move(427,63,126,14)
       Font = Font["Times,-1"]
       Text = ("Suma Albaranes en factura:")
     }
-    { Label37 Label 
+    { Label37 Label
       Move(21,7,49,21)
       Font = Font["Times,-1"]
       Text = ("IdFactura:")
     }
-    { Label38 Label 
-      Move(126,7,49,21)
+    { Label38 Label
+      Move(161,7,49,21)
       Font = Font["Times,-1"]
       Text = ("Proveedor:")
     }
-    { Label39 Label 
-      Move(343,7,49,21)
+    { Label39 Label
+      Move(392,0,49,28)
       Font = Font["Times,-1"]
-      Text = ("N\xC2\xBA Factura:")
+      Text = ("Nº Factura:")
     }
-    { Label40 Label 
-      Move(140,42,49,14)
+    { Label40 Label
+      Move(147,35,49,21)
       Font = Font["Times,-1"]
+      Border = Border.Raised
       Text = ("Fecha Fact:")
-      Border = Border.Raised
     }
-    { Label41 Label 
-      Move(294,42,49,14)
+    { Label41 Label
+      Move(294,35,84,21)
       Font = Font["Times,-1"]
-      Text = ("Fecha Imputaci\xC3\xB3n:")
       Border = Border.Raised
+      Text = ("Fecha Imputación:")
     }
-    { LabelIdFactura Label 
-      Move(70,7,49,14)
+    { LabelIdFactura Label
+      Move(70,7,84,21)
       Font = Font["Times,-1"]
       Border = Border.Plain
     }
-    { ComboBoxProvFact ComboBox 
-      Move(182,7,126,14)
+    { ComboBoxProvFact ComboBox
+      Move(231,7,126,21)
       Font = Font["Times,-1"]
-      Text = ("ComboBox3")
       ReadOnly = True
+      Text = ("ComboBox3")
       Sorted = True
     }
-    { Button7 Button 
+    { Button7 Button
       Move(315,7,21,7)
       Font = Font["Times,-1"]
       ToolTip = ("similares")
       Text = ("S")
     }
-    { TextBoxNFactura TextBox 
-      Move(392,7,112,21)
+    { TextBoxNFactura TextBox
+      Move(448,0,161,28)
       Font = Font["Times,-1"]
     }
-    { ValueBoxFFact ValueBox 
-      Move(189,42,70,14)
-      Font = Font["Times,-1"]
-      Type = ValueBox.Date
-    }
-    { ValueBoxFImp ValueBox 
-      Move(343,42,70,14)
+    { ValueBoxFFact ValueBox
+      Move(203,35,70,21)
       Font = Font["Times,-1"]
       Type = ValueBox.Date
     }
-    { ToolButtonAceptarFactura ToolButton 
-      Move(420,35,21,21)
+    { ValueBoxFImp ValueBox
+      Move(378,35,105,21)
+      Font = Font["Times,-1"]
+      Type = ValueBox.Date
+    }
+    { ToolButtonAceptarFactura ToolButton
+      Move(497,35,21,21)
       Enabled = False
-      ToolTip = ("Aceptar...")
+      ToolTip = ("Aceptar") & "..."
       Picture = Picture["icon:/16/apply"]
       Border = True
     }
-    { ToolButtonCancelarFactura ToolButton 
-      Move(448,35,21,21)
+    { ToolButtonCancelarFactura ToolButton
+      Move(539,35,21,21)
       Enabled = False
-      ToolTip = ("Cancelar...")
+      ToolTip = ("Cancelar") & "..."
       Picture = Picture["icon:/16/cancel"]
       Border = True
     }
-    { ButtonNuevaFactura Button 
+    { ButtonNuevaFactura Button
       Move(483,35,21,7)
       Font = Font["Bold,+1"]
-      ToolTip = ("Nuevo...")
+      ToolTip = ("Nuevo") & "..."
       Text = ("*")
     }
-    { GridViewFactura GridView 
-      Move(14,210,532,119)
+    { GridViewFactura GridView
+      Move(21,252,735,119)
       Font = Font["Times,-1"]
-      ToolTip = ("Editar Factura: Haga Click para a\xC3\xB1adir albaranes a la factura")
+      ToolTip = ("Editar Factura: Haga Click para añadir albaranes a la factura")
       Mode = Select.Single
     }
-    { Label73 Label 
+    { Label73 Label
       Move(14,42,42,14)
       Font = Font["Times,-1"]
       Text = ("IdObra:")
     }
-    { ToolButtonBorradoFactura ToolButton 
-      Move(518,35,21,21)
+    { ToolButtonBorradoFactura ToolButton
+      Move(616,35,21,21)
       Visible = False
       Picture = Picture["icon:/16/delete"]
       Border = True
     }
-    { ValueBoxValorFactura ValueBox 
+    { ValueBoxValorFactura ValueBox
       Move(469,63,70,14)
     }
-    { ComboBoxObraFactura ComboBox 
-      Move(49,35,84,14)
-      Text = ("ComboBox4")
+    { ComboBoxObraFactura ComboBox
+      Move(56,35,84,21)
       ReadOnly = True
+      Text = ("ComboBox4")
       Sorted = True
     }
-    { estadofactura Label 
-      Move(357,329,196,14)
-      Text = ("(Estado en Factura:  Modo A\xC3\xB1adir Nuevo)")
+    { estadofactura Label
+      Move(420,385,315,14)
+      Text = ("(Estado en Factura:  Modo Añadir Nuevo)")
     }
-    { GridViewAlbProvObra GridView 
-      Move(21,84,266,105)
+    { GridViewAlbProvObra GridView
+      Move(21,84,343,119)
       Enabled = False
       Font = Font["Times,-1"]
-      ToolTip = ("haga click para a\xC3\xB1adir albaran a la factura")
+      ToolTip = ("haga click para añadir albaran a la factura")
       Mode = Select.Single
     }
-    { GridViewAlbProvObraImp GridView 
-      Move(315,84,245,105)
+    { GridViewAlbProvObraImp GridView
+      Move(427,84,322,133)
       Enabled = False
       Font = Font["Times,-1"]
       ToolTip = ("haga click para quitar albaran de la factuar")
       Mode = Select.Single
     }
-    { ToolButtonInformeSalidas2 ToolButton 
-      Move(518,35,21,21)
+    { ToolButtonInformeSalidas2 ToolButton
+      Move(721,35,21,21)
       ToolTip = ("realizar informe")
       Picture = Picture["icon:/16/printer"]
       Border = True
     }
-    { ToolBuscarFacturasProveedor ToolButton 
-      Move(28,189,231,21)
-      Text = ("Buscar facturas del proveedor elegido...")
+    { ToolBuscarFacturasProveedor ToolButton
+      Move(28,217,350,21)
+      Text = ("Buscar facturas del proveedor elegido") & "..."
       Picture = Picture["icon:/16/find"]
       Border = True
     }
-    { copiarportapaepelesGridViewFactura ToolButton 
-      Move(84,329,147,14)
+    { copiarportapaepelesGridViewFactura ToolButton
+      Move(105,378,217,28)
       Text = ("Copiar al Portapapeles")
       Picture = Picture["icon:/16/copy"]
       Border = True
     }
-    { copiarportapaepelesGridViewFactura2 ToolButton 
-      Move(294,84,21,21)
+    { copiarportapaepelesGridViewFactura2 ToolButton
+      Move(385,91,28,28)
       Picture = Picture["icon:/16/copy"]
       Border = True
     }
-    { copiarportapaepelesGridViewFactura3 ToolButton 
+    { copiarportapaepelesGridViewFactura3 ToolButton
       Move(0,84,21,21)
       Picture = Picture["icon:/16/copy"]
       Border = True
     }
     Index = 6
     Text = ("Informes")
-    { Label63 Label 
-      Move(21,301,140,21)
+    { Label63 Label
+      Move(14,357,196,28)
       Text = ("Fecha de trabajo del informe:")
     }
-    { ToolButtonTabInformesDescompuestoAlbaranes ToolButton 
-      Move(336,175,203,21)
+    { ToolButtonTabInformesDescompuestoAlbaranes ToolButton
+      Move(483,182,231,35)
       ToolTip = ("Descompuestos de Albaranes (proveedor actual y obra actual)")
       Text = ("Descompuestos de Albaranes")
       Picture = Picture["icon:/16/printer"]
       Border = True
     }
-    { Label72 Label 
+    { Label72 Label
       Move(21,245,42,21)
       Font = Font["Times,-1"]
       Text = ("IdObra:")
     }
-    { LabelidObraInforme Label 
+    { LabelidObraInforme Label
       Move(70,245,168,21)
       Font = Font["Times,-1"]
       Border = Border.Plain
     }
-    { LabelFechaTrabajoInforme Label 
-      Move(168,301,77,21)
+    { LabelFechaTrabajoInforme Label
+      Move(210,357,119,28)
+      Font = Font["Arial"]
       Border = Border.Plain
     }
-    { Label20 Label 
-      Move(21,280,84,14)
+    { Label20 Label
+      Move(14,301,175,21)
+      Alignment = Align.Right
       Text = ("Proveedor Actual:")
     }
-    { ComboProvInforme ComboBox 
-      Move(112,273,133,21)
-      Text = ("ComboBox1")
+    { ComboProvInforme ComboBox
+      Move(196,301,133,21)
       ReadOnly = True
+      Text = ("ComboBox1")
     }
-    { Label27 Label 
-      Move(28,7,105,28)
+    { Label27 Label
+      Move(28,7,168,28)
       Text = ("Tipos de informes:")
     }
-    { ToolButtonTabInformesDescompuestoResumenProvAlbFact ToolButton 
-      Move(301,301,238,21)
+    { ToolButtonTabInformesDescompuestoResumenProvAlbFact ToolButton
+      Move(350,343,385,28)
       Text = ("A origen: Prov. / Alb. / Fact. / Saldos ")
       Picture = Picture["icon:/16/printer"]
       Border = True
     }
-    { ToolButtonTabInformesDescompuestoResumenProvAlbFact2 ToolButton 
-      Move(336,203,203,21)
+    { ToolButtonTabInformesDescompuestoResumenProvAlbFact2 ToolButton
+      Move(483,224,231,35)
       Text = ("Descompuestos de Facturas")
       Picture = Picture["icon:/16/printer"]
       Border = True
     }
-    { ToolButtonTabInformesDescompuestoResumenProvAlbFact3 ToolButton 
-      Move(336,21,203,21)
+    { ToolButtonTabInformesDescompuestoResumenProvAlbFact3 ToolButton
+      Move(483,14,231,35)
       Text = ("Proveedores")
       Picture = Picture["icon:/16/printer"]
       Border = True
     }
-    { ToolButtonTabInformesDescompuestoResumenProvAlbFact4 ToolButton 
-      Move(336,56,203,21)
+    { ToolButtonTabInformesDescompuestoResumenProvAlbFact4 ToolButton
+      Move(483,55,231,35)
       Text = ("Conceptos")
       Picture = Picture["icon:/16/printer"]
       Border = True
     }
-    { ToolButtonTabInformesDescompuestoResumenProvAlbFact5 ToolButton 
-      Move(336,91,203,21)
+    { ToolButtonTabInformesDescompuestoResumenProvAlbFact5 ToolButton
+      Move(483,98,231,35)
       Text = ("Albaranes")
       Picture = Picture["icon:/16/printer"]
       Border = True
     }
-    { ToolButtonTabInformesDescompuestoResumenProvAlbFact6 ToolButton 
-      Move(301,252,238,21)
+    { ToolButtonTabInformesDescompuestoResumenProvAlbFact6 ToolButton
+      Move(350,301,385,28)
       Text = ("Acopios: Entradas y Salidas de Materiales")
       Picture = Picture["icon:/16/printer"]
       Border = True
     }
-    { infofacturas ToolButton 
-      Move(336,126,203,21)
+    { infofacturas ToolButton
+      Move(483,140,231,35)
       Text = ("Facturas")
       Picture = Picture["icon:/16/printer"]
       Border = True
     }
-    { ToolButtonTabInformesDescompuestoResumenProvAlbFact7 ToolButton 
-      Move(14,105,259,21)
+    { ToolButtonTabInformesDescompuestoResumenProvAlbFact7 ToolButton
+      Move(28,112,350,28)
       Text = ("Mes: Resumen Facturas y Albaranes")
       Picture = Picture["icon:/16/printer"]
       Border = True
     }
-    { ToolButtonTabInformesDescompuestoAlbaranes2 ToolButton 
-      Move(14,70,259,21)
+    { ToolButtonTabInformesDescompuestoAlbaranes2 ToolButton
+      Move(28,77,350,28)
       Text = ("Mes: Descompuestos de Albaranes ")
       Picture = Picture["icon:/16/printer"]
       Border = True
     }
-    { ToolButtonTabInformesDescompuestoResumenProvAlbFact8 ToolButton 
-      Move(14,35,259,21)
+    { ToolButtonTabInformesDescompuestoResumenProvAlbFact8 ToolButton
+      Move(28,42,350,28)
       Text = ("Mes: Alquileres ")
       Picture = Picture["icon:/16/printer"]
       Border = True
     }
-    { ToolButtonTabInformesDescompuestoAlbaranes3 ToolButton 
-      Move(14,182,259,21)
+    { ToolButtonTabInformesDescompuestoAlbaranes3 ToolButton
+      Move(28,182,350,35)
       ToolTip = ("Descompuestos de Albaranes (proveedor actual y obra actual)")
       Text = ("Descompuestos de Albaranes por Dia")
       Picture = Picture["icon:/16/printer"]
       Border = True
     }
-    { Separator1 Separator 
-      Move(287,238,14,91)
+    { Separator1 Separator
+      Move(329,287,14,98)
     }
-    { Separator2 Separator 
-      Move(294,231,252,14)
+    { Separator2 Separator
+      Move(336,280,413,14)
     }
-    { Separator3 Separator 
-      Move(294,329,252,7)
+    { Separator3 Separator
+      Move(336,378,413,7)
     }
-    { Separator4 Separator 
-      Move(546,238,7,91)
+    { Separator4 Separator
+      Move(735,287,21,98)
     }
     Index = 0
   }
-  { ToolButton1 ToolButton 
-    Move(455,0,119,21)
+  { ToolButton1 ToolButton
+    Move(455,0,329,28)
     Font = Font["Times,-1"]
     Text = ("Muestra Arbol de datos")
     Picture = Picture["icon:/16/indent"]
     Border = True
   }
-  { salvadatosseccionactual Button 
-    Move(322,0,112,21)
+  { salvadatosseccionactual Button
+    Move(322,0,112,28)
     Enabled = False
     Font = Font["Times,-1"]
     Text = ("salva datos seccion actual")
   }
-  { ProgressBarGuardar ProgressBar 
-    Move(168,0,126,14)
+  { ProgressBarGuardar ProgressBar
+    Move(168,0,126,28)
     Visible = False
-    Foreground = &HD7FF5F&
+    Foreground = &HD7FF5F
   }
-  { labelOrdenando Label 
-    Move(21,0,133,21)
+  { labelOrdenando Label
+    Move(21,0,133,28)
     Font = Font["Century Schoolbook L,-1"]
   }
 }

@@ -1,13 +1,15 @@
 # Gambas Form File 3.0
-{ Form Form 
-  MoveScaled(0,0,42,28)
-  { Button1 Button 
-    MoveScaled(12,23,15,2)
-    Font = Font["Times,-1"]
+
+{ Form Form
+  MoveScaled(0,0,72,49)
+  { Button1 Button
+    MoveScaled(30,42,15,5)
+    Font = Font["Arial,+1"]
     Text = ("Aceptar")
+    Picture = Picture["icon:/16/apply"]
   }
-  { DateChooserfecha DateChooser 
-    MoveScaled(2,2,38,20)
-    Font = Font["-1"]
+  { DateChooserfecha DateChooser
+    MoveScaled(2,2,67,37)
+    Font = Font["Arial,+1"]
   }
 }

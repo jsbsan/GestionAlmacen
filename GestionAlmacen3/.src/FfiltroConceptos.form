@@ -1,40 +1,43 @@
 # Gambas Form File 3.0
-{ Form Form 
-  MoveScaled(0,0,69,39)
-  { Label58 Label 
+
+{ Form Form
+  MoveScaled(0,0,105,70)
+  { Label58 Label
     MoveScaled(1,1,8,3)
-    Font = Font["Times,-1"]
+    Font = Font["Arial,+1"]
     Text = ("Filtrado:")
   }
-  { TextBoxFiltroConcepto TextBox 
-    MoveScaled(7,1,14,3)
-    Font = Font["Times,-1"]
+  { TextBoxFiltroConcepto TextBox
+    MoveScaled(9,1,23,3)
+    Font = Font["Arial,+1"]
   }
-  { ButtonFiltroConcepto Button 
-    MoveScaled(24,1,33,3)
-    Font = Font["Times,-1"]
+  { ButtonFiltroConcepto Button
+    MoveScaled(34,1,63,3)
+    Font = Font["Arial,+1"]
     ToolTip = ("busca conceptos que contengan la palabra del filtro")
-    Text = ("MFiltrar (m\xC3\xA1ximo 3 palabras separadas por coma)")
+    Text = ("MFiltrar (máximo 3 palabras separadas por coma)")
   }
-  { GridViewfiltroconcepto GridView 
-    MoveScaled(0,5,68,28)
-    Font = Font["Times,-1"]
+  { GridViewfiltroconcepto GridView
+    MoveScaled(2,5,102,58)
+    Font = Font["Arial,+1"]
     Mode = Select.Single
   }
-  { Button2 Button 
-    MoveScaled(45,34,13,4)
+  { Button2 Button
+    MoveScaled(86,64,13,4)
     Visible = False
-    Font = Font["Times,-1"]
+    Font = Font["Arial,+1"]
     Text = ("Aceptar")
+    Picture = Picture["icon:/16/apply"]
   }
-  { Button3 Button 
-    MoveScaled(29,34,13,4)
-    Font = Font["Times,-1"]
+  { Button3 Button
+    MoveScaled(51,64,13,4)
+    Font = Font["Arial,+1"]
     Text = ("Cancelar")
+    Picture = Picture["icon:/16/cancel"]
   }
-  { copiarportapaepelesGridViewAlbaran ToolButton 
-    MoveScaled(2,35,21,3)
-    Font = Font["Tarablus,-1"]
+  { copiarportapaepelesGridViewAlbaran ToolButton
+    MoveScaled(3,64,31,4)
+    Font = Font["Arial,+1"]
     Text = ("Copiar al Portapapeles")
     Picture = Picture["icon:/16/copy"]
     Border = True

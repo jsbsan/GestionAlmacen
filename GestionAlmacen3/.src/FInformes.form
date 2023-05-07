@@ -1,32 +1,37 @@
 # Gambas Form File 3.0
-{ Form Form 
-  MoveScaled(0,0,65,26)
+
+{ Form Form
+  MoveScaled(0,0,109,66)
   AutoResize = True
-  { ToolButton1 ToolButton 
-    MoveScaled(1,0,10,4)
+  { ToolButton1 ToolButton
+    MoveScaled(18,2,10,4)
+    Font = Font["Arial,+1"]
     Text = ("a  .TXT")
     Picture = Picture["icon:/16/new"]
     Border = True
   }
-  { ToolButtonHtml ToolButton 
-    MoveScaled(13,0,15,4)
+  { ToolButtonHtml ToolButton
+    MoveScaled(39,2,15,4)
+    Font = Font["Arial,+1"]
     Text = ("a  .HTML")
     Picture = Picture["icon:/16/html"]
     Border = True
   }
-  { ToolButton3 ToolButton 
-    MoveScaled(30,0,18,4)
+  { ToolButton3 ToolButton
+    MoveScaled(62,2,25,4)
+    Font = Font["Arial,+1"]
     Text = ("al Portapapeles")
     Picture = Picture["icon:/16/copy"]
     Border = True
   }
-  { Button1 Button 
-    MoveScaled(50,0,14,4)
+  { Button1 Button
+    MoveScaled(92,60,14,4)
+    Font = Font["Arial,+1"]
     Text = ("Salir")
   }
-  { TextAreaInforme TextArea 
-    MoveScaled(0,4,64,13)
-    Font = Font["Courier,-2"]
+  { TextAreaInforme TextArea
+    MoveScaled(1,8,107,51)
+    Font = Font["Arial,+1"]
     ReadOnly = True
   }
 }
