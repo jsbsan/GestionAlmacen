@@ -1,0 +1,61 @@
+' Gambas module file
+
+
+PUBLIC SUB nuevo(idalbaran AS String, idconcepto AS String)
+  DIM a AS Integer
+  DIM nombrenuevo AS String
+
+
+  var.entrada_numero += 1
+  a = var.entrada_numero - 1
+  
+   'redimensiono
+    var.entrada_id.Resize(a + 1) 'le pongo el nº de id del albaran 
+    var.entrada_idconcepto.Resize(a + 1) 'le pongo el nº de id del concepto
+    var.entrada_medidaconcepto.resize(a + 1)  'le ponga la medida del concepto que tiene el albaran
+    var.entrada_precio.resize(a + 1) 'precio del cooncepto
+    var.entrada_tipoprecio.resize(a + 1) ' contrado, estimacion, oferta
+    var.entrada_memoria.resize(a + 1)
+    var.entrada_salida.resize(a + 1) 'cantidad de salida
+    
+  'almacenos datos
+    var.entrada_id[a] = idalbaran 'debe de ser el numero id de albaran (que da automaticamente el programa)
+    var.entrada_idconcepto[a] = idconcepto
+    'procedente del formulario entradaconceptoMedicion
+    
+    var.entrada_medidaconcepto[a] = var.FentradaconceptoMedion   'le ponga la medida del concepto que tiene el albaran
+    var.entrada_precio[a] = var.FentradaconceptoMedionPrecio 'precio del cooncepto
+    var.entrada_tipoprecio[a] = VAR.FentradaconceptoPrecoTipo
+    
+    var.entrada_memoria[a] = a
+
+ABNuevoConceptoenAlbaran.muestra(idalbaran)
+
+
+
+
+finnuevo:
+
+END
+
+
+PUBLIC SUB muestra(idalbaran AS String)
+DIM a AS Integer
+ a = var.entrada_numero - 1
+ FentradasAlb.GridViewConceptosEntrada.Rows.count = a + 1
+
+ BorradosDatosIniciales.dibujogridEntradaAlbaran(idalbaran)
+  GOTO finmuestra
+      
+finmuestra:
+END 
+
+PUBLIC SUB enblanco()
+    ' fmain.labelidconcepto.text = ""
+    ' fmain.textboxidudobra.text = ""
+    ' fmain.textboxconcepto.text = ""
+    ' fmain.valueboxmedconcepto.value = 0
+    ' fmain.valueboxprecioconcepto.value = 0
+    ' fmain.comboboxud.text = "ud."
+    ' fmain.ComboBoxtipoconcepto.text = "materiales"
+END

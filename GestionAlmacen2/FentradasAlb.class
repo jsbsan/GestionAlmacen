@@ -1,0 +1,56 @@
+' Gambas class file
+
+
+PUBLIC SUB Button5_Click()
+FfiltroConceptos.TAG = FentradasAlb.Tag
+var.obraEntradaFiltroAlbaran = LabelObraEntrada.text 'que filtre los conceptos por la obra del albaran
+
+
+  FfiltroConceptos.ShowModal
+
+ BorradosDatosIniciales.dibujogridEntradaAlbaran(FentradasAlb.tag)
+
+END
+
+
+
+PUBLIC SUB Form_Open()
+'fasdfa
+  BorradosDatosIniciales.dibujogridEntradaAlbaran(FentradasAlb.tag)
+  
+
+END
+
+PUBLIC SUB Button1_Click()
+FMain.estadoalbaran.text = "(Estado en Albaran:  Modo Añadir Nuevo)"
+
+ ABNuevoAlbaran.enblanco()
+ FMain.ButtonDescompuesto.enableD = TRUE
+ FMain.ToolButtonAceptaralbaran.enableD = TRUE
+ FMain.ToolButtonCancelaralbaran.Enabled = TRUE
+  ME.Close
+
+END
+
+PUBLIC SUB GridViewConceptosEntrada_ColumnClick(Column AS Integer)
+
+  IF var.ordenConceptosEntrada = 0 THEN 
+  OrdenacionGridview.ord_AZ(GridViewConceptosEntrada, Column)
+  var.ordenConceptosEntrada = 1
+  ELSE 
+  var.ordenConceptosEntrada = 0
+  OrdenacionGridview.ord_ZA(GridViewConceptosEntrada, Column)
+ENDIF 
+
+END
+
+
+
+
+PUBLIC SUB copiarportapaepelesGridViewAlbaran_Click()
+
+  GambasAOpenoffice.copiaraportapapeles(GridViewConceptosEntrada)
+
+END
+
+

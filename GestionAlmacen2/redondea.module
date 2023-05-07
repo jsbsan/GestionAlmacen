@@ -1,0 +1,8 @@
+' Gambas module file
+
+PUBLIC FUNCTION numero(valor AS Float) AS String
+DIM devuelve AS String
+devuelve = Format(Round(valor, -2), "#.#0")
+
+RETURN devuelve
+END 

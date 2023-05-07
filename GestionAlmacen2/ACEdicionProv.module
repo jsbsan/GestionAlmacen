@@ -1,0 +1,57 @@
+' Gambas module file
+PUBLIC SUB edicion(fila AS Integer)
+    fmain.labelidprov.text = var.Prov_id[fila] 
+    fmain.textboxnombreproveedor.text = var.Prov_nombre[fila] 
+    fmain.textboxnifletra.text = Left(var.Prov_Nif[fila], 1)
+    fmain.valueboxnifnumero.value) = Mid$(var.Prov_Nif[fila], 3, Len(var.Prov_Nif[fila]))
+    fmain.textboxcontacto.text = var.Prov_pc[fila]    'persona de contacto
+    fmain.textboxtelf.text = var.Prov_telf[fila]
+    fmain.textboxfax.text = var.Prov_Fax[fila]  'fax
+    fmain.textboxmovil.text = var.Prov_Movil[fila] 
+    fmain.textboxcorreo.text = var.Prov_Correo[fila]          'correo electronico
+    fmain.textboxfp.text = var.Prov_fp[fila]   'forma de pago
+    fmain.valueboxfdatos.value = var.Prov_Fecha[fila]   'fecha del dato que introducimos
+    fmain.textboxdireccion.text = var.Prov_Direccion[fila] 
+    fmain.textboxcp.value = var.Prov_cp[fila] 
+    fmain.textboxciudad.text = var.Prov_Ciudad[fila] 
+    fmain.textboxprov.text = var.Prov_Provincia[fila] 
+    fmain.textboxobs.text = var.Prov_observaciones[fila] 
+    fmain.TextBoxNombreProveedor.SetFocus
+END
+
+PUBLIC SUB subreescriboGridProveedor(posregilla AS Integer, posmemoria AS Integer)
+      FMain.GridViewProveedor[posregilla, 0].text = var.Prov_id[posmemoria]
+      FMain.GridViewProveedor[posregilla, 1].text = var.Prov_nombre[posmemoria]
+      FMain.GridViewProveedor[posregilla, 2].text = var.Prov_Nif[posmemoria]
+      FMain.GridViewProveedor[posregilla, 3].text = var.Prov_pc[posmemoria]
+      FMain.GridViewProveedor[posregilla, 4].text = var.Prov_telf[posmemoria]
+      FMain.GridViewProveedor[posregilla, 5].text = var.Prov_Fax[posmemoria] 
+      FMain.GridViewProveedor[posregilla, 6].text = var.Prov_Movil[posmemoria]
+      FMain.GridViewProveedor[posregilla, 7].text = var.Prov_Correo[posmemoria]
+      FMain.GridViewProveedor[posregilla, 8].text = var.Prov_fp[posmemoria]
+      FMain.GridViewProveedor[posregilla, 9].text = var.Prov_Fecha[posmemoria]
+      FMain.GridViewProveedor[posregilla, 10].text = var.Prov_Direccion[posmemoria]
+      FMain.GridViewProveedor[posregilla, 11].text = var.Prov_cp[posmemoria]
+      FMain.GridViewProveedor[posregilla, 12].text = var.Prov_Ciudad[posmemoria] 
+      FMain.GridViewProveedor[posregilla, 13].text = var.Prov_Provincia[posmemoria]
+      FMain.GridViewProveedor[posregilla, 14].text = var.Prov_observaciones[posmemoria]
+END 
+
+
+PUBLIC SUB reescriboProveedorMemoria(posmemoria AS Integer)
+    var.Prov_id[posmemoria] = fmain.labelidprov.text
+    var.Prov_nombre[posmemoria] = Upper$(fmain.textboxnombreproveedor.text)
+    var.Prov_Nif[posmemoria] = Upper$(Right(" " & fmain.textboxnifletra.text, 1) & "-" & Str$(fmain.valueboxnifnumero.value))
+    var.Prov_pc[posmemoria] = fmain.textboxcontacto.text  'persona de contacto
+    var.Prov_telf[posmemoria] = fmain.textboxtelf.text
+    var.Prov_Fax[posmemoria] = fmain.textboxfax.text 'fax
+    var.Prov_Movil[posmemoria] = fmain.textboxmovil.text  
+    var.Prov_Correo[posmemoria] = fmain.textboxcorreo.text   'correo electronico
+    var.Prov_fp[posmemoria] = fmain.textboxfp.text   'forma de pago
+    var.Prov_Fecha[posmemoria] = fmain.valueboxfdatos.value  'fecha del dato que introducimos
+    var.Prov_Direccion[posmemoria] = fmain.textboxdireccion.text 
+    var.Prov_cp[posmemoria] = fmain.textboxcp.value
+    var.Prov_Ciudad[posmemoria] = fmain.textboxciudad.text
+    var.Prov_Provincia[posmemoria] = fmain.textboxprov.text
+    var.Prov_observaciones[posmemoria] = fmain.textboxobs.text
+END

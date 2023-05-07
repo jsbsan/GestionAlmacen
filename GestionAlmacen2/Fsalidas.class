@@ -1,0 +1,76 @@
+' Gambas class file
+
+
+PUBLIC SUB Form_Open()
+'se debe rellanar las entradas del concepto elegido....
+    rellena_salida(var.conceptosalida)
+END
+
+
+
+
+
+'-----------------------------------------------------------------
+'subrutinas
+'-----------------------------------------------------------------
+
+SUB rellena_salida(idconcepto AS String)
+  DIM c AS Integer
+  DIM numero AS Integer
+  Titulos.fgridsalidas() 'vuelvo a definir como es la grid de salidas
+  
+      FOR c = 0 TO var.entrada_numero - 1
+              IF var.entrada_idconcepto[c] <> "IdB" AND idconcepto = var.entrada_idconcepto[c] AND (var.entrada_medidaconcepto[c] - var.entrada_salida[c]) <> 0 THEN 
+                   'dibujo en el gridw
+                   numero += 1
+                   GridViewS.Rows.count = numero
+                   GridViewS[numero - 1, 0].text = var.entrada_idconcepto[c] 
+                   GridViewS[numero - 1, 1].text = buscar.buscaprov(var.entrada_id[c])
+                   GridViewS[numero - 1, 2].text = buscar.buscaUd(var.entrada_idconcepto[c])
+                   GridViewS[numero - 1, 3].text = buscar.buscaDenoConcepto(var.entrada_idconcepto[c])
+                   Gridviews[numero - 1, 4].text = var.entrada_precio[c]
+                   Gridviews[numero - 1, 5].text = var.entrada_medidaconcepto[c]
+                   Gridviews[numero - 1, 6].text = var.entrada_salida[c]
+                   Gridviews[numero - 1, 7].text = var.entrada_medidaconcepto[c] - var.entrada_salida[c]
+                   GridViewS[numero - 1, 8].text = Str$(c)
+              ENDIF 
+          NEXT   
+  
+  
+  
+END
+
+PUBLIC SUB GridViewS_Click()
+
+var.salir = Val(GridViewS[GridViewS.row, 8].text)
+
+FCuantoSale.ShowModal
+
+'pide la salida 
+'dando recomendaciones:
+' todo
+' lo que sale
+'lo que debe de quedar
+' y luego debe de grabar en ver.entrada_salida, el dato. y redibujar el grid
+
+rellena_salida(var.conceptosalida)
+END
+
+
+
+PUBLIC SUB Button1_Click()
+
+  ME.close
+
+END
+
+PUBLIC SUB GridViewS_ColumnClick(Column AS Integer)
+  IF var.ordensalidas = 0 THEN 
+  OrdenacionGridview.ord_AZ(GridViewS, Column)
+  var.ordensalidas = 1
+  ELSE 
+  var.ordensalidas = 0
+  OrdenacionGridview.ord_ZA(GridViewS, Column)
+ENDIF 
+
+END

@@ -1,0 +1,687 @@
+' Gambas module file
+
+PUBLIC FUNCTION ProveedorSimple(idbus AS String) AS Integer
+DIM a AS Integer
+DIM encontrado AS Integer
+
+  FOR a = 0 TO var.Prov_numero - 1
+  IF var.Prov_id[a] = idbus THEN 
+      encontrado = a
+      GOTO finbusqueda
+      END IF 
+  NEXT 
+  'no lo encuentro
+  RETURN -1
+  'encontrado
+  finbusqueda:
+  RETURN encontrado
+END
+
+PUBLIC FUNCTION ProveedorFiltro(patron AS String, solonifoproveedor AS Boolean) AS Integer
+
+DIM cadena AS String
+  DIM a AS Integer
+DIM numero AS Integer
+
+'FMain.GridViewProveedor.Clear
+FMain.GridViewProveedor.Rows.count = 0
+numero = 0 'contador de filas validas (sin estar borradas)
+
+IF patron = "*" OR patron = "" THEN 
+ BorradosDatosIniciales.dibujogridProveedores
+ RETURN 0
+ENDIF 
+
+
+
+FOR a = 0 TO var.Prov_numero - 1
+  IF var.Prov_id[a] <> "IdB" THEN 
+    IF solonifoproveedor = -1 THEN 
+        IF (dentro(var.Prov_nombre[a], patron) OR dentro(var.Prov_Nif[a], patron)) THEN 
+         'Contine parte del nombre o del nif
+          numero += 1
+          FMain.GridViewProveedor.Rows.count = numero 
+          FMain.GridViewProveedor[numero - 1, 0].text = var.Prov_id[a]
+          FMain.GridViewProveedor[numero - 1, 1].text = var.Prov_nombre[a]
+          FMain.GridViewProveedor[numero - 1, 2].text = var.Prov_Nif[a]
+          FMain.GridViewProveedor[numero - 1, 3].text = var.Prov_pc[a]
+          FMain.GridViewProveedor[numero - 1, 4].text = var.Prov_telf[a]
+          FMain.GridViewProveedor[numero - 1, 5].text = var.Prov_Fax[a] 
+          FMain.GridViewProveedor[numero - 1, 6].text = var.Prov_Movil[a]
+          FMain.GridViewProveedor[numero - 1, 7].text = var.Prov_Correo[a]
+          FMain.GridViewProveedor[numero - 1, 8].text = var.Prov_fp[a]
+          FMain.GridViewProveedor[numero - 1, 9].text = var.Prov_Fecha[a]
+          FMain.GridViewProveedor[numero - 1, 10].text = var.Prov_Direccion[a]
+          FMain.GridViewProveedor[numero - 1, 11].text = var.Prov_cp[a]
+          FMain.GridViewProveedor[numero - 1, 12].text = var.Prov_Ciudad[a] 
+          FMain.GridViewProveedor[numero - 1, 13].text = var.Prov_Provincia[a]
+          FMain.GridViewProveedor[numero - 1, 14].text = var.Prov_observaciones[a]
+          GOTO finnext 
+         ELSE 
+        GOTO finnext
+      ENDIF
+    ENDIF 
+   ENDIF 
+
+ IF var.Prov_id[a] <> "IdB" THEN 
+  cadena = var.Prov_observaciones[a]
+  cadena &= var.Prov_Provincia[a] 
+  cadena &= var.Prov_Ciudad[a] 
+  cadena &= Str$(var.Prov_cp[a]) 
+  cadena &= var.Prov_Direccion[a]
+  cadena &= Str$(var.Prov_Fecha[a])
+  cadena &= var.Prov_fp[a] 
+  cadena &= var.Prov_Correo[a] 
+  cadena &= var.Prov_Movil[a] 
+  'cadena &= var.Prov_id[a]  'no buscar en el identificador
+  cadena &= var.Prov_nombre[a] 
+  cadena &= Str$(var.Prov_Nif[a]) 
+  cadena &= var.Prov_pc[a] 
+  cadena &= var.Prov_telf[a] 
+  cadena &= var.Prov_Fax[a] 
+  
+  IF dentro(Upper$(cadena), patron) THEN   
+          numero += 1
+          FMain.GridViewProveedor.Rows.count = numero 
+          FMain.GridViewProveedor[numero - 1, 0].text = var.Prov_id[a]
+          FMain.GridViewProveedor[numero - 1, 1].text = var.Prov_nombre[a]
+          FMain.GridViewProveedor[numero - 1, 2].text = var.Prov_Nif[a]
+          FMain.GridViewProveedor[numero - 1, 3].text = var.Prov_pc[a]
+          FMain.GridViewProveedor[numero - 1, 4].text = var.Prov_telf[a]
+          FMain.GridViewProveedor[numero - 1, 5].text = var.Prov_Fax[a] 
+          FMain.GridViewProveedor[numero - 1, 6].text = var.Prov_Movil[a]
+          FMain.GridViewProveedor[numero - 1, 7].text = var.Prov_Correo[a]
+          FMain.GridViewProveedor[numero - 1, 8].text = var.Prov_fp[a]
+          FMain.GridViewProveedor[numero - 1, 9].text = var.Prov_Fecha[a]
+          FMain.GridViewProveedor[numero - 1, 10].text = var.Prov_Direccion[a]
+          FMain.GridViewProveedor[numero - 1, 11].text = var.Prov_cp[a]
+          FMain.GridViewProveedor[numero - 1, 12].text = var.Prov_Ciudad[a] 
+          FMain.GridViewProveedor[numero - 1, 13].text = var.Prov_Provincia[a]
+          FMain.GridViewProveedor[numero - 1, 14].text = var.Prov_observaciones[a]
+      ENDIF 
+  ENDIF
+finnext:
+NEXT
+
+  IF numero > 0 THEN 
+    'SE HA ENCONTRADO PARECIDOS
+    RETURN 1 
+    ELSE 
+    RETURN 0
+    ENDIF 
+  
+END
+
+
+SUB dentro(frase AS String, patron AS String) AS Boolean
+  IF patron = " " THEN 
+  RETURN 1
+  ELSE
+  RETURN InStr(frase, patron)
+  ENDIF
+END
+'--------------------------------------------------------------------------
+' --------------------------------------------------------------------------
+ 'buscar en grid de conceptos:
+ 
+ PUBLIC FUNCTION ConceptoSimple(idbus AS String) AS Integer
+DIM a AS Integer
+DIM encontrado AS Integer
+
+  FOR a = 0 TO var.concepto_numero - 1
+  IF var.concepto_id[a] = idbus THEN 
+      encontrado = a
+      GOTO finbusquedaconcepto
+      END IF 
+  NEXT 
+  'no lo encuentro
+  RETURN -1
+  'encontrado
+  finbusquedaconcepto:
+  RETURN encontrado
+END
+ 
+ '----------------- busqueda conceptos ---------------------------
+PUBLIC FUNCTION Conceptofiltro(patron AS String, OPTIONAL patron1 AS String, OPTIONAL patron2 AS String, OPTIONAL obra AS String) AS Integer
+DIM lineas AS String
+DIM a AS Integer
+DIM numero AS Integer
+DIM validar AS Boolean
+
+'FMain.GridViewProveedor.Clear
+
+FMain.GridViewConceptos.Rows.count = 0
+
+numero = 0 'contador de filas validas (sin estar borradas)
+
+IF patron = "*" OR patron = "" THEN 
+ 'dibujar todos los de la obra
+ BorradosDatosIniciales.dibujogridConceptos(fmain.comboboxobrasconceptos.text)
+ RETURN 0
+ENDIF 
+
+IF patron1 = "" THEN patron1 = " "
+IF patron2 = "" THEN patron2 = " "
+
+FOR a = 0 TO var.concepto_numero - 1
+  IF var.concepto_id[a] <> "IdB" THEN 
+         Lineas = var.concepto_id[a]
+          Lineas &= var.concepto_idudobra[a] 
+          Lineas &= var.concepto_nombre[a]
+          Lineas &= var.concepto_ud[a] 
+          Lineas &= var.concepto_med[a]
+          Lineas &= var.concepto_precio[a] 
+          'Lineas &= var.conceptomemoria[a]
+          Lineas &= var.conceptotipo[a] 
+          Lineas &= var.concepto_Obra[a]
+lineas = Upper$(lineas)
+  validar = dentro(lineas, patron) AND dentro(lineas, patron1) AND dentro(lineas, patron2) AND dentro(var.concepto_Obra[a], obra) 
+ 'PRINT a
+ 'PRINT lineas
+ 'PRINT patron, patron1, patron2, obra
+ 
+ 
+ 
+ 'PRINT dentro(lineas, patron), dentro(lineas, patron1), dentro(lineas, patron2), dentro(var.concepto_Obra[a], obra) 
+' PRINT validar
+ 
+  IF validar THEN   
+          numero += 1
+          FMain.GridViewconceptos.Rows.count = numero 
+       FMain.GridViewConceptos[numero - 1, 0].text = var.concepto_id[a]
+       FMain.GridViewConceptos[numero - 1, 1].text = var.concepto_Obra[a]
+       FMain.GridViewConceptos[numero - 1, 2].text = var.concepto_idudobra[a]
+       FMain.GridViewConceptos[numero - 1, 3].text = var.concepto_ud[a] 
+       FMain.GridViewConceptos[numero - 1, 4].text = var.concepto_nombre[a]
+       FMain.GridViewConceptos[numero - 1, 5].text = var.concepto_med[a]
+       FMain.GridViewConceptos[numero - 1, 6].text = var.concepto_precio[a]
+       FMain.GridViewConceptos[numero - 1, 7].text = var.conceptotipo[a]
+         
+      ENDIF 
+  ENDIF
+finnext:
+NEXT
+
+  IF numero > 0 THEN 
+    'SE HA ENCONTRADO PARECIDOS
+    RETURN 1 
+    ELSE 
+    RETURN 0
+    ENDIF 
+  
+END
+
+
+' - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+' filtro en albaran para proveedores
+' - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+ PUBLIC FUNCTION ProveedorFiltroalb(patron AS String, solonifoproveedor AS Boolean) AS Integer
+
+DIM cadena AS String
+DIM a AS Integer
+DIM numero AS Integer
+
+'FMain.GridViewProveedor.Clear
+FfiltroProveedor.GridView1.Rows.count = 0
+numero = 0 'contador de filas validas (sin estar borradas)
+
+IF patron = "*" OR patron = "" THEN 
+ BorradosDatosIniciales.dibujogrid1
+ RETURN 0
+ENDIF 
+
+
+
+FOR a = 0 TO var.Prov_numero - 1
+  IF var.Prov_id[a] <> "IdB" THEN 
+    IF solonifoproveedor = -1 THEN 
+      IF (dentro(var.Prov_nombre[a], patron) OR dentro(var.Prov_Nif[a], patron)) THEN 
+         'Contine parte del nombre o del nif
+          numero += 1
+          FfiltroProveedor.GridView1.Rows.count = numero 
+          FfiltroProveedor.GridView1[numero - 1, 0].text = var.Prov_id[a]
+          FfiltroProveedor.GridView1[numero - 1, 1].text = var.Prov_nombre[a]
+          FfiltroProveedor.GridView1[numero - 1, 2].text = var.Prov_Nif[a]
+          FfiltroProveedor.GridView1[numero - 1, 3].text = var.Prov_pc[a]
+          FfiltroProveedor.GridView1[numero - 1, 4].text = var.Prov_telf[a]
+          FfiltroProveedor.GridView1[numero - 1, 5].text = var.Prov_Fax[a] 
+          FfiltroProveedor.GridView1[numero - 1, 6].text = var.Prov_Movil[a]
+          FfiltroProveedor.GridView1[numero - 1, 7].text = var.Prov_Correo[a]
+          FfiltroProveedor.GridView1[numero - 1, 8].text = var.Prov_fp[a]
+          FfiltroProveedor.GridView1[numero - 1, 9].text = var.Prov_Fecha[a]
+          FfiltroProveedor.GridView1[numero - 1, 10].text = var.Prov_Direccion[a]
+          FfiltroProveedor.GridView1[numero - 1, 11].text = var.Prov_cp[a]
+          FfiltroProveedor.GridView1[numero - 1, 12].text = var.Prov_Ciudad[a] 
+          FfiltroProveedor.GridView1[numero - 1, 13].text = var.Prov_Provincia[a]
+          FfiltroProveedor.GridView1[numero - 1, 14].text = var.Prov_observaciones[a]
+      GOTO finnext1
+      ELSE 
+      GOTO finnext1
+      ENDIF 
+      ENDIF 
+      ENDIF 
+
+ IF var.Prov_id[a] <> "IdB" THEN 
+  cadena = var.Prov_observaciones[a]
+  cadena &= var.Prov_Provincia[a] 
+  cadena &= var.Prov_Ciudad[a] 
+  cadena &= Str$(var.Prov_cp[a]) 
+  cadena &= var.Prov_Direccion[a]
+  cadena &= Str$(var.Prov_Fecha[a])
+  cadena &= var.Prov_fp[a] 
+  cadena &= var.Prov_Correo[a] 
+  cadena &= var.Prov_Movil[a] 
+  'cadena &= var.Prov_id[a]  'no buscar en el identificador
+  cadena &= var.Prov_nombre[a] 
+  cadena &= Str$(var.Prov_Nif[a]) 
+  cadena &= var.Prov_pc[a] 
+  cadena &= var.Prov_telf[a] 
+  cadena &= var.Prov_Fax[a] 
+  
+  IF dentro(Upper$(cadena), patron) THEN   
+          numero += 1
+          FfiltroProveedor.GridView1.Rows.count = numero 
+          FfiltroProveedor.GridView1[numero - 1, 0].text = var.Prov_id[a]
+          FfiltroProveedor.GridView1[numero - 1, 1].text = var.Prov_nombre[a]
+          FfiltroProveedor.GridView1[numero - 1, 2].text = var.Prov_Nif[a]
+          FfiltroProveedor.GridView1[numero - 1, 3].text = var.Prov_pc[a]
+          FfiltroProveedor.GridView1[numero - 1, 4].text = var.Prov_telf[a]
+          FfiltroProveedor.GridView1[numero - 1, 5].text = var.Prov_Fax[a] 
+          FfiltroProveedor.GridView1[numero - 1, 6].text = var.Prov_Movil[a]
+          FfiltroProveedor.GridView1[numero - 1, 7].text = var.Prov_Correo[a]
+          FfiltroProveedor.GridView1[numero - 1, 8].text = var.Prov_fp[a]
+          FfiltroProveedor.GridView1[numero - 1, 9].text = var.Prov_Fecha[a]
+          FfiltroProveedor.GridView1[numero - 1, 10].text = var.Prov_Direccion[a]
+          FfiltroProveedor.GridView1[numero - 1, 11].text = var.Prov_cp[a]
+          FfiltroProveedor.GridView1[numero - 1, 12].text = var.Prov_Ciudad[a] 
+          FfiltroProveedor.GridView1[numero - 1, 13].text = var.Prov_Provincia[a]
+          FfiltroProveedor.GridView1[numero - 1, 14].text = var.Prov_observaciones[a]
+      ENDIF 
+  ENDIF
+finnext1:
+NEXT
+
+  IF numero > 0 THEN 
+    'SE HA ENCONTRADO PARECIDOS
+    RETURN 1 
+    ELSE 
+    RETURN 0
+    ENDIF 
+  
+END
+'-------------------------------------------------------------------
+' buscar albaran simple 
+'-------------------------------------------------------------------
+PUBLIC FUNCTION AlbaranSimple(idbus AS String) AS Integer
+DIM a AS Integer
+DIM encontrado AS Integer
+
+  FOR a = 0 TO var.alb_numero - 1
+  
+  IF var.alb_id[a] = idbus THEN 
+        encontrado = a
+      GOTO finbusqueda
+      END IF 
+  NEXT 
+  'no lo encuentro
+  RETURN -1
+  'encontrado
+  finbusqueda:
+  RETURN encontrado
+END
+
+'----------------------------------------------------
+' filtro de conceptos para añadir a un albaran
+'----------------------------------------------------
+PUBLIC FUNCTION Conceptofiltro2(obra AS String, patron AS String, OPTIONAL patron1 AS String, OPTIONAL patron2 AS String) AS Integer
+
+DIM lineas AS String
+DIM a AS Integer
+DIM numero AS Integer
+
+'FMain.GridViewProveedor.Clear
+
+FfiltroConceptos.GridViewfiltroconcepto.Rows.count = 0
+
+numero = 0 'contador de filas validas (sin estar borradas)
+
+IF patron = "*" OR patron = "" THEN 
+ BorradosDatosIniciales.dibujogridConceptos2(fmain.ComboBoxObraAlbaran.text)
+ RETURN 0
+ENDIF 
+
+IF patron1 = "" THEN patron1 = " "
+IF patron2 = "" THEN patron2 = " "
+
+FOR a = 0 TO var.concepto_numero - 1
+  IF var.concepto_id[a] <> "IdB" THEN 
+         Lineas = var.concepto_id[a]
+          Lineas &= var.concepto_idudobra[a] 
+          Lineas &= var.concepto_nombre[a]
+          Lineas &= var.concepto_ud[a] 
+          Lineas &= var.concepto_med[a]
+          Lineas &= var.concepto_precio[a] 
+          'Lineas &= var.conceptomemoria[a]
+          Lineas &= var.conceptotipo[a] 
+          Lineas &= var.concepto_Obra[a]
+  
+  IF dentro(Upper$(var.concepto_Obra[a]), obra) AND dentro(Upper$(lineas), patron) AND dentro(Upper$(lineas), patron1) AND dentro(Upper$(lineas), patron2) THEN   
+          numero += 1
+          FfiltroConceptos.GridViewfiltroconcepto.Rows.count = numero 
+          FfiltroConceptos.GridViewfiltroConcepto[numero - 1, 0].text = var.concepto_id[a]
+          FfiltroConceptos.GridViewfiltroConcepto[numero - 1, 1].text = var.concepto_Obra[a]
+          FfiltroConceptos.GridViewfiltroConcepto[numero - 1, 2].text = var.concepto_idudobra[a]
+          FfiltroConceptos.GridViewfiltroConcepto[numero - 1, 3].text = var.concepto_ud[a] 
+          FfiltroConceptos.GridViewfiltroconcepto[numero - 1, 4].text = var.concepto_nombre[a]
+          FfiltroConceptos.GridViewfiltroConcepto[numero - 1, 5].text = var.concepto_med[a]
+          FfiltroConceptos.GridViewfiltroConcepto[numero - 1, 6].text = var.concepto_precio[a]
+          FfiltroConceptos.GridViewfiltroConcepto[numero - 1, 7].text = var.conceptotipo[a]
+         
+      ENDIF 
+  ENDIF
+finnext:
+NEXT
+
+  IF numero > 0 THEN 
+    'SE HA ENCONTRADO PARECIDOS
+    RETURN 1 
+    ELSE 
+    RETURN 0
+    ENDIF 
+  
+END
+
+
+
+'busqueda 
+PUBLIC SUB buscaObra(idconcepto AS String) AS String 'devuelve la obra
+  DIM a AS Integer
+FOR a = 0 TO var.concepto_numero - 1
+  IF var.concepto_id[a] = idconcepto THEN 
+      RETURN var.concepto_obra[a]
+  END IF
+NEXT
+Message.Info("No encuentro obra del concepto: " & idconcepto)  
+END
+
+PUBLIC SUB buscaUd(idconcepto AS String) AS String 'devuelve la unidad de concepto
+  DIM a AS Integer
+FOR a = 0 TO var.concepto_numero - 1
+  IF var.concepto_id[a] = idconcepto THEN 
+      RETURN var.concepto_ud[a]
+  END IF
+NEXT
+Message.Info("No encuentro unidad del concepto: " & idconcepto)  
+END
+
+
+
+
+
+
+PUBLIC SUB buscaIdUd(idconcepto AS String) AS String 'devuelve la unidad de concepto
+  DIM a AS Integer
+FOR a = 0 TO var.concepto_numero - 1
+  IF var.concepto_id[a] = idconcepto THEN 
+      RETURN var.concepto_idudobra[a]
+  END IF
+NEXT
+Message.Info("No encuentro unidad del concepto: " & idconcepto)  
+END
+
+PUBLIC SUB buscatipoconcepto(idconcepto AS String) AS String 'devuelve la unidad de concepto
+  DIM a AS Integer
+FOR a = 0 TO var.concepto_numero - 1
+  IF var.concepto_id[a] = idconcepto THEN 
+      RETURN var.conceptotipo[a]
+  END IF
+NEXT
+Message.Info("No encuentro unidad del concepto: " & idconcepto)  
+END
+
+
+
+
+
+
+
+PUBLIC SUB buscaDenoConcepto(idconcepto AS String) AS String 'devuelvo la denominacion del concepto
+  DIM a AS Integer
+FOR a = 0 TO var.concepto_numero - 1
+  IF var.concepto_id[a] = idconcepto THEN 
+      RETURN var.concepto_nombre[a]
+  END IF
+NEXT
+Message.Info("No encuentro descripcion del concepto: " & idconcepto)  
+END
+
+
+PUBLIC SUB precioConcepto(idconcepto AS String) AS String 'devuelvo el precio de contrato del concepto
+DIM a AS Integer
+FOR a = 0 TO var.concepto_numero - 1
+  IF var.concepto_id[a] = idconcepto THEN 
+      RETURN var.concepto_precio[a]
+      END IF
+NEXT
+Message.Info("No encuentro descripcion del concepto: " & idconcepto)  
+
+
+END 
+
+
+PUBLIC FUNCTION sumadescompuesto(idalbaran AS String) AS Float 'var.alb_id[a])
+DIM a AS Integer
+DIM suma AS Float
+'tengo que ver todos los descompuestos, y hacer la operacion medicionxprecio y ir sumando
+suma = 0
+FOR a = 1 TO var.entrada_numero 
+  IF var.entrada_id[a - 1] = idalbaran THEN 
+     suma += (var.entrada_medidaconcepto[a - 1] * var.entrada_precio[a - 1])
+ END IF
+NEXT
+RETURN suma
+END
+
+'----------------------------------------------
+'dado un id de albaran buscar proveedor
+
+PUBLIC FUNCTION buscaprov(idalbaran AS String) AS String 'devuelve al proveedor
+DIM a AS Integer
+DIM encontrado AS Integer
+
+  FOR a = 0 TO var.alb_numero - 1
+  
+  IF var.alb_id[a] = idalbaran THEN 
+        encontrado = a
+      GOTO finbusqueda
+      END IF 
+  NEXT 
+  'no lo encuentro
+  Message.Error("No encuentro el proveedor de ese albaran")
+  GOTO fintotal
+  'encontrado
+  finbusqueda:
+  RETURN var.alb_prov[encontrado]
+  
+  fintotal:
+END
+'-----------------------------------------------------------------------------
+' dado un id de var.prov_id, 
+
+'---------------------------- edicion de albaran
+PUBLIC FUNCTION facturaSimple(idbus AS String) AS Integer
+DIM a AS Integer
+DIM encontrado AS Integer
+  FOR a = 0 TO var.fact_numero - 1
+    IF var.fact_id[a] = idbus THEN 
+        encontrado = a
+      GOTO finbusqueda
+      END IF 
+  NEXT 
+  'no lo encuentro
+  RETURN -1
+  'encontrado
+  finbusqueda:
+  RETURN encontrado
+END
+
+'------------------------------------------------------------------------------
+'filtrado de albaranes
+'------------------------------------------------------------------------------
+PUBLIC FUNCTION AlbaranesMFiltro(patron AS String, OPTIONAL patron1 AS String, OPTIONAL patron2 AS String, OPTIONAL obra AS String) AS Integer
+DIM lineas AS String
+DIM a AS Integer
+DIM numero AS Integer
+DIM validar AS Boolean
+
+
+
+FMain.GridViewAlbaran.Rows.count = 0
+
+numero = 0 'contador de filas validas (sin estar borradas)
+
+IF patron = "*" OR patron = "" THEN 
+ 'dibujar todos los de la obra
+ BorradosDatosIniciales.dibujogridAlbaran(fmain.Comboboxobraalbaran.text)
+ RETURN 0
+ENDIF 
+
+IF patron1 = "" THEN patron1 = " "
+IF patron2 = "" THEN patron2 = " "
+
+FOR a = 0 TO var.alb_numero - 1
+  IF var.alb_id[a] <> "IdB" THEN 
+         Lineas = var.alb_id[a]
+          lineas &= var.alb_numeroprov[a]
+    Lineas &= var.alb_prov[a]
+    Lineas &= var.alb_fecha[a]
+    Lineas &= var.alb_idobra[a]
+    Lineas &= var.alb_imp[a]
+    Lineas &= var.alb_fechaEnt[a]
+    Lineas &= var.alb_valor[a]
+         
+          
+  validar = dentro(Upper$(lineas), patron) AND dentro(Upper$(lineas), patron1) AND dentro(Upper$(lineas), patron2) AND dentro(Upper$(lineas), obra) 
+  IF validar THEN   
+          numero += 1
+          FMain.GridViewAlbaran.Rows.count = numero 
+          
+           FMain.GridViewAlbaran[numero - 1, 0].text = var.alb_idobra[a]
+           FMain.GridViewAlbaran[numero - 1, 1].text = var.alb_prov[a]
+          FMain.GridViewAlbaran[numero - 1, 2].text = var.alb_id[a]
+          FMain.GridViewAlbaran[numero - 1, 3].text = var.alb_numeroprov[a]
+          FMain.GridViewAlbaran[numero - 1, 4].text = var.alb_valor[a]
+          FMain.GridViewAlbaran[numero - 1, 5].text = var.alb_fecha[a]
+          FMain.GridViewAlbaran[numero - 1, 6].text = var.alb_fechaEnt[a]
+          FMain.GridViewAlbaran[numero - 1, 7].text = var.alb_imp[a]
+      ENDIF 
+  ENDIF
+finnext:
+NEXT
+
+  IF numero > 0 THEN 
+    'SE HA ENCONTRADO PARECIDOS
+    RETURN 1 
+    ELSE 
+    RETURN 0
+    ENDIF 
+  
+
+END 
+' ------------------------------------------------------------------------------
+'buscar filtro en proveedor en facturas
+'-------------------------------------------------------------------------------------------------------
+PUBLIC FUNCTION ProveedorFiltrofacturas(patron AS String, solonifoproveedor AS Boolean) AS Integer
+
+DIM cadena AS String
+DIM a AS Integer
+DIM numero AS Integer
+
+'FMain.GridViewProveedor.Clear
+FfiltroProveedorFactura.GridView1.Rows.count = 0
+numero = 0 'contador de filas validas (sin estar borradas)
+
+IF patron = "*" OR patron = "" THEN 
+ BorradosDatosIniciales.dibujogrid11
+ RETURN 0
+ENDIF 
+
+
+
+FOR a = 0 TO var.Prov_numero - 1
+  IF var.Prov_id[a] <> "IdB" THEN 
+    IF solonifoproveedor = -1 THEN 
+      IF (dentro(var.Prov_nombre[a], patron) OR dentro(var.Prov_Nif[a], patron)) THEN 
+         'Contine parte del nombre o del nif
+          numero += 1
+          FfiltroProveedorFactura.GridView1.Rows.count = numero 
+          FfiltroProveedorFactura.GridView1[numero - 1, 0].text = var.Prov_id[a]
+          FfiltroProveedorFactura.GridView1[numero - 1, 1].text = var.Prov_nombre[a]
+          FfiltroProveedorFactura.GridView1[numero - 1, 2].text = var.Prov_Nif[a]
+          FfiltroProveedorFactura.GridView1[numero - 1, 3].text = var.Prov_pc[a]
+          FfiltroProveedorFactura.GridView1[numero - 1, 4].text = var.Prov_telf[a]
+          FfiltroProveedorFactura.GridView1[numero - 1, 5].text = var.Prov_Fax[a] 
+          FfiltroProveedorFactura.GridView1[numero - 1, 6].text = var.Prov_Movil[a]
+          FfiltroProveedorFactura.GridView1[numero - 1, 7].text = var.Prov_Correo[a]
+          FfiltroProveedorFactura.GridView1[numero - 1, 8].text = var.Prov_fp[a]
+          FfiltroProveedorFactura.GridView1[numero - 1, 9].text = var.Prov_Fecha[a]
+          FfiltroProveedorFactura.GridView1[numero - 1, 10].text = var.Prov_Direccion[a]
+          FfiltroProveedorFactura.GridView1[numero - 1, 11].text = var.Prov_cp[a]
+          FfiltroProveedorFactura.GridView1[numero - 1, 12].text = var.Prov_Ciudad[a] 
+          FfiltroProveedorFactura.GridView1[numero - 1, 13].text = var.Prov_Provincia[a]
+          FfiltroProveedorFactura.GridView1[numero - 1, 14].text = var.Prov_observaciones[a]
+      GOTO finnext1
+      ELSE 
+      GOTO finnext1
+      ENDIF 
+      ENDIF 
+      ENDIF 
+
+ IF var.Prov_id[a] <> "IdB" THEN 
+  cadena = var.Prov_observaciones[a]
+  cadena &= var.Prov_Provincia[a] 
+  cadena &= var.Prov_Ciudad[a] 
+  cadena &= Str$(var.Prov_cp[a]) 
+  cadena &= var.Prov_Direccion[a]
+  cadena &= Str$(var.Prov_Fecha[a])
+  cadena &= var.Prov_fp[a] 
+  cadena &= var.Prov_Correo[a] 
+  cadena &= var.Prov_Movil[a] 
+  'cadena &= var.Prov_id[a]  'no buscar en el identificador
+  cadena &= var.Prov_nombre[a] 
+  cadena &= Str$(var.Prov_Nif[a]) 
+  cadena &= var.Prov_pc[a] 
+  cadena &= var.Prov_telf[a] 
+  cadena &= var.Prov_Fax[a] 
+  
+  IF dentro(Upper$(cadena), patron) THEN   
+          numero += 1
+          FfiltroProveedorFactura.GridView1.Rows.count = numero 
+          FfiltroProveedorFactura.GridView1[numero - 1, 0].text = var.Prov_id[a]
+          FfiltroProveedorFactura.GridView1[numero - 1, 1].text = var.Prov_nombre[a]
+          FfiltroProveedorFactura.GridView1[numero - 1, 2].text = var.Prov_Nif[a]
+          FfiltroProveedorFactura.GridView1[numero - 1, 3].text = var.Prov_pc[a]
+          FfiltroProveedorFactura.GridView1[numero - 1, 4].text = var.Prov_telf[a]
+          FfiltroProveedorFactura.GridView1[numero - 1, 5].text = var.Prov_Fax[a] 
+          FfiltroProveedorFactura.GridView1[numero - 1, 6].text = var.Prov_Movil[a]
+          FfiltroProveedorFactura.GridView1[numero - 1, 7].text = var.Prov_Correo[a]
+          FfiltroProveedorFactura.GridView1[numero - 1, 8].text = var.Prov_fp[a]
+          FfiltroProveedorFactura.GridView1[numero - 1, 9].text = var.Prov_Fecha[a]
+          FfiltroProveedorFactura.GridView1[numero - 1, 10].text = var.Prov_Direccion[a]
+          FfiltroProveedorFactura.GridView1[numero - 1, 11].text = var.Prov_cp[a]
+          FfiltroProveedorFactura.GridView1[numero - 1, 12].text = var.Prov_Ciudad[a] 
+          FfiltroProveedorFactura.GridView1[numero - 1, 13].text = var.Prov_Provincia[a]
+          FfiltroProveedorFactura.GridView1[numero - 1, 14].text = var.Prov_observaciones[a]
+      ENDIF 
+  ENDIF
+finnext1:
+NEXT
+
+  IF numero > 0 THEN 
+    'SE HA ENCONTRADO PARECIDOS
+    RETURN 1 
+    ELSE 
+    RETURN 0
+    ENDIF 
+  
+END

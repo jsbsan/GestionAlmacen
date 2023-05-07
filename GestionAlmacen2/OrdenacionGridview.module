@@ -1,0 +1,90 @@
+' Gambas module file
+
+
+PUBLIC SUB ord_AZ(grid AS GridView, a AS Integer)
+  'a: indica la columna a la que ordenamos
+  'grid: es la rejilla que ordenamos
+
+DIM limite AS Integer
+DIM cambio1 AS String
+DIM i AS Integer
+DIM j AS Integer
+DIM col AS Integer
+grid.visible = FALSE
+
+limite = grid.Rows.Count
+
+IF (grid.Columns.Count < a + 1) OR a < 0 THEN 
+    Message.Error("Error en la columna introducida para ordenar")
+    GOTO salidaordenar
+    END IF 
+FMain.ProgressBarGuardar.visible = TRUE
+FMain.ProgressBarGuardar.value = 0
+FOR i = 0 TO limite - 1
+FMain.ProgressBarGuardar.value += i / limite
+WAIT 0.001
+    FOR j = 0 TO limite - 2
+      IF UCase$(Grid[j, a].Text) > UCase$(Grid[j + 1, a].Text) THEN
+            FOR col = 0 TO grid.Columns.Count - 1
+                cambio1 = Grid[j, col].Text
+                Grid[j, col].text = Grid[j + 1, col].Text
+                Grid[j + 1, col].text = cambio1
+            NEXT 
+      END IF
+  NEXT
+NEXT
+
+ salidaordenar: 
+  FMain.ProgressBarGuardar.value = 1
+
+FMain.ProgressBarGuardar.visible = FALSE
+ grid.visible = TRUE
+END
+
+
+'------------------------------------------------------------------------
+PUBLIC SUB ord_ZA(grid AS GridView, a AS Integer)
+  'a: indica la columna a la que ordenamos
+  'grid: es la rejilla que ordenamos
+
+DIM limite AS Integer
+DIM cambio1 AS String
+DIM i AS Integer
+DIM j AS Integer
+DIM col AS Integer
+
+FMain.ProgressBarGuardar.visible = TRUE
+FMain.ProgressBarGuardar.value = 0
+
+grid.visible = FALSE
+limite = grid.Rows.Count
+
+
+IF (grid.Columns.Count < a + 1) OR a < 0 THEN 
+    Message.Error("Error en la columna introducida para ordenar")
+    GOTO salidaordenar
+    END IF 
+
+FOR i = 0 TO limite - 2
+FMain.ProgressBarGuardar.value += i / limite
+WAIT 0.001
+    FOR j = i TO limite - 1
+      IF UCase$(Grid[i, a].Text) <= UCase$(Grid[j, a].Text) THEN
+            FOR col = 0 TO grid.Columns.Count - 1
+                cambio1 = Grid[j, col].Text
+                Grid[j, col].text = Grid[i, col].Text
+                Grid[i, col].text = cambio1
+            NEXT 
+      END IF
+ 
+  
+  
+  NEXT
+NEXT
+
+ salidaordenar: 
+FMain.ProgressBarGuardar.value = 1
+ 
+FMain.ProgressBarGuardar.visible = FALSE
+ grid.visible = TRUE
+END

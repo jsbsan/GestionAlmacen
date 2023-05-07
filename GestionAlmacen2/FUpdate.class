@@ -1,0 +1,24 @@
+' Gambas class file
+
+
+PUBLIC SUB ToolButton1_Click()
+Update.Update(UpdateDatos.rutaprueba, UpdateDatos.archivo_informacion_update, UpdateDatos.programa, UpdateDatos.version)
+END
+
+PUBLIC SUB Form_Open()
+
+  ME.center
+
+END
+
+PUBLIC SUB ToolButton2_Click()
+
+  ME.close
+
+END
+
+PUBLIC SUB TextLabel1_MouseDown()
+
+  
+
+END

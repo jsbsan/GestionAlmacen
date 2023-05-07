@@ -1,0 +1,18 @@
+' Gambas module file
+
+
+PUBLIC SUB edicion(fila AS Integer)
+DIM a AS Integer
+a = fila
+fmain.LabelIdAlb.text = var.alb_id[a]
+fmain.textboxnalb.text = var.alb_numeroprov[a]
+fmain.ComboBoxALBPROV.text = var.alb_prov[a] 'proveedor de este albaran
+
+ fmain.ValueBoxFAlb.value = var.alb_fecha[a] 'fecha del albaran
+ fmain.ComboBoxObraAlbaran.text = var.alb_idobra[a]
+
+fmain.LabelImputadoAlb.text = var.alb_imp[a]
+fmain.ValueBoxFEAlb.value = var.alb_fechaEnt[a]
+fmain.LabelVALORALBARAN.text = var.alb_valor[a]
+
+END

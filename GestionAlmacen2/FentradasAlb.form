@@ -1,0 +1,176 @@
+# Gambas Form File 2.0
+
+{ Form Form
+  MoveScaled(0,0,82,51)
+  Text = ("")
+  { GridViewConceptosEntrada GridView
+    MoveScaled(1,9,80,37)
+    Font = Font["Times,-1"]
+    Mode = Select.Single
+  }
+  { estadoentrada Label
+    MoveScaled(41,48,28,2)
+    Font = Font["Times,-1"]
+    Text = ("(Estado en Entrada:  Modo A\xC3\xB1adir Nuevo)")
+  }
+  { Label31 Label
+    MoveScaled(18,54,5,2)
+    Font = Font["Times,-1"]
+    Text = ("Tipo:")
+  }
+  { Label30 Label
+    MoveScaled(85,11,11,3)
+    Font = Font["Times,-1"]
+    Text = ("Denominaci\xC3\xB3n:")
+  }
+  { ValueBoxPrecioEntrada ValueBox
+    MoveScaled(87,51,6,2)
+    Font = Font["Times,-1"]
+  }
+  { ComboBox2 ComboBox
+    MoveScaled(85,23,11,2)
+    Font = Font["Times,-1"]
+    Text = ("ComboBox2")
+    ReadOnly = True
+    List = [("ud."), ("m.l."), ("m2."), ("m3"), ("kg."), ("tn."), ("mu."), ("litros"), ("hora"), ("semana"), ("mes"), ("P.A."), ("otra")]
+  }
+  { Label29 Label
+    MoveScaled(88,21,3,2)
+    Font = Font["Times,-1"]
+    Text = ("Ud:")
+  }
+  { Label33 Label
+    MoveScaled(80,55,5,2)
+    Font = Font["Times,-1"]
+    Text = ("Precio:")
+  }
+  { ValueBoxCantidadEntrada ValueBox
+    MoveScaled(83,46,6,2)
+    Font = Font["Times,-1"]
+  }
+  { Label32 Label
+    MoveScaled(81,42,6,2)
+    Font = Font["Times,-1"]
+    Text = ("Cantidad:")
+  }
+  { Label68 Label
+    MoveScaled(83,38,9,3)
+    Font = Font["Times,-1"]
+    Text = ("IdUd.de Obra:")
+  }
+  { Label20 Label
+    MoveScaled(0,0,11,4)
+    Font = Font["Times,-1"]
+    Text = ("N\xC2\xBA Albaran:")
+  }
+  { LabelNAlbaranEntrada Label
+    MoveScaled(8,1,11,2)
+    Font = Font["Times,-1"]
+    Text = ("")
+    Border = Border.Plain
+  }
+  { TextBoxIdUdObraEntrada TextBox
+    MoveScaled(84,29,8,2)
+    Enabled = False
+    Font = Font["Times,-1"]
+    Text = ("")
+    ReadOnly = True
+  }
+  { ComboBox1 ComboBox
+    MoveScaled(34,55,10,2)
+    Font = Font["Times,-1"]
+    Text = ("ComboBox1")
+    ReadOnly = True
+    List = [("estimaci\xC3\xB3n"), ("oferta"), ("contrato")]
+  }
+  { LabelIdconceptoEntrada Label
+    MoveScaled(30,1,8,2)
+    Font = Font["Times,-1"]
+    Text = ("")
+    Border = Border.Plain
+  }
+  { Label27 Label
+    MoveScaled(21,1,8,2)
+    Font = Font["Times,-1"]
+    Text = ("Proveedor:")
+  }
+  { Label55 Label
+    MoveScaled(40,1,4,2)
+    Font = Font["Times,-1"]
+    Text = ("Obra:")
+  }
+  { LabelObraEntrada Label
+    MoveScaled(44,1,10,2)
+    Font = Font["Times,-1"]
+    Text = ("")
+    Border = Border.Plain
+  }
+  { Button5 Button
+    MoveScaled(5,5,19,3)
+    Font = Font["Times,-1"]
+    ToolTip = ("similares")
+    Text = ("Insertar Concepto por Filtro")
+  }
+  { TextBoxDenConceptoEntrada TextBox
+    MoveScaled(85,4,31,2)
+    Enabled = False
+    Font = Font["Times,-1"]
+    Text = ("")
+    ReadOnly = True
+  }
+  { ToolButton5 ToolButton
+    MoveScaled(57,0,3,3)
+    Visible = False
+    Font = Font["Times,-1"]
+    ToolTip = ("Aceptar...")
+    Text = ("")
+    Picture = Picture["icon:/16/apply"]
+    Border = True
+  }
+  { ToolButton6 ToolButton
+    MoveScaled(62,0,3,3)
+    Visible = False
+    Font = Font["Times,-1"]
+    ToolTip = ("Cancelar...")
+    Text = ("")
+    Picture = Picture["icon:/16/cancel"]
+    Border = True
+  }
+  { Button6 Button
+    MoveScaled(67,0,3,1)
+    Visible = False
+    Font = Font["Times,-1"]
+    ToolTip = ("Nuevo...")
+    Text = ("*")
+  }
+  { ToolButton25 ToolButton
+    MoveScaled(72,0,3,3)
+    Visible = False
+    Font = Font["Times,-1"]
+    Text = ("")
+    Picture = Picture["icon:/16/delete"]
+    Border = True
+  }
+  { Button1 Button
+    MoveScaled(69,5,11,3)
+    Font = Font["Times,-1"]
+    Text = ("Aceptar")
+    Picture = Picture["icon:/16/apply"]
+  }
+  { copiarportapaepelesGridViewAlbaran ToolButton
+    MoveScaled(2,47,21,2)
+    Text = ("Copiar al Portapapeles")
+    Picture = Picture["icon:/16/copy"]
+    Border = True
+  }
+  { LabelValoracion Label
+    MoveScaled(28,6,18,2)
+    Text = ("Valoraci\xC3\xB3n Albar\xC3\xA1n:")
+  }
+  { label2valoracion Label
+    MoveScaled(46,6,13,2)
+    Text = ("0")
+    Alignment = Align.Right
+    Border = Border.Plain
+  }
+}

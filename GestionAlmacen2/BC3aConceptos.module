@@ -1,0 +1,261 @@
+' Gambas module file
+'-------------------------------------------------------------------------------
+' version 0.0.5: conversion .BC3 a .conceptos
+'-------------------------------------------------------------------------------
+
+PUBLIC SUB convierteBC3aConceptos() AS Integer 'devuelve 1 si todo va bien, 2 si se ha cancelado,
+DIM c AS String
+DIM arr_cadenas AS NEW String[]
+DIM arr_cadenas_subcadena AS NEW String[]
+DIM cadenas_conceptos AS NEW String[]
+DIM a AS Integer
+DIM b AS Integer
+DIM codigofinline AS String
+DIM codigofinline2 AS String
+DIM obra AS String
+DIM detectadaobra AS String
+DIM hFile AS File
+DIM sLine AS String
+DIM suma AS Integer
+DIM conservaprecios AS Integer
+
+codigofinline = Chr$(13)
+codigofinline2 = "|"
+Dialog.Title = "Seleccione un archivo para abrir tipo .BC3"
+Dialog.Filter = ["", ""]
+Dialog.Path = User.Name
+Dialog.Filter = ["*.bc3", "BC3 FIEBDC-3-95"]
+
+
+IF NOT Dialog.OpenFile() THEN
+  'LECTURA DE TODAS LAS LINEAS DEL ARCHIVO
+  'conversion de caracteres LINUX
+
+ conservaprecios = Message.Question("¿conservo los precios?", "Si", "No")
+  
+  
+  hFile = OPEN Dialog.Path FOR INPUT
+
+
+    WHILE NOT Eof(hFile)
+        LINE INPUT #hFile, sLine
+        suma += 1
+       ' PRINT suma, ": "; sLine
+        arr_cadenas.Resize(suma)
+        arr_cadenas[suma - 1] = Conv$(sLine, "ISO-8859-1", "UTF-8")
+    WEND
+    
+  'BUSQUEDA DE NOMBRE DE OBRA DENTRO DEL BC3
+  
+  obra = ""
+  detectadaobra = ""
+  FOR a = 0 TO arr_cadenas.Count - 1
+  arr_cadenas_subcadena = Split(arr_cadenas[a], codigofinline2)
+  IF arr_cadenas_subcadena.Count > 3 THEN 
+  
+  IF InStr(arr_cadenas_subcadena[0], "C") <> 0 THEN 
+        'se trata de una linea de conceptos
+        'compruebo si lleva el nombre del proyecto
+        IF InStr(arr_cadenas_subcadena[1], "#") <> 0 THEN 
+              'contiene el nombre de la obra o capitulo
+              ELSE 
+              'se trata de un concepto normal
+              'lo añado a la lista
+              var.concepto_numero += 1
+              var.concepto_id.add(arr_cadenas_subcadena[1])
+              var.concepto_idudobra.add(arr_cadenas_subcadena[1])
+              'unidad
+              var.concepto_ud.add(convierteud(arr_cadenas_subcadena[2]))
+              var.concepto_nombre.add(arr_cadenas_subcadena[3])
+
+              var.concepto_med.add(0)
+
+              IF conservaprecios = 1 THEN 
+               var.concepto_precio.add(arr_cadenas_subcadena[4])
+               ELSE 
+                var.concepto_precio.add(0)
+              ENDIF 
+
+
+'asignacion de tipo
+IF arr_cadenas_subcadena[6] = 3 THEN 
+         var.conceptotipo.add("materiales")
+          GOTO finasignaciontipo
+         ENDIF 
+IF arr_cadenas_subcadena[6] = 0 THEN 
+        var.conceptotipo.add("otros")
+        GOTO finasignaciontipo
+         ENDIF 
+IF arr_cadenas_subcadena[6] = 1 THEN 
+        var.conceptotipo.add("mano de obra")
+        GOTO finasignaciontipo
+         ENDIF 
+ IF arr_cadenas_subcadena[6] = 2 THEN 
+        var.conceptotipo.add("maq.med.aux")
+        GOTO finasignaciontipo
+         ENDIF         
+         
+         
+finasignaciontipo:
+ENDIF
+              ENDIF 
+        ENDIF 
+  NEXT 
+  
+  IF arr_cadenas_subcadena.count = 0 THEN 
+      Message.Info("No se han detectado conceptos...?¿")
+      GOTO FINs
+      ENDIF 
+      
+  IF detectadaobra = "" THEN 
+       arr_cadenas = Split(Dialog.Path, "/")
+       obra = Upper$(arr_cadenas[arr_cadenas.count - 1])
+  ENDIF 
+  
+ ' Message.Info("Obra: " & obra)
+  
+  'asigno la obra a todos los conceptos leidos
+ 
+  FOR a = 0 TO var.conceptotipo.count - 1
+   var.concepto_obra.Add(Upper$(obra))
+  NEXT 
+  FMain.TS1[2].Enabled = TRUE
+  
+  'empiezo a pasar datos a conceptos
+  
+  IF var.concepto_numero = 0 THEN 
+  GOTO finabrirconcepto2
+  ENDIF 
+
+
+    
+IF fmain.ComboBoxObras.CounT = 0 THEN 
+     fmain.ComboBoxObras.Add(Upper$(var.concepto_Obra[0]))
+    END IF
+    
+FOR a = 0 TO var.concepto_numero - 1
+  FOR b = 0 TO fmain.ComboBoxObras.Count - 1
+    IF Upper$(var.concepto_Obra[a]) = Upper$(fmain.ComboBoxObras[b].text) THEN 
+    GOTO finnextobrasconceptos
+    ENDIF 
+    
+  NEXT
+'salva el archivo conceptos
+finnextobrasconceptos:
+NEXT 
+AbreGuardaConcepto.salva()
+
+'si no coincide con la lista de obra exitente, se incluye en la lista
+finabrirconcepto2:
+  
+  ELSE 
+  
+  ' HA PULSADO CANCELAR EL DIALOG DE ABRIR ARCHIVO
+  RETURN 2
+  ENDIF 
+ 
+  fins:
+  
+END
+'------------------------------------------------------------------------------
+' CONVERSION DE UNIDADES
+'------------------------------------------------------------------------------
+
+PUBLIC FUNCTION convierteud(unidad AS String) AS String
+DIM a AS Integer
+DIM nuevaunidad AS String
+DIM letra AS String
+nuevaunidad = ""
+
+'quito puntos y comas de la palabra unidad
+FOR a = 1 TO Len(unidad)
+letra = Mid$(unidad, a, 1)
+IF letra = "." THEN 
+   'salta
+   GOTO salto
+   ENDIF 
+IF letra = "," THEN 
+   ' salta
+   GOTO salto
+   ENDIF 
+IF letra = " " THEN 
+   ' salta
+   GOTO salto
+   ENDIF 
+   
+nuevaunidad &= letra
+
+salto:
+NEXT 
+nuevaunidad = LCase$(nuevaunidad)
+IF nuevaunidad = "" THEN 
+LCase$(unidad)
+ENDIF 
+
+'PRINT Len(nuevaunidad), nuevaunidad, Len(unidad), unidad
+
+IF nuevaunidad = "u" THEN 
+         RETURN "ud."
+         ENDIF 
+
+IF nuevaunidad = "ud" THEN 
+         RETURN "ud."
+         ENDIF 
+         
+IF nuevaunidad = "m2" THEN 
+         RETURN "m2."
+         ENDIF 
+  
+  IF nuevaunidad = "m3" THEN 
+         RETURN "m3."
+         ENDIF 
+  
+  IF nuevaunidad = "tn" THEN 
+         RETURN "tn."
+         ENDIF 
+ 
+  IF nuevaunidad = "t" THEN 
+         RETURN "tn."
+         ENDIF 
+   
+  IF nuevaunidad = "mu" THEN 
+         RETURN "mu."
+         ENDIF 
+  
+  IF nuevaunidad = "m" THEN 
+         RETURN "m.l."
+         ENDIF 
+         
+   IF nuevaunidad = "ml" THEN 
+         RETURN "m.l."
+         ENDIF 
+   IF nuevaunidad = "metro" THEN 
+         RETURN "m.l."
+         ENDIF 
+   IF nuevaunidad = "metrolineal" THEN 
+         RETURN "m.l."
+         ENDIF 
+    IF nuevaunidad = "l" THEN 
+         RETURN "litros"
+         ENDIF 
+   IF nuevaunidad = "litro" THEN 
+         RETURN "litros"
+         ENDIF 
+  IF nuevaunidad = "kg" THEN 
+         RETURN "kg."
+         ENDIF 
+         
+  IF nuevaunidad = "k" THEN 
+  RETURN "kg."
+  ENDIF 
+  
+    IF nuevaunidad = "h" THEN 
+         RETURN "hora"
+         ENDIF 
+  
+  RETURN unidad & " comprobar"
+  
+  
+  
+END
+

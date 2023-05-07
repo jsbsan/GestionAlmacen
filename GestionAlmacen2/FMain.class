@@ -1,0 +1,2043 @@
+' Gambas class file
+
+'PUBLIC SUB ver()
+'fmain.center
+'END
+
+PUBLIC salidaanterior AS String
+
+
+PUBLIC SUB Form_Open()
+DIM a AS Integer
+
+ME.Center
+
+  AAInicioVariables.variables
+  UpdateDatos.cargadatos
+  FOR a = 2 TO 6
+  TS1[a].Enabled = FALSE
+  NEXT 
+  LabelFechaTrabajoInforme.text = Str$(ValueBoxFechaTrabajo.Value)
+  salidaanterior = "no"
+addrecientes.abre()
+ME.Show
+
+END
+
+PUBLIC SUB salir_Click()
+'comprobar que no se han echo cambios (para  guardardo y sino salir)
+DIM a AS Integer
+IF Message.Warning("¿Desea salir sin guardar previamente?", "Cancelar", "Salir") = 2 THEN 
+    salidaanterior = "si"
+    addrecientes.salva()
+    ME.close
+    ELSE 
+    salidaanterior = "no"
+    ENDIF 
+END
+
+
+'********************************************************* Codigo de hojas **********************
+
+
+
+
+PUBLIC SUB TextBoxRutaProveedores_KeyPress()
+
+   IF Key.code = Key.enter OR Key.code = Key.Return OR Key.CODE = Key.TAB THEN 
+  TextBoxRutaAlbFact.SetFocus
+  END IF
+
+END
+
+PUBLIC SUB TextBoxRutaAlb_KeyPress()
+
+  IF Key.code = Key.enter OR Key.code = Key.Return OR Key.CODE = Key.TAB THEN 
+  TextBoxRutaConcepto.SetFocus
+  END IF
+
+END
+
+PUBLIC SUB TextBoxRutaConcepto_KeyPress()
+
+  
+  IF Key.code = Key.enter OR Key.code = Key.Return OR Key.CODE = Key.TAB THEN 
+  ComboBoxObras.SetFocus
+  END IF
+
+END
+
+PUBLIC SUB ComboBoxObras_KeyPress()
+  IF Key.code = Key.enter OR Key.code = Key.Return OR Key.CODE = Key.TAB THEN 
+  ValueBoxFechaTrabajo.SetFocus
+  END IF
+  
+
+END
+
+'Pantalla Proveedores introduccion de datos
+
+PUBLIC SUB TextBoxNombreProveedor_KeyPress()
+  IF (Key.code = Key.enter OR Key.code = Key.Return OR Key.CODE = Key.TAB) AND (TextBoxNombreProveedor.text <> "") THEN 
+  TextBoxNombreProveedor.text = Upper$(TextBoxNombreProveedor.text)
+  TextBoxNifLetra.SetFocus
+  END IF
+END
+
+PUBLIC SUB TextBoxNombreProveedor_LostFocus()
+  TextBoxNombreProveedor.text = Upper$(TextBoxNombreProveedor.text)
+END
+
+
+PUBLIC SUB TextBoxNifLetra_KeyPress()
+IF Key.code = Key.enter OR Key.code = Key.Return OR Key.CODE = Key.TAB THEN 
+  TextBoxNifLetra.text = Upper$(TextBoxNifLetra.text)
+  ValueBoxNifNumero.SetFocus
+  END IF
+END
+
+PUBLIC SUB TextBoxNifLetra_LostFocus()
+  TextBoxNifLetra.text = Upper$(TextBoxNifLetra.text)
+END
+
+
+
+PUBLIC SUB ValueBoxNifNumero_KeyPress()
+IF (Key.code = Key.enter OR Key.code = Key.Return OR Key.CODE = Key.TAB) AND (ValueBoxNifNumero.value <> 0) THEN 
+  TextBoxContacto.SetFocus
+  END IF
+
+IF (ValueBoxNifNumero.value = 0) THEN   
+  Message.Error("Nif no valido, debe de introducirlo")
+  ENDIF 
+  
+
+END
+
+PUBLIC SUB TextBoxContacto_KeyPress()
+IF Key.code = Key.enter OR Key.code = Key.Return OR Key.CODE = Key.TAB THEN 
+  TextBoxTelf.SetFocus
+  END IF
+END
+
+PUBLIC SUB TextBoxTelf_KeyPress()
+IF Key.code = Key.enter OR Key.code = Key.Return OR Key.CODE = Key.TAB THEN 
+  TextBoxFax.SetFocus
+  END IF
+END
+
+
+PUBLIC SUB TextBoxFax_KeyPress()
+IF Key.code = Key.enter OR Key.code = Key.Return OR Key.CODE = Key.TAB THEN 
+  TextBoxMovil.SetFocus
+  END IF
+END
+
+PUBLIC SUB TextBoxMovil_KeyPress()
+IF Key.code = Key.enter OR Key.code = Key.Return OR Key.CODE = Key.TAB THEN 
+  TextBoxCorreo.SetFocus
+  END IF
+END
+
+
+
+
+
+PUBLIC SUB TextBoxCorreo_KeyPress()
+IF Key.code = Key.enter OR Key.code = Key.Return OR Key.CODE = Key.TAB THEN 
+  TextBoxFP.SetFocus
+  END IF
+END
+
+PUBLIC SUB TextBoxFP_KeyPress()
+IF Key.code = Key.enter OR Key.code = Key.Return OR Key.CODE = Key.TAB THEN 
+  ValueBoxFdatos.SetFocus
+  END IF
+END
+
+PUBLIC SUB ValueBoxFdatos_KeyPress()
+
+IF Key.code = Key.enter OR Key.code = Key.Return OR Key.CODE = Key.TAB THEN 
+TextBoxDireccion.SetFocus
+END IF
+
+END
+
+PUBLIC SUB TextBoxDireccion_KeyPress()
+IF Key.code = Key.enter OR Key.code = Key.Return OR Key.CODE = Key.TAB THEN 
+  TextBoxCP.SetFocus
+  END IF
+END
+
+PUBLIC SUB TextBoxCP_KeyPress()
+IF Key.code = Key.enter OR Key.code = Key.Return OR Key.CODE = Key.TAB THEN 
+  TextBoxCiudad.SetFocus
+  END IF
+END
+
+PUBLIC SUB TextBoxCiudad_KeyPress()
+IF Key.code = Key.enter OR Key.code = Key.Return OR Key.CODE = Key.TAB THEN 
+  TextBoxProv.SetFocus
+  END IF
+END
+
+PUBLIC SUB TextBoxProv_KeyPress()
+IF Key.code = Key.enter OR Key.code = Key.Return OR Key.CODE = Key.TAB THEN 
+  TextBoxObs.SetFocus
+  END IF
+END
+
+PUBLIC SUB TextBoxObs_KeyPress()
+IF Key.code = Key.enter OR Key.code = Key.Return OR Key.CODE = Key.TAB THEN 
+  IF estadoprov.text = "(Estado en Proveedores:  Modo Edicion)" THEN 
+  ToolButtonAceptarProveedor.SetFocus
+  ELSE
+  IF estadoprov.text = "(Estado en Proveedores:  Modo Añadir Nuevo)" THEN 
+     ButtonNuevoProveedor.SetFocus
+  ENDIF
+  ENDIF
+  ENDIF
+END
+
+
+
+
+
+'-------------------------------- TAB -------------------------------------------------
+
+PUBLIC SUB TS1_Click()
+DIM a AS Integer
+DIM obraactual AS String
+
+obraactual = ComboBoxObras.Text
+
+IF TS1.current.caption = "Proveedores" THEN
+ 'actualizo obra
+ 
+  TextBoxNombreProveedor.setfocus
+  ValueBoxFdatos.VALUE = ValueBoxFechaTrabajo.VALUE
+  END IF
+  
+IF TS1.current.caption = "Conceptos" THEN
+
+ComboBoxObrasConceptos.Clear
+FOR a = 0 TO ComboBoxObras.Count - 1
+ComboBoxObrasConceptos.Add(ComboBoxObras[a].text)
+NEXT 
+
+ComboBoxObrasConceptos.text = obraactual
+TextBoxIdUdObra.setfocus
+ 'muestro en gridproveedores
+      IF var.inicioconcepto = 0 THEN
+          BorradosDatosIniciales.dibujogridconceptos(ComboBoxObrasConceptos.text)
+           var.inicioconcepto = 1
+      ENDIF 
+
+ END IF
+  
+  
+IF TS1.current.caption = "Albaranes" THEN
+    ComboboxObraalbaran.CLEAR
+    ComboboxObraalbaran.Sorted = 1
+    FOR a = 0 TO ComboBoxObras.Count - 1
+     ComboboxObraalbaran.add(ComboBoxObras[a].Text)
+    NEXT 
+    Comboboxobraalbaran.text = ComboBoxObras.Text
+    TextBoxNAlb.SetFocus
+    
+    ComboBoxALBPROV.Clear
+    FOR a = 0 TO var.Prov_numero - 1
+    ComboBoxALBPROV.Add(var.prov_nombre[a])
+    NEXT 
+    ValueBoxFEAlb.value = ValueBoxFechaTrabajo.value
+    
+   IF var.inicioalbaranes = 0 THEN 
+    
+     BorradosDatosIniciales.dibujogridAlbaran(Comboboxobraalbaran.text)
+  var.inicioalbaranes = 1
+  ENDIF 
+  
+  END IF
+
+
+IF TS1.current.caption = "Salidas Materiales" THEN
+   LabelIdObraSalida.text = ComboBoxObras.Text
+  BorradosDatosIniciales.dibujogridConceptosSalidas(LabelIdObraSalida.text)
+   
+  END IF 
+
+IF TS1.current.caption = "Facturas" THEN
+    Comboboxobrafactura.CLEAR
+    FOR a = 0 TO ComboBoxObras.Count - 1
+      Comboboxobrafactura.add(ComboBoxObras[a].Text)
+    NEXT 
+     Comboboxobrafactura.text = ComboBoxObras.Text
+     
+    ComboBoxProvFact.Clear
+    FOR a = 0 TO var.Prov_numero - 1
+      ComboBoxProvFact.Add(var.prov_nombre[a])
+    NEXT 
+    ValueBoxFEAlb.value = ValueBoxFechaTrabajo.value
+     
+     'deber leer todos los albaranes que coincidan con la obra y con el proveedor
+     'y rellenar el grid:  GridViewAlbProvObra
+     BorradosDatosIniciales.dibujogridFactura(ComboBoxProvFact.text, Comboboxobrafactura.text)
+     BorradosDatosIniciales.dibujogridAlbaranProveedorObra(ComboBoxProvFact.text, Comboboxobrafactura.text, GridViewAlbProvObra, ValueBoxFImp.value)
+     BorradosDatosIniciales.dibujogridAlbaranProveedorObraimp(LabelIdFactura.text, ComboBoxProvFact.text, Comboboxobrafactura.text, GridViewAlbProvObraimp, ValueBoxFImp.value)
+     
+     
+    TextBoxNFactura.SetFocus
+  END IF 
+IF TS1.current.caption = "Informes" THEN
+    
+    'añado proveedores al combo
+    ComboProvInforme.CLEAR
+    
+    ComboProvInforme.Sorted = 1
+    
+    FOR a = 0 TO var.Prov_numero - 1
+    ComboProvInforme.Add(var.Prov_nombre[a] & " Nif: " & var.Prov_Nif[a])
+    NEXT 
+    
+  END IF 
+END
+
+'-------------------------------- CONCEPTOS -------------------------------------------------
+
+'acciones de botones en proveedores
+
+PUBLIC SUB ButtonNuevoProveedor_Click()
+'aumento el numero de proveedores
+IF estadoprov.text = "(Estado en Proveedores:  Modo Edicion)" THEN 
+  'pongo en blanco las lineas
+  ABNuevoProveedor.enblanco()
+  'paso a modo añadir
+  estadoprov.text = "(Estado en Proveedores:  Modo Añadir Nuevo)"
+  ELSE 
+   'estoy en modo de añadir
+  ABNuevoProveedor.nuevo()
+  ToolButtonAceptarProveedor.Enabled = FALSE
+  ToolButtonCancelarProveedor.Enabled = FALSE   
+  GridViewProveedor.Background = Color.White 'SIN FILTRAR
+  'hay que guardar datos
+     
+    
+  END IF
+
+fmain.TextBoxNombreProveedor.SetFocus
+END
+
+
+
+PUBLIC SUB GridViewProveedor_Click()
+'entramos en modo edicion (Estado en Proveedores:  Modo Añadir Nuevo)
+ToolButtonAceptarProveedor.Enabled = TRUE
+ToolButtonCancelarProveedor.Enabled = TRUE
+ButtonNuevoProveedor.enabled = FALSE
+ToolButtonBorrar.Enabled = TRUE
+
+var.filaproveedorEditada = GridViewProveedor.row
+var.ProveedorMemoriaEditada = buscar.ProveedorSimple(GridViewProveedor[GridViewProveedor.ROW, 0].TEXT)
+
+estadoprov.text = "(Estado en Proveedores:  Modo Edicion)"
+ACEdicionProv.edicion(var.ProveedorMemoriaEditada)
+END
+
+PUBLIC SUB ToolButtonAceptarProveedor_Click()
+'cambio los datos que apunta el idproveedor
+IF estadoprov.text = "(Estado en Proveedores:  Modo Añadir Nuevo)" THEN 
+   Message.Error("Para Editar debe hacer click en algun proveedor")
+   fmain.TextBoxNombreProveedor.SetFocus
+   GOTO finaceptar
+   ENDIF
+ACEdicionProv.reescriboProveedorMemoria(var.ProveedorMemoriaEditada)
+'modifico la linea que he editado del grid
+ACEdicionProv.subreescriboGridProveedor(var.filaproveedorEditada, var.ProveedorMemoriaEditada)
+' cambio modo
+estadoprov.text = "(Estado en Proveedores:  Modo Añadir Nuevo)"
+ABNuevoProveedor.enblanco()
+ToolButtonAceptarProveedor.Enabled = FALSE
+ToolButtonCancelarProveedor.Enabled = FALSE
+    
+    
+
+
+finaceptar:
+ButtonNuevoProveedor.enabled = TRUE
+ToolButtonBorrar.enabled = FALSE
+END
+
+PUBLIC SUB ToolButtonBorrar_Click()
+DIM borrar AS Integer
+DIM valor AS Integer
+'Si estamos en modo Añadir Nuevo y borro, quiero decir debar en blanco los textbox, 
+IF estadoprov.text = "(Estado en Proveedores:  Modo Añadir Nuevo)" THEN 
+    ABNuevoProveedor.enblanco()
+    GOTO finborrado
+    END IF
+
+'Entonces estamos en añadir nuevo (editando....)
+
+'localizo el provedor segun su id
+borrar = buscar.ProveedorSimple(LabelIDProv.text)
+
+IF borrar = -1 THEN 
+     Message("Error en borrado no encuentro proveedor")
+     GOTO finborrado
+     END IF
+
+valor = Message.Question("¿Esta seguro de borrar el proveedor?, si tiene albaranes asignados quedarán huerfanos", "Aceptar", "Cancelar")
+IF valor <> 1 THEN GOTO finborrado
+
+
+'borro registro (id=idborrado)
+var.Prov_id[borrar] = "IdB"
+
+
+'redibujo grid (todos menos los en blanco)
+BorradosDatosIniciales.dibujogridProveedores
+
+'escribo en blanco los textbox
+  ABNuevoProveedor.enblanco()
+  estadoprov.text = "(Estado en Proveedores:  Modo Añadir Nuevo)"
+ToolButtonAceptarProveedor.Enabled = FALSE
+ToolButtonCancelarProveedor.Enabled = FALSE
+    
+    
+finborrado:
+fmain.TextBoxNombreProveedor.SetFocus
+ButtonNuevoProveedor.enabled = TRUE
+ToolButtonBorrar.enabled = FALSE
+END
+
+PUBLIC SUB ToolButtonCancelarProveedor_Click()
+
+ABNuevoProveedor.enblanco()
+ fmain.TextBoxNombreProveedor.SetFocus 
+ estadoprov.text = "(Estado en Proveedores:  Modo Añadir Nuevo)"
+ToolButtonAceptarProveedor.Enabled = FALSE
+ToolButtonCancelarProveedor.Enabled = FALSE
+ButtonNuevoProveedor.enabled = TRUE
+ToolButtonBorrar.enabled = FALSE
+END
+
+PUBLIC SUB TextBoxFiltroProv_KeyPress()
+IF Key.code = Key.enter OR Key.code = Key.Return OR Key.CODE = Key.TAB THEN 
+  ButtonFiltroProveedor.SetFocus
+  END IF
+  
+
+END
+
+PUBLIC SUB ButtonFiltroProveedor_Click()
+DIM resultado AS Integer
+resultado = buscar.ProveedorFiltro(Upper(TextBoxFiltroProv.text), CheckBoxFiltroProveedor.Value)
+IF RESULTADO = 1 THEN 
+    GridViewProveedor.Background = Color.Cyan
+    ELSE 
+    GridViewProveedor.Background = Color.White
+  END IF
+
+END
+
+
+'----------------INICIO-----------------------------------------------------------------------------
+
+
+PUBLIC SUB ToolButtonSALVAPROVEEDORES_Click()
+  AbreGuardaProveedores.salva() 
+END
+
+PUBLIC SUB ToolButtonABREPROVEEDORES_Click()
+  AbreGuardaProveedores.abrir()
+  
+END
+
+
+
+PUBLIC SUB ToolButtonNuevaObra_Click()
+
+  FnuevaObra.ShowModal
+
+END
+
+PUBLIC SUB ComboBoxObras_Click()
+DIM a AS Integer
+
+'IF estadoconcepto.Text = "(Estado en Concepto: Modo Añadir Nuevo)" THEN comboBoxObrasConceptos.text = ComboBoxObras.Text
+'IF estadoalbaran.text = "(Estado en Albaran:  Modo Añadir Nuevo)" THEN ComboboxObraalbaran.text = ComboBoxObras.Text
+'IF estadoentrada.text = "(Estado en Entrada:  Modo Añadir Nuevo)" THEN LabelObraEntrada.text = ComboBoxObras.Text
+'IF estadosalida.text = "(Estado en Salida:  Modo Añadir Nuevo)" THEN LabelIdObraSalida.text = ComboBoxObras.Text
+'IF estadofactura.text = "(Estado en Factura:  Modo Añadir Nuevo)" THEN comboboxobrafactura.text = ComboBoxObras.Text
+
+LabelidObraInforme.text = ComboBoxObras.Text
+
+
+FOR a = 2 TO 6
+  TS1[a].Enabled = TRUE
+NEXT 
+  fmain.Title = "Gestión de Almacén (Obra Actual: " & ComboBoxObras.Text & ")"
+END
+
+PUBLIC SUB ValueBoxFechaTrabajo_KeyPress()
+  LabelFechaTrabajoInforme.text = Str$(ValueBoxFechaTrabajo.Value)
+END
+
+
+'-----------------------------------CONCEPTOS---------------------------------------------------------------
+
+PUBLIC SUB ButtonNuevoConcepto_Click()
+  'aumento el numero de conceptos
+IF estadoconcepto.text = "(Estado en Concepto:  Modo Edicion)" THEN 
+  'pongo en blanco las lineas
+  ABNuevoConcepto.enblanco()
+  'paso a modo añadir
+  estadoconcepto.text = "(Estado en Concepto:  Modo Añadir Nuevo)"
+  ELSE 
+   'estoy en modo de añadir
+  ABNuevoConcepto.nuevo()
+  ToolButtonAceptarConcepto.Enabled = FALSE
+  ToolButtonCancelarConcepto.Enabled = FALSE   
+  GridViewConceptos.Background = Color.White 'SIN FILTRAR
+     
+    
+  
+  
+  END IF
+FMain.TextBoxIdUdObra.SetFocus
+END
+
+
+PUBLIC SUB TextBoxIdUdObra_KeyPress()
+  IF Key.code = Key.enter OR Key.code = Key.Return OR Key.CODE = Key.TAB THEN 
+    fmain.textboxconcepto.SetFocus
+  END IF
+END
+
+PUBLIC SUB ComboBoxUd_Change()
+ fmain.textboxconcepto.SetFocus
+END
+
+PUBLIC SUB ComboBoxUd_Enter()
+  fmain.textboxconcepto.SetFocus
+END
+
+PUBLIC SUB TextBoxConcepto_KeyPress()
+IF Key.code = Key.enter OR Key.code = Key.Return OR Key.CODE = Key.TAB THEN 
+    fmain.ValueBoxMedConcepto.SetFocus
+  END IF
+END
+
+PUBLIC SUB ValueBoxMedConcepto_KeyPress()
+  IF (key.Code = Asc(".")) THEN
+  ValueBoxMedConcepto.Insert(",")
+END IF
+  
+  
+  IF Key.code = Key.enter OR Key.code = Key.Return OR Key.CODE = Key.TAB THEN 
+    ValueBoxPrecioConcepto.SetFocus
+  END IF
+END
+
+PUBLIC SUB ValueBoxPrecioConcepto_KeyPress()
+IF (key.Code = Asc(".")) THEN
+  ValueBoxPrecioConcepto.Insert(",")
+END IF
+
+
+IF Key.code = Key.enter OR Key.code = Key.Return OR Key.CODE = Key.TAB THEN 
+      IF estadoconcepto.text = "(Estado en Concepto:  Modo Edicion)" THEN 
+      ToolButtonAceptarConcepto.SetFocus
+      ELSE
+      IF estadoconcepto.text = "(Estado en Concepto:  Modo Añadir Nuevo)" THEN 
+      ButtonNuevoConcepto.SetFocus
+      ENDIF
+ENDIF
+  
+  ENDIF
+END
+
+
+
+PUBLIC SUB ToolButtonAceptarConcepto_Click()
+DIM obraactual AS String
+  'cambio los datos que apunta el idproveedor
+IF estadoconcepto.text = "(Estado en Concepto: Modo Añadir Nuevo)" THEN 
+   Message.Error("Para Editar debe hacer click en algun concepto")
+   FMain.TextBoxIdUdObra.SetFocus
+   GOTO finaceptarconcepto
+   ENDIF
+ACEdicionConcepto.reescriboConceptoMemoria(var.ConceptoMemoriaEditada)
+obraactual = fmain.ComboBoxObrasConceptos.text
+'modifico la linea que he editado del grid
+ACEdicionConcepto.subreescriboGridConcepto(var.filaconceptoEditada, var.ConceptoMemoriaEditada)
+' cambio modo
+estadoconcepto.text = "(Estado en Concepto: Modo Añadir Nuevo)"
+ABNuevoConcepto.enblanco()
+ToolButtonAceptarConcepto.Enabled = FALSE
+ToolButtonCancelarConcepto.Enabled = FALSE
+ComboBoxObrasConceptos.text = obraactual
+    
+    
+
+finaceptarconcepto:
+ButtonNuevoConcepto.Enabled = TRUE
+ToolButton27.Enabled = FALSE
+END
+
+PUBLIC SUB GridViewConceptos_Click()
+'entramos en modo edicion (Estado en Proveedores:  Modo Añadir Nuevo)
+ToolButtonAceptarConcepto.Enabled = TRUE
+ToolButtonCancelarConcepto.Enabled = TRUE
+ToolButton27.enabled = TRUE
+ButtonNuevoConcepto.Enabled = FALSE
+
+var.filaconceptoEditada = GridViewConceptos.row
+var.conceptoMemoriaEditada = buscar.ConceptoSimple(GridViewConceptos[GridViewConceptos.ROW, 0].TEXT)
+
+estadoconcepto.text = "(Estado en Concepto:  Modo Edicion)"
+ACEdicionConcepto.edicion(var.ConceptoMemoriaEditada)
+  
+
+END
+
+PUBLIC SUB ToolButtonCancelarConcepto_Click()
+
+  
+ABNuevoConcepto.enblanco()
+
+ fmain.TextBoxIdUdObra.SetFocus 
+ estadoconcepto.text = "(Estado en Concepto: Modo Añadir Nuevo)"
+ ToolButtonAceptarConcepto.enableD = FALSE
+ ToolButtonCancelarConcepto.Enabled = FALSE
+ ToolButton27.Enabled = FALSE
+ ButtonNuevoConcepto.Enabled = TRUE
+END
+
+
+
+PUBLIC SUB ToolButton27_Click()
+DIM borrar AS Integer
+DIM valor AS Integer
+'Si estamos en modo Añadir Nuevo y borro, quiero decir debar en blanco los textbox, 
+IF estadoconceptO.text = "(Estado en Concepto:  Modo Añadir Nuevo)" THEN 
+    ABNuevoConcepto.enblanco()
+    GOTO finborrado
+    END IF
+
+'Entonces estamos en añadir nuevo (editando....)
+
+'localizo el provedor segun su id
+borrar = buscar.ConceptoSimple(LabelIDconcepto.text)
+
+IF borrar = -1 THEN 
+     Message("Error en borrado no encuentro concepto")
+     GOTO finborrado
+     END IF
+
+valor = Message.Question("¿Esta seguro de borrar el concepto?, si tiene albaranes asignados quedarán huerfanos", "Aceptar", "Cancelar")
+IF valor <> 1 THEN GOTO finborrado
+
+
+'borro registro (id=idborrado)
+var.concepto_id[borrar] = "IdB"
+
+
+'redibujo grid (todos menos los en blanco)
+
+BorradosDatosIniciales.dibujogridconceptos(ComboBoxObrasConceptos.text)
+
+
+'escribo en blanco los textbox
+  ABNuevoConcepto.enblanco()
+
+  estadoconcepto.text = "(Estado en Concepto:  Modo Añadir Nuevo)"
+ToolButtonAceptarConcepto.Enabled = FALSE
+ToolButtonCancelarConcepto.Enabled = FALSE
+      
+    
+
+finborrado:
+ToolButton27.Enabled = FALSE
+ ButtonNuevoConcepto.Enabled = TRUE
+fmain.TextBoxIdUdObra.SetFocus
+END
+
+PUBLIC SUB ButtonFiltroConcepto_Click()
+DIM c AS String
+  DIM resultado AS Integer
+  DIM patrones AS NEW String[]
+  DIM numero_patrones AS Integer
+  numero_patrones = 0
+   
+  
+  patrones = Split(Upper$(TextBoxFiltroConcepto.text), ",")
+  
+  numero_patrones = patrones.Count
+'FOR EACH c IN patrones
+ '             numero_patrones = numero_patrones + 1
+'NEXT
+
+IF numero_patrones = 0 THEN 
+ patrones.resize(3)
+    patrones[0] = "*"
+    patrones[1] = " "
+    patrones[2] = " "
+ END IF
+
+
+IF numero_patrones = 1 THEN 
+    patrones.resize(3)
+    patrones[1] = " "
+    patrones[2] = " "
+    END IF
+    
+IF numero_patrones = 2 THEN 
+    patrones.resize(3)
+    patrones[2] = " "
+  END IF
+  IF numero_patrones > 3 THEN 
+    Message.Info("solo se admiten 3 patrones de busqueda")
+    TextBoxFiltroConcepto.SetFocus
+    GOTO finfiltro
+  END IF
+   
+resultado = buscar.ConceptoFiltro(patrones[0], patrones[1], patrones[2], fmain.ComboBoxObrasConceptos.text)
+
+IF RESULTADO = 1 THEN 
+    GridViewConceptos.Background = Color.Cyan
+    ELSE 
+    GridViewConceptos.Background = Color.White
+  END IF
+
+finfiltro:
+END
+'----------------INICIO --------------------
+
+PUBLIC SUB ToolButtonGuardaConcepto_Click()
+
+  AbreGuardaConcepto.salva() 
+
+END
+
+PUBLIC SUB ToolButtonAbreconcepto_Click()
+
+DIM A AS Integer
+DIM B AS Integer
+
+AbreGuardaConcepto.abrir()
+' codigo: obras de conceptos añadirlas a combo de obra...
+'repetir tanta veces como conceptos haya
+IF var.concepto_numero = 0 THEN GOTO finabrirconcepto2
+
+
+    
+IF fmain.ComboBoxObras.CounT = 0 THEN 
+     ComboBoxObras.Add(var.concepto_Obra[0])
+    END IF
+    
+FOR a = 0 TO var.concepto_numero - 1
+  FOR b = 0 TO fmain.ComboBoxObras.Count - 1
+    IF Upper$(var.concepto_Obra[a]) = Upper$(ComboBoxObras[b].text) THEN GOTO finnextobrasconceptos
+  NEXT
+ComboBoxObras.Add(var.concepto_Obra[a])
+finnextobrasconceptos:
+NEXT 
+'si no coincide con la lista de obra exitente, se incluye en la lista
+finabrirconcepto2:
+END
+
+
+
+PUBLIC SUB TextBoxFiltroConcepto_KeyPress()
+
+  IF Key.code = Key.enter OR Key.code = Key.Return OR Key.CODE = Key.TAB THEN 
+  ButtonFiltroConcepto.SetFocus
+  END IF
+
+END
+
+
+' -----------------------------------------------------------------------------------
+'-----------------------------ALBARANES----------------------------------------------
+' -----------------------------------------------------------------------------------
+
+
+PUBLIC SUB TextBoxNAlb_KeyPress()
+  IF Key.code = Key.enter OR Key.code = Key.Return OR Key.CODE = Key.TAB THEN 
+    IF TextBoxNAlb.text <> "" THEN fmain.ValueBoxFAlb.SetFocus
+  END IF
+END
+
+PUBLIC SUB ValueBoxFAlb_KeyPress()
+  
+  IF Key.code = Key.enter OR Key.code = Key.Return OR Key.CODE = Key.TAB THEN 
+     IF ValueBoxFAlb.value = NULL THEN ValueBoxFAlb.value = ValueBoxFechaTrabajo.value
+  
+    fmain.ValueBoxFEAlb.SetFocus
+  END IF
+END
+
+
+PUBLIC SUB ValueBoxFEAlb_KeyPress()
+IF Key.code = Key.enter OR Key.code = Key.Return OR Key.CODE = Key.TAB THEN 
+  IF estadoalbaran.text = "(Estado en Albaran:  Modo Edicion)" THEN 
+  ToolButtonAceptaralbaran.SetFocus
+ ELSE
+  IF estadoalbaran.text = "(Estado en Albaran:  Modo Añadir Nuevo)" THEN 
+      ButtonNuevoalbaran.SetFocus
+  ENDIF
+  ENDIF
+ENDIF
+END
+
+PUBLIC SUB Button4_Click()
+
+  FfiltroProveedor.Show
+  
+  
+
+END
+
+'---------------------------------------------------------
+'codigo de albaranes
+
+PUBLIC SUB ButtonNuevoAlbaran_Click()
+
+    'aumento el numero de Albarans
+IF estadoalbaran.text = "(Estado en Albaran:  Modo Edicion)" THEN 
+  
+  'pongo en blanco las lineas
+  ABNuevoAlbaran.enblanco()
+  'paso a modo añadir
+  estadoAlbaran.text = "(Estado en Albaran:  Modo Añadir Nuevo)"
+  ELSE 
+   'estoy en modo de añadir
+  
+  
+  ABNuevoAlbaran.nuevo()
+  ToolButtonAceptarAlbaran.Enabled = FALSE
+  ToolButtonCancelarAlbaran.Enabled = FALSE   
+  GridViewAlbaran.Background = Color.White 'SIN FILTRAR
+      
+    
+  END IF
+FMain.TextBoxNAlb.SetFocus
+
+END
+
+PUBLIC SUB GridViewAlbaran_Click()
+  'entramos en modo edicion "(Estado en Albaran:  Modo Edicion Descompuesto)"
+IF LabelImputadoAlb.Text <> "" THEN 
+Message.Info("Si el albaran ya esta imputado a una factura y no es posible su modificación. Debera crear otro albaran rectificativo")
+GOTO fingridalbaranclick
+END IF
+'si el albaran esta imputado no lo podemos editar
+IF GridViewAlbaran[GridViewalbaran.ROW, 7].TEXT <> "" THEN 
+Message.Info("El albaran esta ya imputado no se puede editar")
+var.filaalbEditada = GridViewalbaran.row
+var.albMemoriaEditada = buscar.AlbaranSimple(GridViewAlbaran[GridViewalbaran.ROW, 2].TEXT)
+ButtonDescompuesto.Enabled = TRUE
+'estadoalbaran.text = "(Estado en Albaran:  Modo Edicion Descompuesto)"
+ACEdicionalbaran.edicion(var.albMemoriaEditada)
+FentradasAlb.Button5.enabled = FALSE
+FentradasAlb.GridViewConceptosEntrada.Background = Color.Orange
+ButtonDescompuesto_Click
+
+
+GOTO fingridalbaranclick
+END IF
+
+
+
+'si queremos  editar el albaran (cambio de obra, etc)
+ToolButtonAceptaralbaran.Enabled = TRUE
+ToolButtonCancelaralbaran.Enabled = TRUE
+
+fmain.textboxnalb.enabled = FALSE
+fmain.ComboBoxALBPROV.enabled = FALSE
+fmain.ValueBoxFAlb.enabled = FALSE
+fmain.ComboBoxObraAlbaran.enabled = FALSE
+fmain.LabelImputadoAlb.enabled = FALSE
+fmain.ValueBoxFEAlb.enabled = FALSE
+LabelIdAlb.enabled = FALSE
+
+
+var.filaalbEditada = GridViewalbaran.row
+var.albMemoriaEditada = buscar.AlbaranSimple(GridViewAlbaran[GridViewalbaran.ROW, 2].TEXT)
+ButtonDescompuesto.Enabled = TRUE
+estadoalbaran.text = "(Estado en Albaran:  Modo Edicion Descompuesto)"
+ACEdicionalbaran.edicion(var.albMemoriaEditada)
+ButtonDescompuesto_Click
+fingridalbaranclick:
+
+FentradasAlb.Button1.Enabled = TRUE
+FentradasAlb.GridViewConceptosEntrada.Background = Color.White
+
+
+END
+
+PUBLIC SUB ToolButtonCancelarAlbaran_Click()
+  ABNuevoAlbaran.enblanco()
+ fmain.TextBoxNAlb.SetFocus 
+ estadoconcepto.text = "(Estado en Albaran:  Modo Añadir Nuevo)"
+ ToolButtonAceptaralbaran.enableD = FALSE
+ ToolButtonCancelaralbaran.Enabled = FALSE
+END
+
+PUBLIC SUB ButtonDescompuesto_Click()
+  FentradasAlb.Caption = "Albaran: " & TextBoxNAlb.text & " del Proveedor " & ComboBoxALBPROV.text & " de Obra:" & ComboBoxObraAlbaran.text
+  'FentradasAlb.tag = TextBoxNAlb.text  'numero de albaran
+  FentradasAlb.tag = LabelIdAlb.text ' id del albaran
+  'var.albaraneditado =LabelIdAlb.text
+  FentradasAlb.LabelNAlbaranEntrada.text = TextBoxNAlb.text
+  FentradasAlb.LabelIdconceptoEntrada.text = ComboBoxALBPROV.text
+  FentradasAlb.LabelObraEntrada.text = ComboBoxObraAlbaran.text
+  FentradasAlb.ShowModal
+  'redibuja el listado de albaranes
+  BorradosDatosIniciales.dibujogridAlbaran(Comboboxobraalbaran.text)
+  ABNuevoAlbaran.enblanco()
+   ButtonDescompuesto.enableD = FALSE
+  ToolButtonAceptaralbaran.enableD = FALSE
+  ToolButtonCancelaralbaran.Enabled = FALSE
+  fmain.textboxnalb.enabled = TRUE
+  fmain.ComboBoxALBPROV.enabled = TRUE
+  fmain.ValueBoxFAlb.enabled = TRUE
+  fmain.ComboBoxObraAlbaran.enabled = TRUE
+  fmain.LabelImputadoAlb.enabled = TRUE
+  fmain.ValueBoxFEAlb.enabled = TRUE
+END
+
+'---------------------------------------------------------------------------------
+'zona de inicio: boton de salvar y guardar seccion
+'---------------------------------------------------------------------------------
+
+PUBLIC SUB ToolButton7_Click()
+
+  'guardar rutas de configuracion
+  
+  AbreGuardaSeccion.salva()
+fmain.ComboBoxObras.text = FMain.ComboBoxObras.tag 
+TextBoxRutaSeccion.Text = var.seccion
+salvadatosseccionactual.enabled = TRUE
+var.inicioalbaranes = 0
+var.inicioconcepto = 0
+
+
+finabrir:
+END
+
+PUBLIC SUB ToolButton8_Click()
+DIM a AS Integer
+DIM b AS Integer
+  AbreGuardaSeccion.abrir
+  IF var.concepto_numero = 0 AND var.Prov_numero = 0 THEN GOTO finabrir
+' codigo: obras de conceptos añadirlas a combo de obra...
+'repetir tanta veces como conceptos haya
+IF fmain.ComboBoxObras.CounT = 0 THEN 
+     ComboBoxObras.Add(var.concepto_Obra[0])
+    END IF
+    
+FOR a = 0 TO var.concepto_numero - 1
+  FOR b = 0 TO fmain.ComboBoxObras.Count - 1
+    IF Upper$(var.concepto_Obra[a]) = Upper$(ComboBoxObras[b].text) THEN GOTO finnextobrasconceptos
+  NEXT
+ComboBoxObras.Add(var.concepto_Obra[a])
+finnextobrasconceptos:
+NEXT 
+  
+'si no coincide con la lista de obra exitente, se incluye en la lista
+fmain.ComboBoxObras.text = FMain.ComboBoxObras.tag 
+TextBoxRutaSeccion.Text = var.seccion
+salvadatosseccionactual.enabled = TRUE
+var.inicioalbaranes = 0
+var.inicioconcepto = 0
+addrecientes.add(var.seccion)
+finabrir:
+END
+
+
+PUBLIC SUB Buttonfiltrosalidas_Click()
+
+  DIM c AS String
+  DIM resultado AS Integer
+  DIM patrones AS NEW String[]
+  DIM numero_patrones AS Integer
+  numero_patrones = 0
+  
+  patrones = Split(Upper$(TextBoxFiltroSalida.text), ",")
+  
+  IF var.entrada_numero = 0 THEN GOTO finfiltro ' no hay entradas
+  
+  
+  
+FOR EACH c IN patrones
+              numero_patrones = numero_patrones + 1
+NEXT
+
+patrones.resize(3)
+
+IF numero_patrones = 0 THEN 
+     patrones[0] = "*"
+    patrones[1] = " "
+    patrones[2] = " "
+    
+ END IF
+
+
+IF numero_patrones = 1 THEN 
+    patrones[1] = " "
+    patrones[2] = " "
+    END IF
+    
+IF numero_patrones = 2 THEN 
+    patrones[2] = " "
+  END IF
+  IF numero_patrones > 3 THEN 
+    Message.Info("solo se admiten 3 patrones de busqueda")
+       
+    GOTO finfiltro
+  END IF
+   
+resultado = buscarsalida.ConceptoFiltroSalidas(patrones[0], patrones[1], patrones[2], LabelIdObraSalida.text)
+
+IF RESULTADO = 1 THEN 
+   GridViewConceptosSalidas.Background = Color.Cyan
+    ELSE 
+   GridViewConceptosSalidas.Background = Color.White
+  END IF
+finfiltro:
+
+
+END
+
+PUBLIC SUB GridViewConceptosSalidas_Click()
+  var.conceptosalida = GridViewConceptosSalidas[GridViewConceptosSalidas.row, 0].text 'contiene el id del concepto
+  'introduzco la medicion de salida
+Fsalidas.showmodal()
+  'opciones:
+    'cantidad libre
+    'sacar todo lo que quede
+    'sacar para que quede una determinada cantidad
+    'opcion de cancelar o aceptar
+    'guardar salida
+    'volver a presentar grid
+LabelIdObraSalida.text = ComboBoxObras.Text
+  BorradosDatosIniciales.dibujogridConceptosSalidas(LabelIdObraSalida.text)
+
+END
+
+PUBLIC SUB TextBoxFiltroSalida_KeyPress()
+
+  IF Key.code = Key.enter OR Key.code = Key.Return OR Key.CODE = Key.TAB THEN 
+Buttonfiltrosalidas.SetFocus
+  END IF
+
+END
+
+'-------------------------------------------------------------------------------------
+'----------------- FACTURAS ----------------------------------------------------------
+'-------------------------------------------------------------------------------------
+
+
+PUBLIC SUB TextBoxNFactura_KeyPress()
+
+IF Key.code = Key.enter OR Key.code = Key.Return OR Key.CODE = Key.TAB THEN 
+IF TextBoxNFactura.text = "" THEN
+        Message.Error("Intoduzca numero/letra de factura")
+        ELSE
+ValueBoxFFact.SetFocus
+  END IF
+  END IF
+  
+END
+
+PUBLIC SUB ValueBoxFFact_KeyPress()
+
+  IF Key.code = Key.enter OR Key.code = Key.Return OR Key.CODE = Key.TAB THEN 
+    IF ValueBoxFFact.value = NULL THEN 
+        Message.Error("Intoduzca fecha de factura")
+        ELSE 
+ValueBoxFImp.SetFocus
+  END IF
+  END IF
+  
+
+END
+
+PUBLIC SUB ValueBoxFImp_KeyPress()
+
+  IF Key.code = Key.enter OR Key.code = Key.Return OR Key.CODE = Key.TAB THEN 
+  IF ValueBoxFimp.value = NULL THEN
+        Message.Error("Intoduzca fecha de imputacioón")
+        ELSE 
+ButtonNuevaFactura.SetFocus
+  END IF
+ENDIF 
+
+END
+
+PUBLIC SUB Button7_Click()
+
+   FfiltroProveedorFactura.Show
+
+END
+
+'--------------------------------------------------------------------
+' FACTURAS
+'---------------------------------------------------------
+
+PUBLIC SUB ButtonNuevaFactura_Click()
+    'aumento el numero de FACTURAS
+
+IF estadofactura.text = "(Estado en Factura:  Modo Insertar Albaranes en Factura)" THEN 
+  'pongo en blanco las lineas
+  ABNuevafactura.enblanco()
+  'paso a modo añadir
+  estadofactura.text = "(Estado en Factura:  Modo Añadir Nuevo)" 
+  ELSE 
+   'estoy en modo de añadir
+  ABNuevaFactura.nuevo()
+  ToolButtonAceptarFactura.Enabled = FALSE
+  ToolButtonCancelarFactura.Enabled = FALSE   
+  GridViewFactura.Background = Color.White 'SIN FILTRAR
+      
+    
+  END IF
+TextBoxNFactura.SetFocus
+
+END
+
+PUBLIC SUB GridViewFactura_Click()
+
+ButtonNuevaFactura.Enabled = FALSE
+ToolButtonAceptarFactura.Enabled = TRUE
+ToolButtonCancelarFactura.Enabled = TRUE
+'poner no editable los textbox de datos
+
+LabelIdFactura.Enabled = FALSE ' 'contiene el id de la factura dado por el programa
+fmain.Comboboxprovfact.Enabled = FALSE ' 'contiene el proveedor 'nombre del proveedor de esta factura
+fmain.textboxnfactura.Enabled = FALSE ' 'contiene el numero de factura que le da el proveedor 'numero de factura que da n ºfacturadadaproveedor   (nº de factura que le da el proveedor)
+fmain.ComboBoxObraFactura.Enabled = FALSE ' 'obra de la factura 'obra a la que pertenece la factura
+fmain.ValueBoxFFact.Enabled = FALSE ' ' fecha factura 'fecha de la factura (la que tiene la factura)
+fmain.ValueBoxFImp.Enabled = FALSE
+
+ToolButtonPasa.enabled = TRUE
+ToolButtonBorra.Enabled = TRUE
+
+GridViewAlbProvObra.enabled = TRUE
+GridViewAlbProvObraImp.Enabled = TRUE
+GridViewFactura.enabled = FALSE
+
+
+
+var.filaFactEditada = GridViewFactura.row
+var.factMemoriaEditada = buscar.facturaSimple(GridViewFactura[GridViewFactura.ROW, 0].TEXT)
+estadofactura.text = "(Estado en Factura:  Modo Insertar Albaranes en Factura)"
+ 
+
+ACEdicionfactura.edicion(var.factMemoriaEditada)
+'rellena las grid
+' los albaranes que cumplan las siguientes condiciones.
+'proveedor factura=proveedor albaran, obra factura=obra albaran, fecha de imputacion albaran <=fecha de imputacion factura
+BorradosDatosIniciales.dibujogridAlbaranProveedorObra(ComboBoxProvFact.text, Comboboxobrafactura.text, GridViewAlbProvObra, ValueBoxFImp.value)
+'comprobar si pasa al otro lado.
+BorradosDatosIniciales.dibujogridAlbaranProveedorObraimp(LabelIdFactura.Text, ComboBoxProvFact.text, Comboboxobrafactura.text, GridViewAlbProvObraimp, ValueBoxFImp.value)
+
+
+
+END
+
+PUBLIC SUB ToolButtonPasa_Click()
+Message.Info("haga click en el grid de albaranes para pasarlos al otro lado")
+END
+
+PUBLIC SUB ToolButtonAceptarAlbaran_Click()
+  '
+
+  'limpio las factura
+  ABNuevafactura.enblanco()
+  ' cambio modo
+  estadofactura.text = "(Estado en Factura:  Modo Añadir Nuevo)" 
+    
+    
+
+END
+
+
+PUBLIC SUB ToolButtonAceptarFactura_Click()
+
+DIM a AS Integer
+a = buscar.facturaSimple(LabelIdFactura.text)
+var.fact_valor[a] = ValueBoxValorFactura.Value
+
+
+
+ToolButtonAceptarFactura.Enabled = FALSE
+ToolButtonCancelarFactura.Enabled = FALSE
+'poner no editable los textbox de datos
+
+LabelIdFactura.Enabled = TRUE ' 'contiene el id de la factura dado por el programa
+LabelIdFactura.text = ""
+fmain.Comboboxprovfact.Enabled = TRUE ' 'contiene el proveedor 'nombre del proveedor de esta factura
+
+fmain.textboxnfactura.Enabled = TRUE ' 'contiene el numero de factura que le da el proveedor 'numero de factura que da n ºfacturadadaproveedor   (nº de factura que le da el proveedor)
+fmain.textboxnfactura.text = ""
+fmain.ComboBoxObraFactura.Enabled = TRUE ' 'obra de la factura 'obra a la que pertenece la factura
+
+fmain.ValueBoxFFact.Enabled = TRUE ' ' fecha factura 'fecha de la factura (la que tiene la factura)
+fmain.ValueBoxFFact.value = 0
+fmain.ValueBoxFImp.Enabled = TRUE
+fmain.ValueBoxFImp.value = 0
+ToolButtonPasa.enabled = FALSE
+ToolButtonBorra.Enabled = FALSE
+
+GridViewAlbProvObra.enabled = FALSE
+GridViewAlbProvObraImp.Enabled = FALSE
+ estadofactura.text = "(Estado en Factura:  Modo Añadir Nuevo)" 
+ButtonNuevaFactura.Enabled = TRUE
+GridViewFactura.enabled = TRUE
+ToolButtonCancelarFactura.enabled = FALSE
+ToolButtonAceptarFactura.enabled = FALSE
+TextBoxNFactura.SetFocus
+    
+    
+'redibuja rejilla de facturas
+BorradosDatosIniciales.dibujogridAlbaranProveedorObra(ComboBoxProvFact.text, Comboboxobrafactura.text, GridViewAlbProvObra, ValueBoxFImp.value)
+BorradosDatosIniciales.dibujogridAlbaranProveedorObraimp(LabelIdFactura.text, ComboBoxProvFact.text, Comboboxobrafactura.text, GridViewAlbProvObraimp, ValueBoxFImp.value)
+BorradosDatosIniciales.dibujogridFactura(ComboBoxProvFact.text, Comboboxobrafactura.text)
+
+END
+
+PUBLIC SUB GridViewAlbProvObra_Click()
+DIM numero AS Integer
+
+  Titulos.titulosalbaranesProvFactura()
+  'busco el numero de registro dado el idalbaran 
+  numero = buscar.AlbaranSimple(GridViewAlbProvObra[GridViewAlbProvObra.row, 2].text)
+  var.alb_imp[numero] = "Si#" & LabelIdFactura.Text
+  
+  'rellena las grid
+  BorradosDatosIniciales.dibujogridAlbaranProveedorObra(ComboBoxProvFact.text, Comboboxobrafactura.text, GridViewAlbProvObra, ValueBoxFImp.value)
+  'comprobar si pasa al otro lado.
+   BorradosDatosIniciales.dibujogridAlbaranProveedorObraimp(LabelIdFactura.Text, ComboBoxProvFact.text, Comboboxobrafactura.text, GridViewAlbProvObraimp, ValueBoxFImp.value)
+  'sumo los valores de albaranes y los pasos al valor de la factura
+var.ordenAlbProvObra = 0
+  var.ordenAlbProvObraimp = 0
+
+GridViewAlbProvObra_ColumnClick(1)
+GridViewAlbProvObraImp_ColumnClick(1)
+
+END
+
+PUBLIC SUB ToolButtonCancelarFactura_Click()
+DIM a AS Integer
+DIM numero AS Integer
+ Titulos.titulosalbaranesProvFactura()
+  'todos los albaranes que estan en el grid imp pasar al grid sin imp
+fmain.ValueBoxValorFactura.value = 0
+
+FOR a = 0 TO GridViewAlbProvObraimp.rows.count - 1
+    numero = buscar.AlbaranSimple(GridViewAlbProvObra[a, 2].text)
+  var.alb_imp[numero] = ""
+NEXT 
+  'rellena las grid
+  BorradosDatosIniciales.dibujogridAlbaranProveedorObra(ComboBoxProvFact.text, Comboboxobrafactura.text, GridViewAlbProvObra, ValueBoxFImp.value)
+  'comprobar si pasa al otro lado.
+   BorradosDatosIniciales.dibujogridAlbaranProveedorObraimp(LabelIdFactura.Text, ComboBoxProvFact.text, Comboboxobrafactura.text, GridViewAlbProvObraimp, ValueBoxFImp.value)
+  'sumo los valores de albaranes y los pasos al valor de la factura
+
+LabelIdFactura.Enabled = TRUE ' 'contiene el id de la factura dado por el programa
+LabelIdFactura.text = ""
+fmain.Comboboxprovfact.Enabled = TRUE ' 'contiene el proveedor 'nombre del proveedor de esta factura
+
+fmain.textboxnfactura.Enabled = TRUE ' 'contiene el numero de factura que le da el proveedor 'numero de factura que da n ºfacturadadaproveedor   (nº de factura que le da el proveedor)
+fmain.textboxnfactura.text = ""
+fmain.ComboBoxObraFactura.Enabled = TRUE ' 'obra de la factura 'obra a la que pertenece la factura
+
+fmain.ValueBoxFFact.Enabled = TRUE ' ' fecha factura 'fecha de la factura (la que tiene la factura)
+fmain.ValueBoxFFact.value = 0
+fmain.ValueBoxFImp.Enabled = TRUE
+fmain.ValueBoxFImp.value = 0
+ToolButtonPasa.enabled = FALSE
+ToolButtonBorra.Enabled = FALSE
+
+GridViewAlbProvObra.enabled = FALSE
+GridViewAlbProvObraImp.Enabled = FALSE
+
+ButtonNuevaFactura.Enabled = TRUE
+GridViewFactura.enabled = TRUE
+ToolButtonCancelarFactura.enabled = FALSE
+ToolButtonAceptarFactura.enabled = FALSE
+estadofactura.text = "(Estado en Factura:  Modo Añadir Nuevo)" 
+TextBoxNFactura.SetFocus
+
+END
+
+PUBLIC SUB GridViewAlbProvObraImp_Click()
+DIM numero AS Integer
+  'todos los albaranes que estan en el grid imp pasar al grid sin imp
+  numero = buscar.AlbaranSimple(GridViewAlbProvObraimp[GridViewAlbProvObraimp.row, 2].text)
+  var.alb_imp[numero] = ""
+  'rellena las grid
+  BorradosDatosIniciales.dibujogridAlbaranProveedorObra(ComboBoxProvFact.text, Comboboxobrafactura.text, GridViewAlbProvObra, ValueBoxFImp.value)
+  'comprobar si pasa al otro lado.
+  BorradosDatosIniciales.dibujogridAlbaranProveedorObraimp(LabelIdFactura.Text, ComboBoxProvFact.text, Comboboxobrafactura.text, GridViewAlbProvObraimp, ValueBoxFImp.value)
+  
+var.ordenAlbProvObra = 0
+  var.ordenAlbProvObraimp = 0
+
+GridViewAlbProvObra_ColumnClick(2) 'ver
+GridViewAlbProvObraImp_ColumnClick(2) 'ver
+
+END
+
+PUBLIC SUB ToolButtonBorra_Click()
+DIM a AS Integer
+DIM numero AS Integer
+ Titulos.titulosalbaranesProvFactura()
+  'todos los albaranes que estan en el grid imp pasar al grid sin imp
+fmain.ValueBoxValorFactura.value = 0
+FOR a = 0 TO GridViewAlbProvObraimp.rows.count - 1
+    numero = buscar.AlbaranSimple(GridViewAlbProvObra[a, 2].text)
+  var.alb_imp[numero] = ""
+NEXT 
+  'rellena las grid
+  BorradosDatosIniciales.dibujogridAlbaranProveedorObra(ComboBoxProvFact.text, Comboboxobrafactura.text, GridViewAlbProvObra, ValueBoxFImp.value)
+  'comprobar si pasa al otro lado.
+   BorradosDatosIniciales.dibujogridAlbaranProveedorObraimp(LabelIdFactura.Text, ComboBoxProvFact.text, Comboboxobrafactura.text, GridViewAlbProvObraimp, ValueBoxFImp.value)
+  'sumo los valores de albaranes y los pasos al valor de la factura
+END
+
+
+'---------------------------------inicio---------------------
+PUBLIC SUB ToolButtonGuardaAlbFact_Click()
+  AbreGuardaAlbFact.salva() 
+END
+
+
+PUBLIC SUB ToolButton10_Click()
+  DIM a AS Integer
+  DIM b AS Integer
+  DIM suma AS Integer
+  
+  AbreGuardaAlbFact.abrir()
+  'añadir obras a combo de obras
+  IF var.alb_numero = 0 THEN GOTO finalbaranabrir
+    
+  IF fmain.ComboBoxObras.CounT = 0 THEN 
+    
+    ComboBoxObras.Add(var.alb_idobra[0])
+    
+    END IF
+  
+ 'ver las obras que se añaden
+ 'ordenar
+ 'quitar repetidos
+
+FOR a = 0 TO var.alb_numero - 1
+  FOR b = 0 TO fmain.ComboBoxObras.Count - 1
+    IF var.alb_idobra[a] = ComboBoxObras[b].text THEN GOTO finnextObrasalb
+  NEXT 
+'parte que se ejecuta si termina el for B y no encuentra ninguna obra igual
+ComboBoxObras.Add(var.alb_idobra[a])
+
+finnextObrasalb:
+'salto que se produce cuando encuentra una obra de albaran incluida en el combo de obras
+NEXT 
+
+finalbaranabrir:
+
+IF var.alb_numero = 0 THEN GOTO finfactura
+    
+  
+ 
+FOR a = 0 TO var.fact_numero - 1
+  FOR b = 0 TO fmain.ComboBoxObras.Count - 1
+    IF var.fact_idobra[a] = ComboBoxObras[b].text THEN GOTO finnextObrasfact
+  NEXT 
+ComboBoxObras.Add(var.fact_idobra[a])
+
+finnextObrasfact:
+NEXT 
+  
+  fmain.ComboBoxObras.text = ComboBoxObras[0].text
+  finfactura:
+END
+
+
+'-------------------------------------------------
+'ordenacion de columnas alfabeticamente A-Z o de la Z-A
+'-------------------------------------------------
+
+PUBLIC SUB GridViewProveedor_ColumnClick(Column AS Integer)
+  IF var.ordenProveedor = 0 THEN
+  FMain.labelOrdenando.text = "Ordenando..."
+
+  OrdenacionGridview.ord_AZ(GridViewProveedor, Column)
+  var.ordenProveedor = 1
+   FMain.labelOrdenando.text = ""
+  ELSE 
+  var.ordenProveedor = 0
+   FMain.labelOrdenando.text = "Ordenando..."
+  OrdenacionGridview.ord_ZA(GridViewProveedor, Column)
+   FMain.labelOrdenando.text = ""
+  ENDIF
+END
+
+PUBLIC SUB GridViewConceptos_ColumnClick(Column AS Integer)
+   IF var.ordenConcepto = 0 THEN
+    FMain.labelOrdenando.text = "Ordenando..."
+   OrdenacionGridview.ord_AZ(GridViewConceptos, Column)
+   var.ordenConcepto = 1
+    FMain.labelOrdenando.text = ""
+   ELSE 
+    FMain.labelOrdenando.text = "Ordenando..."
+   OrdenacionGridview.ord_ZA(GridViewConceptos, Column)
+   var.ordenConcepto = 0
+    FMain.labelOrdenando.text = ""
+   ENDIF 
+END
+
+
+PUBLIC SUB GridViewAlbaran_ColumnClick(Column AS Integer)
+ IF var.ordenAlbaran = 0 THEN 
+  OrdenacionGridview.ord_AZ(GridViewAlbaran, Column)
+  var.ordenAlbaran = 1
+  ELSE 
+  var.ordenAlbaran = 0
+  OrdenacionGridview.ord_ZA(GridViewAlbaran, Column)
+ENDIF 
+END
+
+PUBLIC SUB GridViewConceptosSalidas_ColumnClick(Column AS Integer)
+IF var.ordenConceptosSalida = 0 THEN 
+  OrdenacionGridview.ord_AZ(GridViewConceptosSalidas, Column)
+  var.ordenConceptosSalida = 1
+  ELSE 
+  var.ordenConceptosSalida = 0
+  OrdenacionGridview.ord_ZA(GridViewConceptosSalidas, Column)
+ENDIF 
+  
+
+END
+
+PUBLIC SUB GridViewFactura_ColumnClick(Column AS Integer)
+IF var.ordenFactura = 0 THEN 
+  OrdenacionGridview.ord_AZ(GridViewFactura, Column)
+  var.ordenFactura = 1
+  ELSE 
+  var.ordenFactura = 0
+  OrdenacionGridview.ord_ZA(GridViewFactura, Column)
+ENDIF 
+  
+
+END
+
+PUBLIC SUB GridViewAlbProvObra_ColumnClick(Column AS Integer)
+IF var.ordenAlbProvObra = 0 THEN 
+  OrdenacionGridview.ord_AZ(GridViewAlbProvObra, Column)
+  var.ordenAlbProvObra = 1
+  ELSE 
+  var.ordenAlbProvObra = 0
+  OrdenacionGridview.ord_ZA(GridViewAlbProvObra, Column)
+ENDIF 
+END
+
+PUBLIC SUB GridViewAlbProvObraImp_ColumnClick(Column AS Integer)
+IF var.ordenAlbProvObraimp = 0 THEN 
+  OrdenacionGridview.ord_AZ(GridViewAlbProvObraImp, Column)
+  var.ordenAlbProvObraimp = 1
+  ELSE 
+  var.ordenAlbProvObraimp = 0
+  OrdenacionGridview.ord_ZA(GridViewAlbProvObraImp, Column)
+ENDIF 
+END
+
+
+'cuando cambie el valor de combo de factura, que mueste las nuevas facturas
+PUBLIC SUB ComboBoxProvFact_Change()
+  BorradosDatosIniciales.dibujogridFactura(ComboBoxProvFact.text, Comboboxobrafactura.text)
+END
+
+
+PUBLIC SUB ComboBoxObraFactura_Change()
+BorradosDatosIniciales.dibujogridFactura(ComboBoxProvFact.text, Comboboxobrafactura.text)
+END
+
+PUBLIC SUB ComboBoxProvFact_Lostfocus()
+BorradosDatosIniciales.dibujogridFactura(ComboBoxProvFact.text, Comboboxobrafactura.text)
+END
+
+
+PUBLIC SUB ComboBoxObraFactura_LostFocus()
+BorradosDatosIniciales.dibujogridFactura(ComboBoxProvFact.text, Comboboxobrafactura.text)
+END
+
+PUBLIC SUB ComboBoxProvFact_Enter()
+  BorradosDatosIniciales.dibujogridFactura(ComboBoxProvFact.text, Comboboxobrafactura.text)
+END
+
+
+PUBLIC SUB ComboBoxObraFactura_Enter()
+BorradosDatosIniciales.dibujogridFactura(ComboBoxProvFact.text, Comboboxobrafactura.text)
+END
+
+PUBLIC SUB ComboBoxProvFact_MouseDown()
+BorradosDatosIniciales.dibujogridFactura(ComboBoxProvFact.text, Comboboxobrafactura.text)
+END
+
+PUBLIC SUB ComboBoxObraFactura_MouseUp()
+BorradosDatosIniciales.dibujogridFactura(ComboBoxProvFact.text, Comboboxobrafactura.text)
+END
+
+
+
+'----------------------------------------------------------------------------------------
+'menus
+'----------------------------------------------------------------------------------------
+
+PUBLIC SUB crearproveedor_Click()
+
+  'parto de cero los proveedores
+  
+
+END
+
+PUBLIC SUB abrirproveedor_Click()
+
+  AbreGuardaProveedores.abrir()
+
+END
+
+PUBLIC SUB Menu2_Click()
+
+  DIM A AS Integer
+DIM B AS Integer
+
+AbreGuardaConcepto.abrir()
+' codigo: obras de conceptos añadirlas a combo de obra...
+'repetir tanta veces como conceptos haya
+IF var.concepto_numero = 0 THEN GOTO finabrirconcepto
+IF fmain.ComboBoxObras.CounT = 0 THEN 
+    
+    ComboBoxObras.Add(var.concepto_Obra[0])
+    END IF
+    
+
+  FOR a = 0 TO var.concepto_numero - 1
+ 
+        FOR b = 0 TO fmain.ComboBoxObras.Count - 1
+        IF var.concepto_Obra[a] <> ComboBoxObras[b].text THEN ComboBoxObras.Add(var.concepto_Obra[a])
+        NEXT 
+        
+  NEXT
+'si no coincide con
+finabrirconcepto:
+END
+
+PUBLIC SUB abriralbaran_Click()
+ DIM a AS Integer
+  DIM b AS Integer
+  DIM suma AS Integer
+  AbreGuardaAlbFact.abrir()
+  
+  IF var.alb_numero = 0 THEN GOTO finabriralbaran
+  'añadir obras a combo de obras
+  IF fmain.ComboBoxObras.CounT = 0 THEN 
+    ComboBoxObras.Add(var.alb_idobra[0])
+    END IF
+  
+ 'ver las obras que se añaden
+ 'ordenar
+ 'quitar repetidos
+
+FOR a = 0 TO var.alb_numero - 1
+  FOR b = 0 TO fmain.ComboBoxObras.Count - 1
+    IF var.alb_idobra[a] = ComboBoxObras[b].text THEN GOTO finnextObrasalb
+  NEXT 
+'parte que se ejecuta si termina el for B y no encuentra ninguna obra igual
+ComboBoxObras.Add(var.alb_idobra[a])
+finnextObrasalb:
+'salto que se produce cuando encuentra una obra de albaran incluida en el combo de obras
+NEXT 
+
+FOR a = 0 TO var.fact_numero - 1
+  FOR b = 0 TO fmain.ComboBoxObras.Count - 1
+    IF var.fact_idobra[a] = ComboBoxObras[b].text THEN GOTO finnextObrasfact
+  NEXT 
+ComboBoxObras.Add(var.fact_idobra[a])
+
+finnextObrasfact:
+NEXT 
+  fmain.ComboBoxObras.text = ComboBoxObras[0].text
+finabriralbaran:
+END
+
+PUBLIC SUB Menu3_Click()
+ToolButton8_Click()
+ 
+
+END
+
+PUBLIC SUB Menu4_Click()
+  AbreGuardaProveedores.salva() 
+  
+
+END
+
+PUBLIC SUB Menu8_Click()
+
+  AbreGuardaConcepto.salva() 
+
+
+END
+
+PUBLIC SUB Menu9_Click()
+
+   AbreGuardaAlbFact.salva() 
+
+END
+
+
+PUBLIC SUB Menu7_Click()
+
+    'guardar rutas de configuracion
+  
+  AbreGuardaSeccion.salva()
+
+END
+
+'----------------------------------------------------------------------------------------
+'------------------------------- INFORMES -----------------------------------------------
+'----------------------------------------------------------------------------------------
+
+PUBLIC SUB ToolButtonInformeProv_Click()
+DIM INFO AS NEW FInformes
+Info.Caption = "Proveedores"
+INFO.Show
+END
+
+PUBLIC SUB ToolButtonInformeConcepto_Click()
+DIM INFO AS NEW FInformes
+Info.caption = "Conceptos" & "|" & ComboBoxObras.text
+INFO.Show
+END
+
+PUBLIC SUB ToolButtonInformeAlb_Click()
+  DIM INFO AS NEW FInformes
+Info.caption = "Albaranes" & "|" & ComboBoxObras.text
+INFO.Show
+END
+
+
+PUBLIC SUB ToolButtonInformeSalidas_Click()
+DIM info AS NEW FInformes
+  info.caption = "Salidas" & "|" & ComboBoxObras.Text
+info.Show
+END
+
+
+
+PUBLIC SUB ToolButtonInformeSalidas2_Click()
+DIM info AS NEW FInformes
+  info.caption = "Facturas" & "|" & ComboBoxObras.Text
+info.Show
+END
+
+
+
+
+
+'--------------------------------------------------------------------------
+'                             TAB INFORMES
+'--------------------------------------------------------------------------
+
+PUBLIC SUB ToolButtonTabInformes_Click()
+
+  
+END
+
+PUBLIC SUB ToolButtonTabInformesDescompuestoAlbaranes_Click()
+  DIM info AS NEW FInformes
+  info.caption = "Descomposicion Albaranes " & " Proveedor: " & ComboProvInforme.text & " Obra: " & ComboBoxObras.Text
+info.Show
+END
+
+PUBLIC SUB ToolButtonTabInformesDescompuestoResumenProvAlbFact_Click()
+ DIM info AS NEW FInformes
+  info.caption = "Resumen Prov/Alb/Fact " & " Obra: " & ComboBoxObras.Text
+info.Show
+END
+
+PUBLIC SUB ToolButtonTabInformesDescompuestoResumenProvAlbFact2_Click()
+DIM info AS NEW FInformes
+  info.caption = "Descompuesto de facturas " & " Obra: " & ComboBoxObras.Text
+info.Show
+  
+END
+
+PUBLIC SUB Form_Close()
+IF salidaanterior = "no" THEN 
+ salir_Click()
+ 
+ END IF
+
+END
+
+'-----------------------------------------------------------------
+
+
+
+
+PUBLIC SUB ButtonFiltroAlbaranes_Click()
+
+  DIM c AS String
+  DIM resultado AS Integer
+  DIM patrones AS NEW String[]
+  DIM numero_patrones AS Integer
+  numero_patrones = 0
+   
+  
+  patrones = Split(Upper$(TextBoxFiltroAlbaranes.text), ",")
+  
+  'cuenta el numero de patrones automaticamente con la propiedad COUNT
+  numero_patrones = patrones.Count
+
+'otra forma de hacerlo:
+'FOR EACH c IN patrones
+ '             numero_patrones = numero_patrones + 1
+'NEXT
+
+IF numero_patrones = 0 THEN 
+ patrones.resize(3)
+    patrones[0] = "*"
+    patrones[1] = " "
+    patrones[2] = " "
+ END IF
+
+
+IF numero_patrones = 1 THEN 
+    patrones.resize(3)
+    patrones[1] = " "
+    patrones[2] = " "
+    END IF
+    
+IF numero_patrones = 2 THEN 
+    patrones.resize(3)
+    patrones[2] = " "
+  END IF
+  IF numero_patrones > 3 THEN 
+    Message.Info("solo se admiten 3 patrones de busqueda")
+    TextBoxFiltroAlbaranes.SetFocus
+    GOTO finfiltro
+  END IF
+   
+resultado = buscar.AlbaranesMFiltro(patrones[0], patrones[1], patrones[2], ComboBoxObraAlbaran.text)
+
+IF RESULTADO = 1 THEN 
+    GridViewAlbaran.Background = Color.Cyan
+    ELSE 
+    GridViewAlbaran.Background = Color.White
+  END IF
+
+finfiltro:
+
+
+END
+
+PUBLIC SUB TextBoxFiltroAlbaranes_KeyPress()
+
+  IF Key.code = Key.enter OR Key.code = Key.Return OR Key.CODE = Key.TAB THEN 
+  ButtonFiltroAlbaranes.SetFocus
+  END IF
+
+END
+
+
+'boton de "salir de aplicion"
+PUBLIC SUB ToggleButton1_Click()
+
+  salir_Click()
+
+END
+
+'-----------------------------------
+'informes en TAB
+'-----------------------------
+PUBLIC SUB ToolButtonTabInformesDescompuestoResumenProvAlbFact3_Click()
+
+  ToolButtonInformeProv_Click()
+
+END
+
+
+PUBLIC SUB ToolButtonTabInformesDescompuestoResumenProvAlbFact4_Click()
+
+  ToolButtonInformeConcepto_Click()
+
+END
+
+PUBLIC SUB ToolButtonTabInformesDescompuestoResumenProvAlbFact5_Click()
+
+  ToolButtonInformeAlb_Click()
+
+END
+
+PUBLIC SUB infofacturas_Click()
+
+  ToolButtonInformeSalidas2_Click()
+
+END
+
+PUBLIC SUB ToolButtonTabInformesDescompuestoResumenProvAlbFact6_Click()
+
+  ToolButtonInformeSalidas_Click()
+
+END
+
+PUBLIC SUB ToolButtonTabInformesDescompuestoResumenProvAlbFact7_Click()
+
+  DIM info AS NEW FInformes
+  info.caption = "Resumen Mes " & " Obra: " & ComboBoxObras.Text
+info.Show
+  
+
+END
+
+PUBLIC SUB ToolButtonTabInformesDescompuestoAlbaranes2_Click()
+
+   DIM info AS NEW FInformes
+  info.caption = "Mes Descomposicion Albaranes " & " Proveedor: " & ComboProvInforme.text & " Obra: " & ComboBoxObras.Text
+info.Show
+
+END
+
+'-------------------------------------------------------------------------------
+' version 0.0.5: conversion .BC3 a .conceptos
+'-------------------------------------------------------------------------------
+
+
+
+PUBLIC SUB ButtonBC3_Click()
+
+  BC3aConceptos.convierteBC3aConceptos()
+
+END
+
+
+'-----------------------------------------------------------------------
+' version 0.0.6: vista arbol
+PUBLIC SUB Vista_Arbol_Click()
+'DIM vistaarbol AS NEW Farbol
+Farbol.Show()
+'  vistaarbol.Show()
+  
+
+END
+
+PUBLIC SUB ToolButton1_Click()
+
+    Farbol.Show()
+
+END
+
+PUBLIC SUB Update_Click()
+
+   FUpdate.show
+
+END
+
+'----------------------------------- mejora version 0.0.7.1
+
+
+
+PUBLIC SUB salvadatosseccionactual_Click()
+
+   'salva proveedores
+ProgressBarGuardar.visible = TRUE
+AbreGuardaProveedores.salva(FMain.TextBoxRutaProveedores.text, "sobreescribe") 
+WAIT 0.05
+espera1:
+IF var.esperaprov = "si" THEN GOTO espera1
+
+
+'------------------------------------------
+  'salva datos desde cualquier archivo
+'------------------------------------------
+AbreGuardaConcepto.salva(FMain.TextBoxRutaConcepto.text, "sobreescribe") 
+WAIT 0.05
+espera2:
+IF var.esperaconcepto = "si" THEN GOTO espera2
+
+'salva facturas y albaranes
+AbreGuardaAlbFact.salva(FMain.TextBoxRutaAlbFact.text, "sobreescribe") 
+
+espera3:
+IF var.esperaalb = "si" THEN GOTO espera3
+
+WAIT 0.05
+ProgressBarGuardar.Visible = FALSE
+END
+
+
+'informe de alquileres por mes....
+
+PUBLIC SUB ToolButtonTabInformesDescompuestoResumenProvAlbFact8_Click()
+
+   DIM info AS NEW FInformes
+  info.caption = "Alquileres por Meses " & " Obra: " & ComboBoxObras.Text
+info.Show
+
+END
+
+
+
+
+
+
+
+PUBLIC SUB ToolBuscarFacturasProveedor_Click()
+
+  BorradosDatosIniciales.dibujogridFactura(ComboBoxProvFact.text, Comboboxobrafactura.text)
+
+END
+
+
+
+PUBLIC SUB Label23_MouseDown()
+
+  ValueBoxFAlb.value = FInformes.Preguntarhastafecha()
+
+END
+
+PUBLIC SUB Label24_MouseDown()
+
+   ValueBoxFEAlb.value = FInformes.Preguntarhastafecha()
+
+END
+
+PUBLIC SUB Label40_MouseDown()
+
+ValueBoxFFact.value = FInformes.Preguntarhastafecha()
+
+END
+
+PUBLIC SUB Label41_MouseDown()
+
+  ValueBoxFImp.value = FInformes.Preguntarhastafecha()
+
+END
+
+'--------------------------------------------------------
+'portapapeles version 7.4
+'--------------------------------------------------------
+
+PUBLIC SUB copiarportapaepelesGridViewProveedor_Click()
+
+  GambasAOpenoffice.copiaraportapapeles(GridViewProveedor)
+
+END
+
+
+
+PUBLIC SUB copiarportapaepelesGridViewConceptos_Click()
+
+  GambasAOpenoffice.copiaraportapapeles(GridViewConceptos)
+
+END
+
+PUBLIC SUB copiarportapaepelesGridViewAlbaran_Click()
+
+   GambasAOpenoffice.copiaraportapapeles(GridViewAlbaran)
+
+END
+
+PUBLIC SUB copiarportapaepelesGridViewFactura_Click()
+
+  GambasAOpenoffice.copiaraportapapeles(GridViewFactura)
+
+END
+
+PUBLIC SUB copiarportapaepelesGridViewAlbaran2_Click()
+
+   GambasAOpenoffice.copiaraportapapeles(GridViewConceptosSalidas)
+
+END
+
+PUBLIC SUB ButtonCalcConcepto_Click()
+
+  FOpenOfficeCalcGambas2.Show()
+
+END
+
+PUBLIC SUB MiniCalendario_Click()
+DIM calendario AS NEW Ffechadia
+
+   calendario.Show
+
+END
+
+PUBLIC SUB ToolButton2_Click()
+
+  FListarAlbaranes.Show
+
+END
+'--------------------------------------------------------------------------------------------------------------
+' abrir secciones recientes
+'-----------------------------------------------------------
+
+PUBLIC SUB reciente0_Click()
+
+  IF reciente0.caption <> "(sin recientes)" THEN 
+  
+
+AbreGuardaSeccion.abreseccionrutaconocida(reciente0.caption)
+
+ENDIF 
+
+END
+
+PUBLIC SUB reciente1_Click()
+
+  AbreGuardaSeccion.abreseccionrutaconocida(reciente1.caption)
+
+END
+
+PUBLIC SUB reciente2_Click()
+AbreGuardaSeccion.abreseccionrutaconocida(reciente2.caption)
+  
+
+END
+
+PUBLIC SUB reciente3_Click()
+AbreGuardaSeccion.abreseccionrutaconocida(reciente3.caption)
+  
+
+END
+
+PUBLIC SUB reciente4_Click()
+AbreGuardaSeccion.abreseccionrutaconocida(reciente4.caption)
+  
+
+END
+
+PUBLIC SUB copiarportapaepelesGridViewFactura2_Click()
+
+   GambasAOpenoffice.copiaraportapapeles(GridViewAlbProvObraImp)
+
+END
+
+PUBLIC SUB copiarportapaepelesGridViewFactura3_Click()
+
+    GambasAOpenoffice.copiaraportapapeles(GridViewAlbProvObra)
+
+END
+
+PUBLIC SUB ToolButtonTabInformesDescompuestoAlbaranes3_Click()
+
+  DIM info AS NEW FInformes
+  info.caption = "Descomposicion Albaranes Por Dia" & " Proveedor: " & ComboProvInforme.text & " Obra: " & ComboBoxObras.Text
+info.Show
+
+END

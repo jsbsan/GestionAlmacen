@@ -1,0 +1,217 @@
+' Gambas module file
+
+PUBLIC SUB abrir()
+DIM c AS String
+DIM arr_cadenas AS String[]
+DIM a AS Integer
+DIM b AS Integer
+DIM codigofinline AS String
+DIM cuentaprov AS Integer
+
+codigofinline = "|"
+Dialog.Title = "Seleccione un archivo para abrir"
+Dialog.Filter = ["", ""]
+Dialog.Path = User.Name
+Dialog.Filter = ["*.prov", "Datos de Proveedores"]
+
+IF NOT Dialog.OpenFile() THEN
+   TRY arr_cadenas = Split(File.LOAD(Dialog.Path), codigofinline)
+  
+  IF ERROR THEN 
+      Message.Info("Error producido en la lectura del archivo ")
+      GOTO finabreproveedor
+      END IF
+  
+  
+  
+  IF arr_cadenas[0] = "v0.0.1" THEN 
+        FMain.TextBoxRutaProveedores.text = Dialog.Path
+         var.Prov_numero = Val(arr_cadenas[2]) 'numero de proveedores que contiene el archivo
+          b = 2
+        'amplio memoria de los proveedores
+        var.Prov_id.resize(var.Prov_numero)
+        var.Prov_nombre.resize(var.Prov_numero)
+        var.Prov_Nif.resize(var.Prov_numero)
+        var.Prov_pc.resize(var.Prov_numero)   'persona de contacto
+        var.Prov_telf.resize(var.Prov_numero)
+        var.Prov_Fax.resize(var.Prov_numero)   'fax
+        var.Prov_Movil.resize(var.Prov_numero)  
+        var.Prov_Correo.resize(var.Prov_numero)   'correo electronico
+        var.Prov_fp.resize(var.Prov_numero)   'forma de pago
+        var.Prov_Fecha.resize(var.Prov_numero)  'fecha del dato que introducimos
+        var.Prov_Direccion.resize(var.Prov_numero)  
+        var.Prov_cp.resize(var.Prov_numero)
+        var.Prov_Ciudad.resize(var.Prov_numero)
+        var.Prov_Provincia.resize(var.Prov_numero)
+        var.Prov_observaciones.resize(var.Prov_numero)
+        var.provmemoria.resize(var.Prov_numero)
+        
+        
+        'escribo datos de proveedores
+        FOR a = 0 TO var.Prov_numero - 1
+          b += 1
+          var.Prov_id[a] = arr_cadenas[b]
+          b += 1
+          var.Prov_nombre[a] = arr_cadenas[b]
+          b += 1
+          var.Prov_Nif[a] = arr_cadenas[b]
+          b += 1 
+          var.Prov_pc[a] = arr_cadenas[b]
+          b += 1
+          var.Prov_telf[a] = arr_cadenas[b]
+          b += 1
+          var.Prov_Fax[a] = arr_cadenas[b] 
+          b += 1
+          var.Prov_Movil[a] = arr_cadenas[b]
+          b += 1
+          var.Prov_Correo[a] = arr_cadenas[b]
+          b += 1
+          var.Prov_fp[a] = arr_cadenas[b]
+          b += 1
+          var.Prov_Fecha[a] = Val(arr_cadenas[b])
+          b += 1
+          var.Prov_Direccion[a] = arr_cadenas[b]
+          b += 1
+          var.Prov_cp[a] = arr_cadenas[b]
+          b += 1
+          var.Prov_Ciudad[a] = arr_cadenas[b] 
+          b += 1
+          var.Prov_Provincia[a] = arr_cadenas[b]
+          b += 1
+          var.Prov_observaciones[a] = arr_cadenas[b]
+     NEXT
+      Message.Info("Archivo leido", "Aceptar") 
+      'muestro en gridproveedores
+      BorradosDatosIniciales.dibujogridProveedores()
+      ELSE
+      Message.Error("Archivo no compatible con esta version", "Aceptar")
+      GOTO finabreproveedor
+      ENDIF 
+
+END IF
+finabreproveedor:
+END
+
+'---------------------------------------------------------------------------------------------
+
+
+PUBLIC SUB salva(OPTIONAL ruta AS String, OPTIONAL sobreescribe AS String)
+  DIM lineas AS String
+DIM destino AS String
+DIM numArchivo AS Integer
+DIM a AS Integer
+DIM codigofinline AS String
+DIM cuentaprov AS Integer
+
+inicio:
+var.esperaprov = "si"
+IF ruta = "" THEN 
+      Dialog.Title = "Escriba  un nombre de archivo para guardar los datos"
+      Dialog.Filter = ["", ""]
+      Dialog.Path = User.Name
+      Dialog.Filter = ["*.prov", "Datos de Proveedores"]
+      a = Dialog.SaveFile()
+      IF a = -1 THEN GOTO fins
+    
+            IF Right$(Dialog.Path, 5) <> ".prov" THEN
+              destino = Dialog.Path & ".prov"
+              ELSE
+              destino = Dialog.Path
+              END IF
+            
+        
+    ELSE 
+   destino = ruta
+  ENDIF 
+  
+  
+  IF sobreescribe = "sobreescribe" THEN GOTO finsobreescribe
+  
+  
+   'Comprueba si existe el archivo, en tal caso pide confirmacion de sobreescritura
+  IF AbreGuardaProveedores.compruebaexistencia(DESTINO, "Proveedor") = 2 THEN 
+     GOTO inicio
+     END IF
+     
+     finsobreescribe:
+     
+  'Message.Info("GRAVANDO DATOS")
+  
+  codigofinline = "|"
+  lineas = "v0.0.1" & codigofinline 'informo version
+  Lineas &= "gestionalmacen.090409" & codigofinline ' programa que ha echo el archivo
+  
+  'cuento cuantos proveedores no estan borrados para indicar el numero real de proveedores existentes
+  cuentaprov = 0
+  FOR a = 0 TO var.Prov_numero - 1
+  IF var.Prov_id[a] <> "IdB" THEN cuentaprov += 1 
+  NEXT 
+   
+  Lineas &= Str$(cuentaprov) & codigofinline 'numero de proveedores que contiene el archivo sin estar borrados
+  'escribo datos de proveedores
+    FOR a = 0 TO var.Prov_numero - 1
+      'PRINT var.Prov_id[a]; "IdB"; var.Prov_id[a] = "IdB"
+        IF var.Prov_id[a] <> "IdB" THEN 
+          'los datos borrados no los salvo
+          Lineas &= var.Prov_id[a] & codigofinline
+          Lineas &= var.Prov_nombre[a] & codigofinline
+          Lineas &= var.Prov_Nif[a] & codigofinline
+          Lineas &= var.Prov_pc[a] & codigofinline
+          Lineas &= var.Prov_telf[a] & codigofinline
+          Lineas &= var.Prov_Fax[a] & codigofinline
+          Lineas &= var.Prov_Movil[a] & codigofinline
+          Lineas &= var.Prov_Correo[a] & codigofinline
+          Lineas &= var.Prov_fp[a] & codigofinline
+          Lineas &= Str$(var.Prov_Fecha[a]) & codigofinline
+          Lineas &= var.Prov_Direccion[a] & codigofinline
+          Lineas &= var.Prov_cp[a] & codigofinline
+          Lineas &= var.Prov_Ciudad[a] & codigofinline
+          Lineas &= var.Prov_Provincia[a] & codigofinline
+          Lineas &= var.Prov_observaciones[a] & codigofinline
+        END IF
+      NEXT
+      IF destino = "" THEN
+      Message.Info("No se pudo salvar")
+      GOTO fins
+      
+       ENDIF
+    File.Save(destino, lineas)
+   
+    FMain.TextBoxRutaProveedores.text = destino
+    
+      IF sobreescribe = "sobreescribe" THEN 
+ FMain.ProgressBarGuardar.value = FMain.ProgressBarGuardar.value + 0.33 
+    GOTO fins
+    ENDIF 
+    
+    
+    IF ruta <> "" THEN Message.Info("Archivo salvado", "Aceptar")
+    
+   '
+fins:
+var.esperaprov = ""
+END
+
+
+'------------------------------------------------------------------------------------
+PUBLIC FUNCTION compruebaexistencia(destino AS String, tipo AS String) AS Integer
+DIM DEVUELVE AS Integer
+'EXIST DEVUELVE TRUE SI ESISTE EL ARCHIVO
+IF Exist(destino) = FALSE THEN
+                'no existe el archivo, por lo tanto podemos continuar con el salvado con el mismo nombre
+                
+                RETURN 1
+                END IF 
+'esta parte se ejecuta cuando existe el archivo.
+IF Message.Warning("Existe el archivo de " & tipo, "Cancelar", "Sobreescribir") = 1 THEN 
+    ' HE CANCELADO
+    RETURN 2
+  END IF
+
+IF Message.Warning("Ha decidido sobreescribir ¿esta seguro?", "Cancelar", "Aceptar") = 1 THEN 
+    RETURN 2 
+    ELSE 
+    'el usuario quiere sobreescribir y esta seguro con ello ya que lo ha dicho dos veces
+    RETURN 1
+  END IF
+END 

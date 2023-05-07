@@ -1,0 +1,35 @@
+# Gambas Form File 2.0
+
+{ Form Form
+  MoveScaled(0,0,74,63)
+  Text = ("")
+  { ToolButton1 ToolButton
+    MoveScaled(1,2,71,5)
+    Font = Font["-1"]
+    Text = ("Pulsa para comprobar si existen actualizaciones del programa...")
+    Picture = Picture["icon:/24/refresh"]
+    Border = True
+  }
+  { Label1 Label
+    MoveScaled(2,9,26,3)
+    Text = ("Reportes de descargas:")
+  }
+  { TextArea1 TextArea
+    MoveScaled(1,12,72,43)
+    Font = Font["-2"]
+    Background = &H909090&
+    Foreground = &HFFFFFF&
+    Text = ("")
+  }
+  { ToolButton2 ToolButton
+    MoveScaled(61,57,12,4)
+    Text = ("Salir")
+    Picture = Picture["icon:/24/quit"]
+    Border = True
+  }
+  { TextLabel1 TextLabel
+    MoveScaled(1,55,58,7)
+    Font = Font["-1"]
+    Text = ("Nota Importante: Ejecuta el programa (.gambas) en el directorio /home/usuario, sino no encontrara el archivo de datos que baje.")
+  }
+}

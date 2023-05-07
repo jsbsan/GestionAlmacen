@@ -1,0 +1,462 @@
+' Gambas module file
+
+PUBLIC SUB titulosproveedores()
+  
+'‘indica a  un gridwiew, el numero de columnas que va a tener:
+'Gridview1.Columns.Count = numero
+
+'‘indica a un gridview, numero de filas que va a tener:
+'Gridview1.rows.count = numero
+
+''Que se vean las cabezeras
+'Gridview1.header = 0 ‘no se ven ninguna
+'Gridview1.header = 1 ’se ven las cabeceras de las columnas (y no de las filas)
+'Gridview1.header = 2 ’se ven las cabeceras de las filas (y no las de las columnas)
+'Gridview1.header = 3 ’se ven tanto las cabeceras de las columnas como de las filas
+
+'‘Titulo de la columna indicada en numero y texto
+'Gridview1.Columns[numero].title = texto
+ 
+ FMain.GridViewProveedor.header = 3
+ FMain.GridViewProveedor.columns.count = 15
+ FMain.GridViewProveedor.Rows.count = 0
+ FMain.GridViewProveedor.Columns[0].title = "IdProv"
+ FMain.GridViewProveedor.Columns[1].title = "Nombre Prov"
+ FMain.GridViewProveedor.Columns[2].title = "NIF"
+ FMain.GridViewProveedor.Columns[3].title = "Contacto"
+ FMain.GridViewProveedor.Columns[4].title = "Telf"
+ FMain.GridViewProveedor.Columns[5].title = "Fax"
+ FMain.GridViewProveedor.Columns[6].title = "Movil"
+ FMain.GridViewProveedor.Columns[7].title = "Correo"
+ FMain.GridViewProveedor.Columns[8].title = "F.pago"
+ FMain.GridViewProveedor.Columns[9].title = "Fecha"
+ fMain.GridViewProveedor.Columns[10].title = "Dirección"
+ FMain.GridViewProveedor.Columns[11].title = "C.P."
+ FMain.GridViewProveedor.Columns[12].title = "Ciudad"
+ FMain.GridViewProveedor.Columns[13].title = "Provincia"
+ FMain.GridViewProveedor.Columns[14].title = "Observaciones"
+ 
+ 'anchos
+  WITH FMain.GridViewProveedor
+     .Columns[0].Width = 50
+     .Columns[1].Width = 179
+     .Columns[2].Width = 71
+     .Columns[3].Width = 80
+     .Columns[4].Width = 71
+     .Columns[5].Width = 75
+     .Columns[6].Width = 80
+     .Columns[7].Width = 80
+     .Columns[8].Width = 80
+     .Columns[9].Width = 80
+     .Columns[10].Width = 80
+     .Columns[11].Width = 80
+     .Columns[12].Width = 80
+     .Columns[13].Width = 80
+     .Columns[14].Width = 180
+  END WITH
+END
+
+PUBLIC SUB titulosalbaranes()
+  
+  FMain.GridViewAlbaran.header = 3
+ FMain.GridViewAlbaran.columns.count = 8
+ FMain.GridViewAlbaran.Rows.count = 0
+ 
+ FMain.GridViewAlbaran.Columns[0].title = "IdObra"
+ FMain.GridViewAlbaran.Columns[1].title = "Proveedor"
+ FMain.GridViewAlbaran.Columns[2].title = "idAlb"
+ FMain.GridViewAlbaran.Columns[3].title = "Nº Albaran"
+  FMain.GridViewAlbaran.Columns[4].title = "Valor"
+ FMain.GridViewAlbaran.Columns[5].title = "Fecha Alb"
+ FMain.GridViewAlbaran.Columns[6].title = "Fecha Entrada"
+ FMain.GridViewAlbaran.Columns[7].title = "Imputado"
+ 
+' anchos
+  WITH FMain.GridViewAlbaran
+     .Columns[0].Width = 48
+     .Columns[1].Width = 113
+     .Columns[2].Width = 40
+     .Columns[3].Width = 107
+     .Columns[4].Width = 65
+     .Columns[5].Width = 80
+     .Columns[6].Width = 80
+     .Columns[7].Width = 57
+  END WITH
+END
+
+PUBLIC SUB titulosconceptos()
+  FMain.GridViewConceptos.Header = 3
+  FMain.GridViewConceptos.Columns.count = 8
+  FMain.GridViewConceptos.Rows.count = 0
+  FMain.GridViewConceptos.Columns[0].title = "idConcepto"
+  FMain.GridViewConceptos.Columns[1].title = "idObra"
+  FMain.GridViewConceptos.Columns[2].Title = "IdUdObra"
+  FMain.GridViewConceptos.Columns[3].title = "Ud"
+  FMain.GridViewConceptos.Columns[4].title = "Denominación"
+  FMain.GridViewConceptos.Columns[5].title = "Medicion"
+  FMain.GridViewConceptos.Columns[6].title = "Precio"
+  FMain.GridViewConceptos.Columns[7].title = "Tipo" 'materiales, subcontrata, otros
+
+  'anchos
+  WITH FMain.GridViewConceptos
+     .Columns[0].Width = 67
+     .Columns[1].Width = 48
+     .Columns[2].Width = 62
+     .Columns[3].Width = 36
+     .Columns[4].Width = 233
+     .Columns[5].Width = 57
+     .Columns[6].Width = 50
+     .Columns[7].Width = 37
+  END WITH
+  
+  
+END
+
+PUBLIC SUB entradas()
+  WITH FentradasAlb
+   .GridViewConceptosEntrada.header = 3
+  .GridViewConceptosEntrada.Columns.count = 9
+  .GridViewConceptosEntrada.Rows.count = 0
+  .GridViewConceptosEntrada.Columns[0].title = "Nº Alb " 
+  .GridViewConceptosEntrada.Columns[1].title = "IdConcepto" 
+  .GridViewConceptosEntrada.Columns[2].title = "IdUdObra " 
+  .GridViewConceptosEntrada.Columns[3].title = "Ud" 
+  .GridViewConceptosEntrada.Columns[4].title = "Denominación" 
+  .GridViewConceptosEntrada.Columns[5].title = "Cantidad"
+  .GridViewConceptosEntrada.Columns[6].title = "Precio"
+  .GridViewConceptosEntrada.Columns[7].title = "Tipo Precio" 
+  .GridViewConceptosEntrada.Columns[8].title = "Tipo Concepto" 
+  END WITH 
+  
+  ' anchos
+  WITH Fentradasalb.GridViewConceptosEntrada
+     .Columns[0].Width = 59
+     .Columns[1].Width = 66
+     .Columns[2].Width = 69
+     .Columns[3].Width = 37
+     .Columns[4].Width = 204
+     .Columns[5].Width = 62
+     .Columns[6].Width = 53
+     .Columns[7].Width = 60
+     .Columns[8].width = 40
+  END WITH
+END
+
+PUBLIC SUB salidas()
+  
+  FMain.GridViewConceptosSalidas.header = 3
+  FMain.GridViewConceptosSalidas.Columns.count = 9
+  FMain.GridViewConceptosSalidas.Rows.count = 0
+  FMain.GridViewConceptosSalidas.Columns[0].title = "IdConcepto"
+  'FMain.GridViewConceptosSalidas.Columns[1].title = "IdAlb"
+  FMain.GridViewConceptosSalidas.Columns[2].title = "IdObra"
+  FMain.GridViewConceptosSalidas.Columns[3].title = "IdUdObra"
+  FMain.GridViewConceptosSalidas.Columns[4].title = "Ud"
+  FMain.GridViewConceptosSalidas.Columns[5].title = "Denominacion"
+  FMain.GridViewConceptosSalidas.Columns[6].title = "Entradas"
+  FMain.GridViewConceptosSalidas.Columns[7].title = "Salidas"
+  FMain.GridViewConceptosSalidas.Columns[8].title = "Pendiente"
+' anchos
+  WITH FMain.GridViewConceptosSalidas
+     .Columns[0].Width = 66
+     .Columns[1].Width = 0
+     .Columns[2].Width = 46
+     .Columns[3].Width = 62
+     .Columns[4].Width = 34
+     .Columns[5].Width = 148
+     .Columns[6].Width = 54
+     .Columns[7].Width = 82
+     .Columns[8].Width = 57
+  END WITH
+END
+
+PUBLIC SUB facturas()
+
+  FMain.GridViewFactura.header = 3
+  FMain.GridViewFactura.Columns.count = 7
+  FMain.GridViewFactura.Rows.count = 0
+  FMain.GridViewFactura.Columns[0].title = "IdFactura"
+  FMain.GridViewFactura.Columns[1].title = "Proveedor"
+  FMain.GridViewFactura.Columns[2].title = "NºFactura"
+  FMain.GridViewFactura.Columns[3].title = "IdObra"
+  FMain.GridViewFactura.Columns[4].title = "Fecha Fact"
+  FMain.GridViewFactura.Columns[5].title = "Fecha Imp"
+  FMain.GridViewFactura.Columns[6].title = "Valor (sin iva)"
+  
+  WITH FMain.GridViewFactura
+     .Columns[0].Width = 56
+     .Columns[1].Width = 100
+     .Columns[2].Width = 80
+     .Columns[3].Width = 52
+     .Columns[4].Width = 80
+     .Columns[5].Width = 80
+     .Columns[6].Width = 142
+  END WITH
+  
+END
+
+PUBLIC SUB anchura(rejilla AS GridView)
+  DIM a AS Integer
+ FMain.TextLabel1.text = "Ancho de columnas:" & Chr$(13)
+FOR a = 0 TO rejilla.Columns.count - 1
+ FMain.TextLabel1.text &= rejilla.Columns[a].Width & Chr$(13)
+  NEXT 
+FMain.TextLabel1.text &= "FIN" & Chr$(13)
+
+  
+END
+
+PUBLIC SUB titulosproveedores1()
+  
+'‘indica a  un gridwiew, el numero de columnas que va a tener:
+'Gridview1.Columns.Count = numero
+
+'‘indica a un gridview, numero de filas que va a tener:
+'Gridview1.rows.count = numero
+
+''Que se vean las cabezeras
+'Gridview1.header = 0 ‘no se ven ninguna
+'Gridview1.header = 1 ’se ven las cabeceras de las columnas (y no de las filas)
+'Gridview1.header = 2 ’se ven las cabeceras de las filas (y no las de las columnas)
+'Gridview1.header = 3 ’se ven tanto las cabeceras de las columnas como de las filas
+
+'‘Titulo de la columna indicada en numero y texto
+'Gridview1.Columns[numero].title = texto
+ 
+ WITH FfiltroProveedor.GridView1
+        .header = 3
+ .columns.count = 15
+ .Rows.count = 0
+ .Columns[0].title = "IdProv"
+ .Columns[1].title = "Nombre Prov"
+ .Columns[2].title = "NIF"
+ .Columns[3].title = "Contacto"
+ .Columns[4].title = "Telf"
+ .Columns[5].title = "Fax"
+ .Columns[6].title = "Movil"
+ .Columns[7].title = "Correo"
+ .Columns[8].title = "F.pago"
+ .Columns[9].title = "Fecha"
+ .Columns[10].title = "Dirección"
+ .Columns[11].title = "C.P."
+ .Columns[12].title = "Ciudad"
+ .Columns[13].title = "Provincia"
+ .Columns[14].title = "Observaciones"
+ END WITH 
+ 
+ 'anchos
+  WITH FfiltroProveedor.GridView1
+     .Columns[0].Width = 50
+     .Columns[1].Width = 179
+     .Columns[2].Width = 71
+     .Columns[3].Width = 80
+     .Columns[4].Width = 71
+     .Columns[5].Width = 75
+     .Columns[6].Width = 80
+     .Columns[7].Width = 80
+     .Columns[8].Width = 80
+     .Columns[9].Width = 80
+     .Columns[10].Width = 80
+     .Columns[11].Width = 80
+     .Columns[12].Width = 80
+     .Columns[13].Width = 80
+     .Columns[14].Width = 180
+  END WITH
+  
+  
+END
+
+PUBLIC SUB filtroconceptos()
+  ffiltroconceptos.GridViewfiltroconcepto.Header = 3
+  ffiltroconceptos.GridViewfiltroconcepto.Columns.count = 8
+  ffiltroconceptos.GridViewfiltroconcepto.Rows.count = 0
+  ffiltroconceptos.GridViewfiltroconcepto.Columns[0].title = "idConcepto"
+  ffiltroconceptos.GridViewfiltroconcepto.Columns[1].title = "idObra"
+  ffiltroconceptos.GridViewfiltroconcepto.Columns[2].Title = "IdUdObra"
+  ffiltroconceptos.GridViewfiltroconcepto.Columns[3].title = "Ud"
+  ffiltroconceptos.GridViewfiltroconcepto.Columns[4].title = "Denominación"
+  ffiltroconceptos.GridViewfiltroconcepto.Columns[5].title = "Medicion"
+  ffiltroconceptos.GridViewfiltroconcepto.Columns[6].title = "Precio"
+  ffiltroconceptos.GridViewfiltroconcepto.Columns[7].title = "Tipo" 'materiales, subcontrata, otros
+
+  'anchos
+  WITH ffiltroconceptos.GridViewfiltroconcepto
+     .Columns[0].Width = 67
+     .Columns[1].Width = 48
+     .Columns[2].Width = 62
+     .Columns[3].Width = 36
+     .Columns[4].Width = 233
+     .Columns[5].Width = 57
+     .Columns[6].Width = 50
+     .Columns[7].Width = 37
+  END WITH
+  
+  
+END
+
+PUBLIC SUB GridViewfiltroconcepto2()
+  ffiltroconceptos.GridViewfiltroconcepto.Header = 3
+  ffiltroconceptos.GridViewfiltroconcepto.Columns.count = 8
+  ffiltroconceptos.GridViewfiltroconcepto.Rows.count = 0
+  ffiltroconceptos.GridViewfiltroconcepto.Columns[0].title = "idConcepto"
+  ffiltroconceptos.GridViewfiltroconcepto.Columns[1].title = "idObra"
+  ffiltroconceptos.GridViewfiltroconcepto.Columns[2].Title = "IdUdObra"
+  ffiltroconceptos.GridViewfiltroconcepto.Columns[3].title = "Ud"
+  ffiltroconceptos.GridViewfiltroconcepto.Columns[4].title = "Denominación"
+  ffiltroconceptos.GridViewfiltroconcepto.Columns[5].title = "Medicion"
+  ffiltroconceptos.GridViewfiltroconcepto.Columns[6].title = "Precio"
+  ffiltroconceptos.GridViewfiltroconcepto.Columns[7].title = "Tipo" 'materiales, subcontrata, otros
+
+  'anchos
+  WITH ffiltroconceptos.GridViewfiltroconcepto
+     .Columns[0].Width = 67
+     .Columns[1].Width = 48
+     .Columns[2].Width = 62
+     .Columns[3].Width = 36
+     .Columns[4].Width = 233
+     .Columns[5].Width = 57
+     .Columns[6].Width = 50
+     .Columns[7].Width = 37
+  END WITH
+  
+END
+
+'------------------------------ DETERMINAR SALIDA
+PUBLIC SUB fgridsalidas()
+   WITH FSAlIDAS.GridViewS
+            .Header = 3
+            .Columns.count = 9
+            .Rows.count = 0
+            .Columns[0].title = "idConcepto" '
+            .Columns[1].title = "Proveedor"
+            .Columns[2].title = "Ud"
+            .Columns[3].title = "Nombre" 'nombre
+            .Columns[4].title = "Precio"
+            .Columns[5].title = "Entrada" 'cantidad entrada
+            '.Columns[5].Align = 2
+            .Columns[6].title = "salida" 'cantidad que habia salido
+            '.Columns[6].align = 2
+            .Columns[7].title = "pendiente" 'pendiente: entrada-salida
+            '.columns[7].align
+            '.Columns[].Left
+            'la columna 8 contiene el numero del registro de entrada 
+END WITH 
+  'anchos
+  WITH FSAlIDAS.GridViewS
+     .Columns[0].Width = 69
+     .Columns[1].Width = 86
+     .Columns[2].Width = 34
+     .Columns[3].Width = 239
+     .Columns[4].Width = 56
+     .columns[5].width = 47
+     .columns[6].Width = 47
+     .Columns[7].Width = 61
+     .columns[8].width = 0
+  END WITH
+END
+
+'titulos de gridalbaranes para facturas 
+
+PUBLIC SUB titulosalbaranesProvFactura()
+
+ WITH FMain.GridViewAlbProvObra
+  .header = 3
+  .columns.count = 8
+  '.Rows.count = 0
+  .Columns[0].title = "" 'IdObra"
+ .Columns[1].title = "" 'Proveedor"
+ .Columns[2].title = "idAlb"
+ .Columns[3].title = "Nº Albaran"
+ .Columns[4].title = "Valor"
+ .Columns[5].title = "Fecha Alb"
+ .Columns[6].title = "Fecha Entrada"
+ .Columns[7].title = "Imputado"
+ END WITH 
+ 
+' anchos
+  WITH FMain.GridViewAlbProvObra
+     .Columns[0].Width = 0
+     .Columns[1].Width = 0
+     .Columns[2].Width = 40
+     .Columns[3].Width = 70
+     .Columns[4].Width = 65
+     .Columns[5].Width = 80
+     .Columns[6].Width = 80
+     .Columns[7].Width = 57
+  END WITH
+
+  'grid que contiene los albaranes imputados a la factura
+  
+  WITH FMain.GridViewAlbProvObraImp
+  .header = 3
+  .columns.count = 8
+  .Rows.count = 0
+  .Columns[0].title = "" 'IdObra"
+ .Columns[1].title = "" 'Proveedor"
+ .Columns[2].title = "idAlb"
+ .Columns[3].title = "Nº Albaran"
+ .Columns[4].title = "Valor"
+ .Columns[5].title = "Fecha Alb"
+ .Columns[6].title = "Fecha Entrada"
+ .Columns[7].title = "Imputado"
+ 
+' anchos
+ 
+     .Columns[0].Width = 0
+     .Columns[1].Width = 0
+     .Columns[2].Width = 40
+     .Columns[3].Width = 70
+     .Columns[4].Width = 65
+     .Columns[5].Width = 80
+     .Columns[6].Width = 80
+     .Columns[7].Width = 57
+  END WITH
+END
+
+'----------------------------------------------
+'titulos proveedores en filtro de facturas
+'-----------------------------
+PUBLIC SUB tituloFfiltroProveedorFactura()
+  
+  
+
+  WITH FfiltroProveedorFactura.GridView1
+        .header = 3
+ .columns.count = 15
+ .Rows.count = 0
+ .Columns[0].title = "IdProv"
+ .Columns[1].title = "Nombre Prov"
+ .Columns[2].title = "NIF"
+ .Columns[3].title = "Contacto"
+ .Columns[4].title = "Telf"
+ .Columns[5].title = "Fax"
+ .Columns[6].title = "Movil"
+ .Columns[7].title = "Correo"
+ .Columns[8].title = "F.pago"
+ .Columns[9].title = "Fecha"
+ .Columns[10].title = "Dirección"
+ .Columns[11].title = "C.P."
+ .Columns[12].title = "Ciudad"
+ .Columns[13].title = "Provincia"
+ .Columns[14].title = "Observaciones"
+ END WITH 
+ 
+ 'anchos
+  WITH FfiltroProveedorFactura.GridView1
+     .Columns[0].Width = 50
+     .Columns[1].Width = 179
+     .Columns[2].Width = 71
+     .Columns[3].Width = 80
+     .Columns[4].Width = 71
+     .Columns[5].Width = 75
+     .Columns[6].Width = 80
+     .Columns[7].Width = 80
+     .Columns[8].Width = 80
+     .Columns[9].Width = 80
+     .Columns[10].Width = 80
+     .Columns[11].Width = 80
+     .Columns[12].Width = 80
+     .Columns[13].Width = 80
+     .Columns[14].Width = 180
+  END WITH
+END

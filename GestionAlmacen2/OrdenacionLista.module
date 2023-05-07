@@ -1,0 +1,42 @@
+' Gambas module file
+
+PUBLIC FUNCTION listaOrd(lista AS String[], numero AS Integer) AS Integer[] 'le introduces una lista string, y te devuelve un array integer con la ordenacion
+  DIM orden AS NEW Integer[]
+  DIM limite AS Integer
+  DIM cambio1 AS String
+  DIM i AS Integer
+  DIM j AS Integer
+  DIM col AS Integer
+  DIM c AS String
+  DIM a AS Integer
+  DIM array_orden AS NEW String[]
+
+
+orden.Resize(numero)
+array_orden.resize(numero)
+
+FOR a = 0 TO numero - 1
+array_orden[a] = Upper$(lista[a] & "|" & Str$(a)) 'todo en mayusculas para que no haya distincion entre letras
+NEXT 
+
+limite = a
+
+  FOR i = 0 TO limite - 1
+    FOR j = 0 TO limite - 2
+      IF array_orden[j] > array_orden[j + 1] THEN
+                cambio1 = array_orden[j]
+                array_orden[j] = array_orden[j + 1]
+                array_orden[j + 1] = cambio1
+       END IF
+    NEXT
+  NEXT
+  
+  ' ya se ha ordenado
+  
+  FOR a = 0 TO numero - 1
+    orden[a] = Val(Mid$(array_orden[a], InStr(array_orden[a], "|") + 1, Len(array_orden[a])))
+  NEXT
+  
+  RETURN orden
+END
+

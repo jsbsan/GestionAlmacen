@@ -1,0 +1,58 @@
+' Gambas class file
+
+
+PUBLIC SUB Button1_Click()
+
+DIM resultado AS Integer
+resultado = buscar.ProveedorFiltroalb(Upper(TextBox1.text), CheckBoxFiltroProveedorfm.Value)
+IF RESULTADO = 1 THEN 
+    GridView1.Background = Color.Cyan
+    ELSE 
+    GridView1.Background = Color.White
+  END IF
+TextBox1.SetFocus
+END
+
+
+
+PUBLIC SUB Form_Open()
+  BorradosDatosIniciales.dibujogrid1()
+END
+
+PUBLIC SUB TextBox1_KeyPress()
+
+  IF Key.code = Key.enter OR Key.code = Key.Return OR Key.CODE = Key.TAB THEN 
+  Button1.SetFocus
+  END IF
+
+END
+
+PUBLIC SUB GridView1_Click()
+ Button2_Click()
+END
+
+PUBLIC SUB Button2_Click()
+'el numero de fila filtrada no coincide con el nº de entrada de proveedor
+IF GridView1.row <> -1 THEN 
+ FMain.ComboBoxALBPROV.TEXT = GridView1[GridView1.row, 1].text
+ENDIF 
+ME.Close
+
+END
+
+PUBLIC SUB Button3_Click()
+  ME.Close
+END
+
+PUBLIC SUB GridView1_ColumnClick(Column AS Integer)
+
+  IF var.ordenfiltroconcepto = 0 THEN 
+  OrdenacionGridview.ord_AZ(GridView1, Column)
+  var.ordenfiltroprov = 1
+  ELSE 
+  var.ordenfiltroprov = 0
+  OrdenacionGridview.ord_ZA(GridView1, Column)
+ENDIF 
+
+
+END

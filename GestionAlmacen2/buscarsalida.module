@@ -1,0 +1,125 @@
+' Gambas module file
+
+PUBLIC FUNCTION ConceptoFiltroSalidas(patron AS String, OPTIONAL patron1 AS String, OPTIONAL patron2 AS String, obra AS String) AS Integer
+
+DIM lineas AS String
+DIM a AS Integer
+DIM numero AS Integer
+DIM c AS Integer
+DIM sumaentrada AS Float
+DIM sumasalida AS Float
+'FMain.GridViewProveedor.Clear
+'FMain.GridViewConceptosSalidas.Rows.count = 0
+
+numero = 0 'contador de filas validas (sin estar borradas)
+IF var.entrada_numero = 0 THEN RETURN 0 'no existen descompuestos de albaranes
+
+
+IF patron = "*" OR patron = "" THEN 
+ BorradosDatosIniciales.dibujogridConceptosSalidas(obra)
+ RETURN 0
+ENDIF 
+
+IF fMain.GridViewConceptosSalidas.Rows.count = 0 THEN 
+   GOTO finfiltrosalida
+   
+   END IF
+
+IF patron1 = "" THEN patron1 = " "
+IF patron2 = "" THEN patron2 = " "
+
+
+
+FOR a = 0 TO var.concepto_numero - 1
+sumaentrada = 0
+sumasalida = 0
+          FOR c = 0 TO var.entrada_numero - 1
+              IF var.entrada_idconcepto[c] <> "IdB" AND var.concepto_id[a] = var.entrada_idconcepto[c] THEN 
+                   sumaentrada += var.entrada_medidaconcepto[c]
+              ENDIF 
+          NEXT   
+
+IF sumaentrada = 0 THEN GOTO finnext
+
+  IF var.concepto_id[a] <> "IdB" THEN 
+         Lineas = var.concepto_id[a]
+          Lineas &= var.concepto_idudobra[a] 
+          Lineas &= var.concepto_nombre[a]
+          Lineas &= var.concepto_ud[a] 
+          Lineas &= var.concepto_med[a]
+          Lineas &= var.concepto_precio[a] 
+          'Lineas &= var.conceptomemoria[a]
+          Lineas &= var.conceptotipo[a] 
+          Lineas &= var.concepto_Obra[a]
+  
+  IF dentro(Upper$(var.concepto_Obra[a]), obra) AND dentro(Upper$(lineas), patron) AND dentro(Upper$(lineas), patron1) AND dentro(Upper$(lineas), patron2) THEN   
+          numero += 1
+         
+                  FMain.GridViewConceptosSalidas.Rows.count = numero 
+                  FMain.GridViewConceptosSalidas[numero - 1, 0].text = var.concepto_id[a]
+                ' FMain.GridViewConceptosSalidas[numero - 1, 1].text = var.concepto_id[a]
+                  FMain.GridViewConceptosSalidas[numero - 1, 2].text = var.concepto_Obra[a]
+                  FMain.GridViewConceptosSalidas[numero - 1, 3].text = var.concepto_idudobra[a]
+                  FMain.GridViewConceptosSalidas[numero - 1, 4].text = var.concepto_ud[a] 
+                  FMain.GridViewConceptosSalidas[numero - 1, 5].text = var.concepto_nombre[a]
+                  'entradas de medicones
+                  sumaentrada = 0
+                    FOR c = 0 TO var.entrada_numero - 1
+                       IF var.entrada_idconcepto[c] <> "IdB" AND var.concepto_id[a] = var.entrada_idconcepto[c] THEN 
+                       sumaentrada += var.entrada_medidaconcepto[c]
+                       
+                       ENDIF 
+                    NEXT
+                  FMain.GridViewConceptosSalidas[numero - 1, 6].text = redondea.numero(sumaentrada)
+                   FMain.GridViewConceptosSalidas[numero - 1, 6].Alignment = 2
+          'salidas anteriores de mediciones
+           'salidas anteriores de mediciones
+                    sumasalida = 0
+                     FOR c = 0 TO var.entrada_numero - 1
+                        IF var.entrada_idconcepto[c] <> "IdB" AND var.concepto_id[a] = var.entrada_idconcepto[c] THEN 
+                        sumasalida += var.entrada_salida[c]
+                        ENDIF 
+                     NEXT 
+                    
+                    FMain.GridViewConceptosSalidas[numero - 1, 7].text = redondea.numero(sumasalida)
+                     FMain.GridViewConceptosSalidas[numero - 1, 7].Alignment = 2
+                    'pendiente
+                    FMain.GridViewConceptosSalidas[numero - 1, 8].text = redondea.numero(sumaentrada - sumasalida)
+                    FMain.GridViewConceptosSalidas[numero - 1, 8].Alignment = 2
+                    sumaentrada = 0
+                    sumasalida = 0
+         END IF
+          
+      END IF
+
+          
+          
+          'salidas anteriores de mediciones
+          
+          'FMain.GridViewConceptosSalidasnumero - 1, 6].text = var.concepto_precio[a]
+          'FMain.GridViewConceptosSalidas[numero - 1, 7].text = var.conceptotipo[a]
+         
+
+finnext:
+
+NEXT
+
+
+finfiltrosalida:
+
+  IF numero > 0 THEN 
+    'SE HA ENCONTRADO PARECIDOS
+    RETURN 1 
+    ELSE 
+    RETURN 0
+    ENDIF 
+  
+END
+'--------------------------------------------------------------------------------------------------
+'busquda dentro de una cadena
+'--------------------------------------------------------------------------------------------------
+SUB dentro(frase AS String, patron AS String) AS Boolean
+  
+  RETURN InStr(frase, patron)
+  
+END

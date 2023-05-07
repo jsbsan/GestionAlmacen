@@ -1,0 +1,27 @@
+' Gambas module file
+
+
+
+'---------------------------------------------------------
+' DATOS DEL PROGRAMA
+'---------------------------------------------------------
+
+'DEFINICION DE VARIABLES
+ PUBLIC rutaprueba AS String
+ PUBLIC version AS String
+ PUBLIC programa AS String
+ PUBLIC archivo_informacion_update AS String 
+    
+PUBLIC SUB cargadatos()
+UpdateDatos.rutaprueba = "http://www.proyectojulio.webcindario.com/home/julio/gestionalmacenTutorial/007/" 'poner siempre al final / (la barra invertida)
+UpdateDatos.version = "0.0.7.4.3r07" 'se pueden introducir las fechas haciendo click en fecha
+'con valoracion del albaran que introducimos
+'ordenacion de albaranes imputados en facturas
+'copiar albaranes imputados en facturas
+
+UpdateDatos.archivo_informacion_update = "archivo.update"
+UpdateDatos.programa = "gestionalmacen"
+
+FMain.caption = UpdateDatos.programa & " Version " & UpdateDatos.version
+
+END 

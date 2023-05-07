@@ -1,0 +1,11 @@
+' Gambas module file
+
+PUBLIC SUB edicion(a AS Integer) 'a es la fila que edito
+fmain.LabelIdFactura.text = var.fact_id[a]  'contiene el id de la factura
+fmain.Comboboxprovfact.text = var.fact_prov[a] 'contiene el proveedor
+fmain.textboxnfactura.text = var.fact_nprov[a] 'contiene el numero de factura que le da el proveedor
+fmain.ComboBoxObraFactura.text = var.fact_idobra[a]  'obra de la factura
+fmain.ValueBoxFFact.value = var.fact_fecha[a] ' fecha factura
+fmain.ValueBoxFImp.value = var.fact_fecha_imp[a] 'fecha de imputacion
+fmain.ValueBoxValorFactura.value = var.fact_valor[a] 
+END

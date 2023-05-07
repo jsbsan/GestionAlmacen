@@ -1,0 +1,54 @@
+# Gambas Form File 2.0
+
+{ Form Form
+  MoveScaled(0,0,50,18)
+  Text = ("")
+  { ValueBoxmed ValueBox
+    MoveScaled(14,2,15,3)
+    Font = Font["Times,-1"]
+  }
+  { ValueBoxprecio ValueBox
+    MoveScaled(14,7,15,3)
+    Font = Font["Times,-1"]
+  }
+  { RadioButtonEstimacion RadioButton
+    MoveScaled(34,4,24,2)
+    Font = Font["Times,-1"]
+    Text = ("Estimacion")
+    Value = True
+  }
+  { RadioButtonOferta RadioButton
+    MoveScaled(34,7,21,2)
+    Font = Font["Times,-1"]
+    Text = ("Oferta")
+  }
+  { RadioButtonContrato RadioButton
+    MoveScaled(34,10,13,2)
+    Font = Font["Times,-1"]
+    Text = ("Contrato")
+  }
+  { Label1 Label
+    MoveScaled(3,7,9,4)
+    Font = Font["Times,-1"]
+    Text = ("Precio:")
+  }
+  { Label2 Label
+    MoveScaled(3,2,9,4)
+    Font = Font["Times,-1"]
+    Text = ("Medicion:")
+  }
+  { Button1 Button
+    MoveScaled(29,13,16,2)
+    Font = Font["Times,-1"]
+    Text = ("Aceptar")
+  }
+  { Button2 Button
+    MoveScaled(8,13,14,2)
+    Font = Font["Times,-1"]
+    Text = ("Cancelar")
+  }
+  { Label3 Label
+    MoveScaled(33,1,10,2)
+    Text = ("Precio:")
+  }
+}

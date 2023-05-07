@@ -1,0 +1,144 @@
+' Gambas module file
+'Nota importante sobre NEW
+' Si no lo pongo e intento trabajar con la variable como si fuerra array
+'sale un error: NULL OBJECT
+
+'Variable de PROVEEDOR
+PUBLIC Prov_id AS NEW String[] ' Codigo Identificacion del proveedor (uno para cada proveedor)
+PUBLIC Prov_nombre AS NEW String[] ' nombre del proveedor
+PUBLIC Prov_Nif AS NEW String[] 'nif de la empresa
+PUBLIC Prov_pc AS NEW String[] 'persona de contacto
+PUBLIC Prov_Telf AS NEW String[] 'telefono
+PUBLIC Prov_Fax AS NEW String[] 'fax
+PUBLIC Prov_Movil AS NEW String[]
+PUBLIC Prov_Correo AS NEW String[] 'correo electronico
+PUBLIC Prov_fp AS NEW String[] 'forma de pago
+PUBLIC Prov_Fecha AS NEW Date[] 'fecha del dato que introducimos
+PUBLIC Prov_Direccion AS NEW String[]
+PUBLIC Prov_cp AS NEW Integer[]
+PUBLIC Prov_Ciudad AS NEW String[]
+PUBLIC Prov_Provincia AS NEW String[]
+PUBLIC Prov_observaciones AS NEW String[]
+PUBLIC Prov_numero AS Integer
+PUBLIC Provmemoria AS NEW integer[]
+'otras: EDICION PROVEEDOR
+PUBLIC filaproveedorEditada AS Integer 'fila editada del gridproveedor
+PUBLIC ProveedorMemoriaEditada AS Integer 'fila de memoria proveedor editada
+
+'--------------------------------------------------------------------------------------------
+'Variables de conceptos
+PUBLIC concepto_Obra AS NEW String[]
+PUBLIC concepto_id AS NEW String[]
+PUBLIC concepto_idudobra AS NEW String[] 'unidad de obra donde se encuentra
+PUBLIC concepto_nombre AS NEW string[] 'nombre descriptivo unidad
+PUBLIC concepto_ud AS NEW String[]
+PUBLIC concepto_med AS NEW Float[] 'medicion
+PUBLIC concepto_precio AS NEW Float[] 'precio de contrato
+PUBLIC concepto_numero AS Integer
+PUBLIC conceptomemoria AS NEW Integer[]
+PUBLIC conceptotipo AS NEW String[] 'tipo de concepto materiales,subcontratas, otros
+'otras: EDICION concepto
+PUBLIC filaconceptoEditada AS Integer 'fila editada del gridconceptos
+PUBLIC conceptoMemoriaEditada AS Integer 'fila de memoria concepto editada
+
+'----------------------------------------------------------------------------------
+'variables albaran
+PUBLIC alb_id AS NEW String[]
+PUBLIC alb_numeroprov AS NEW string[] 'numero del albaran dado por el proveedor
+PUBLIC alb_prov AS NEW String[]
+PUBLIC alb_fecha AS NEW date[] 'fecha del albaran
+PUBLIC alb_idobra AS NEW String[]
+PUBLIC alb_imp AS NEW String[]
+PUBLIC alb_fechaEnt AS NEW date[] 'entrada en obra
+PUBLIC alb_valor AS NEW float[]
+PUBLIC albmemoria AS NEW Integer[]
+PUBLIC alb_numero AS Integer 'numero de albaranes en el programa
+'otras: EDICION concepto
+PUBLIC filaalbEditada AS Integer 'fila editada del gridalbaran
+PUBLIC albMemoriaEditada AS Integer 'fila de memoria albaran editada
+'-----------------------------------------------------------------------------------
+' entradas de conceptos en albaran
+PUBLIC entrada_numero AS Integer  
+PUBLIC entrada_id AS NEW String[] ''debe de ser el numero id de albaran (que da automaticamente el programa)
+PUBLIC entrada_idconcepto AS NEW String[] 'le ponga la medida del concepto que tiene el albaran
+PUBLIC entrada_medidaconcepto AS NEW FLOAT[]  'le ponga la medida del concepto que tiene el albaran
+PUBLIC entrada_precio AS NEW FLOAT[] 'precio del concepto
+PUBLIC entrada_tipoprecio AS NEW String[] ' contrado, estimacion, oferta
+PUBLIC entrada_salida AS NEW float[] 'cantidad de salida
+PUBLIC entrada_memoria AS NEW Integer[]
+'otras: EDICION concepto
+PUBLIC filaentradaEditada AS Integer 'fila editada del gridconceptos entrada
+PUBLIC entradaMemoriaEditada AS Integer 'fila de memoria entrada  editada
+'PUBLIC entrada_numero AS Integer 'numero de entradas
+PUBLIC obraEntradaFiltroAlbaran AS String 'obra del albaran, para buscar y asociar conceptos de esa obra
+
+PUBLIC introduceentrada_idconcepto AS String 'INDICA EL CONCEPTO QUE SE VA A INTRODUCIR EN LA ENTRADA DEL ALBARAN
+
+' -----------------------------------------
+ PUBLIC entradaconceptoMedion AS Float
+ 
+ PUBLIC FentradaconceptoMedion AS Float
+  PUBLIC FentradaconceptoMedionPrecio AS Float
+ PUBLIC FentradaconceptoPrecoTipo AS String
+
+PUBLIC filaelegida AS String 'fila que eligo del filtro de concepto para editarlo y escribir la medicion y precio
+
+
+'--------------------------------------------------- SALIDAS
+
+PUBLIC conceptosalida AS String
+PUBLIC salir AS Integer 'nº de registro de las entradas 
+
+'---------------------------------------------------- Facturas
+
+PUBLIC fact_id AS NEW String[] 'id dado por el programa a cada factura introducida
+PUBLIC fact_prov AS NEW String[] 'nombre del proveedor de esta factura
+PUBLIC fact_nprov AS NEW String[] 'numero de factura que da n ºfacturadadaproveedor   (nº de factura que le da el proveedor)
+PUBLIC fact_idobra AS NEW String[] 'obra a la que pertenece la factura
+PUBLIC fact_fecha AS NEW Date[] 'fecha de la factura (la que tiene la factura)
+PUBLIC fact_fecha_imp AS NEW date[] 'fecha de imputacion factura
+PUBLIC fact_valor AS NEW float[] ' suma de los valores de los albaranes de la factura
+PUBLIC fact_numero AS Integer 'numero de facturas existentes
+PUBLIC filaFactEditada AS Integer
+PUBLIC factMemoriaEditada AS Integer
+
+'---------------------------- VARIABLES QUE GUARDAN EL ESTADO DE ORDENACION ---------
+PUBLIC ordenConceptosEntrada AS Integer
+PUBLIC ordenfiltroconcepto AS Integer   
+PUBLIC ordenfiltroprov AS Integer   
+PUBLIC ordenfiltroProveedorFactura AS Integer   
+PUBLIC ordensalidas AS Integer   
+PUBLIC ordenProveedor AS Integer   
+PUBLIC ordenConcepto AS Integer  
+PUBLIC ordenAlbaran AS Integer  
+PUBLIC ordenConceptosSalida AS Integer   
+PUBLIC ordenFactura AS Integer  
+PUBLIC ordenAlbProvObra AS Integer  
+PUBLIC ordenAlbProvObraimp AS Integer
+
+
+'-------------------------------- espera que se termine una subrutina -----------------------
+PUBLIC esperaprov AS String
+PUBLIC esperaalb AS String
+PUBLIC esperaconcepto AS String
+
+
+'-------------------------------------------fechas-----------------------
+PUBLIC fechaincluida AS Date
+'-----------------------------------------------------------------
+'
+PUBLIC seccion AS String 'nombre de la seccion actual
+
+'filtro utilizado en introducir conceptos en albaranes
+
+PUBLIC filtroanterior AS String
+
+
+'inicio albaranes y inicio conceptos
+PUBLIC inicioalbaranes AS Integer ' para que cuando se acceda por 1º ver a la pantalla albaranes refresque el grid
+PUBLIC inicioconcepto AS Integer ' 
+
+
+
+
+

@@ -1,0 +1,40 @@
+# Gambas Form File 2.0
+
+{ Form Form
+  MoveScaled(0,0,52,19)
+  Text = ("")
+  { RadioButtonTodo RadioButton
+    MoveScaled(9,6,24,2)
+    Font = Font["Times,-1"]
+    Text = ("Sale Todo")
+  }
+  { ButtonAcepta Button
+    MoveScaled(35,13,12,2)
+    Font = Font["Times,-1"]
+    Text = ("Aceptar")
+  }
+  { RadioButtonQueda RadioButton
+    MoveScaled(9,9,20,2)
+    Font = Font["Times,-1"]
+    Text = ("Queda:")
+  }
+  { ValueBoxQuedaCantidad ValueBox
+    MoveScaled(18,9,13,2)
+    Font = Font["Times,-1"]
+  }
+  { RadioButtonCantidad RadioButton
+    MoveScaled(9,3,21,2)
+    Font = Font["Times,-1"]
+    Text = ("Sale la cantidad de:")
+    Value = True
+  }
+  { ValueBoxSaleCantidad ValueBox
+    MoveScaled(24,3,11,2)
+    Font = Font["Times,-1"]
+  }
+  { ButtonCancela Button
+    MoveScaled(10,13,12,2)
+    Font = Font["Times,-1"]
+    Text = ("Cancela")
+  }
+}

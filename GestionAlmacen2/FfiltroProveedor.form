@@ -1,0 +1,35 @@
+# Gambas Form File 2.0
+
+{ Form Form
+  MoveScaled(0,0,66,42)
+  Text = ("")
+  { TextBox1 TextBox
+    MoveScaled(3,2,25,3)
+    Font = Font["Times,-1"]
+    Text = ("")
+  }
+  { Button1 Button
+    MoveScaled(48,3,14,2)
+    Font = Font["Times,-1"]
+    Text = ("filtrar")
+  }
+  { GridView1 GridView
+    MoveScaled(1,9,64,28)
+    Font = Font["Times,-1"]
+  }
+  { Button2 Button
+    MoveScaled(16,38,13,2)
+    Font = Font["Times,-1"]
+    Text = ("Aceptar")
+  }
+  { Button3 Button
+    MoveScaled(37,38,13,3)
+    Font = Font["Times,-1"]
+    Text = ("Cancelar")
+  }
+  { CheckBoxFiltroProveedorfm CheckBox
+    MoveScaled(30,3,14,2)
+    Font = Font["Times,-1"]
+    Text = ("(proveedor o nif)")
+  }
+}

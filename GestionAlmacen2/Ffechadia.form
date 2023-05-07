@@ -1,0 +1,15 @@
+# Gambas Form File 2.0
+
+{ Form Form
+  MoveScaled(0,0,42,28)
+  Text = ("")
+  { Button1 Button
+    MoveScaled(12,23,15,1)
+    Font = Font["Times,-1"]
+    Text = ("Aceptar")
+  }
+  { DateChooserfecha DateChooser
+    MoveScaled(2,2,38,20)
+    Font = Font["-1"]
+  }
+}

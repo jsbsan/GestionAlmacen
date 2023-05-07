@@ -1,0 +1,159 @@
+' Gambas module file
+
+'FUNCIONES PARA CREAR EL CODIGO .HTML
+
+PUBLIC textohtml AS String
+
+
+'convertir caracteres especiales
+PUBLIC FUNCTION CaracteresEspeciales(texto AS String) AS String
+
+  'al estar implemntado el codigo que hace que la pagina se lea como UT-8 no es necesaria ninguna transformacion
+
+  RETURN texto
+  
+END
+
+
+'******************************************************************
+
+
+
+
+
+PUBLIC FUNCTION TituloventanaHtml(texto AS String) AS String
+  DIM cabecera AS String  
+  cabecera = textohtml & Chr(13) & "<TITLE>" & CaracteresEspeciales(texto) & "</TITLE>" & Chr$(13) 
+
+  RETURN cabecera
+END
+
+PUBLIC FUNCTION LineaHorizontal() AS String
+  
+  DIM linea AS String
+  linea = textohtml & "<HR>" & Chr$(13)
+  RETURN linea
+  
+END
+
+PUBLIC FUNCTION TitularCentrado(textoeF AS String) AS String
+'DIM textoeF AS String
+  textoeF = textohtml & "<H1> <CENTER>" & CaracteresEspeciales(textoeF) & "</CENTER> </H1>" & Chr$(13)
+RETURN textoeF
+END
+
+PUBLIC FUNCTION lineaBlanco() AS String
+  DIM linea AS String
+  linea = textohtml & "<BR>" & Chr$(13)
+  RETURN linea
+END
+
+PUBLIC FUNCTION ponermarca(marca AS String) AS String
+  DIM linea AS String
+  linea = textohtml & "<A NAME=" & Chr$(34) & marca & Chr$(34) & "></A>" & Chr$(13)
+  RETURN linea
+END
+
+
+PUBLIC FUNCTION IraMarca(marca AS String, textohiperenlace AS String) AS String
+  DIM linea AS String
+  linea = textohtml & "<A HREF=" & Chr$(34) & "#" & marca & Chr$(34) & ">" & CaracteresEspeciales(textohiperenlace) & "</A>" & Chr$(13)
+  RETURN linea
+END
+
+PUBLIC FUNCTION DescargaArchivo(destinomarca AS String, textohiperenlace AS String) AS String
+  DIM linea AS String
+   linea = "<A HREF=" & destinomarca & ">" & CaracteresEspeciales(textohiperenlace) & "</A>"
+  
+   RETURN linea
+  
+  
+END
+
+PUBLIC FUNCTION correo(direccion AS String, textohiperenlace AS String) AS String
+  DIM linea AS String
+  linea = textohtml & "<A HREF=" & Chr$(34) & "mailto:" & direccion & "?subject = Duda del proyecto......" & Chr$(34) & ">" & CaracteresEspeciales(textohiperenlace) & "</A>" & Chr$(13)
+  RETURN linea
+END
+
+
+PUBLIC FUNCTION lineaTextoCR(texto AS String) AS String
+ DIM linea AS String
+  linea = textohtml & CaracteresEspeciales(texto) & "<BR>" & Chr$(13)
+  RETURN linea
+END
+
+PUBLIC FUNCTION negrita(texto AS String) AS String
+  DIM linea AS String
+  linea = textohtml & "<B>" & CaracteresEspeciales(texto) & "</B>"
+  RETURN linea
+END
+
+
+PUBLIC FUNCTION cursiva(texto AS String) AS String
+  DIM linea AS String
+  linea = textohtml & "<I>" & CaracteresEspeciales(texto) & "</I>"
+  RETURN linea
+END
+
+PUBLIC FUNCTION subrayado(texto AS String) AS String
+  DIM linea AS String
+  linea = textohtml & "<U>" & CaracteresEspeciales(texto) & "</U>"
+  RETURN linea
+END
+
+PUBLIC FUNCTION textotamanno(tamano AS Integer, texto AS String) AS String
+  DIM linea AS String
+  'TAMANO DEBE DE ESTAR ENTRE 1 Y 7
+  linea = textohtml & "<FONT SIZE=+" & Str$(tamano) & ">" & CaracteresEspeciales(texto) & "</FONT>"
+  RETURN linea
+END
+
+PUBLIC FUNCTION textocentrado(textoEA AS String) AS String
+  
+  DIM linea AS String
+   linea = textohtml & "<CENTER>" & CaracteresEspeciales(textoEA) & "<CENTER>"
+  RETURN linea
+  
+END
+
+
+PUBLIC FUNCTION caracteresUTF8_2() AS String
+  ' obtenido de la pagina web: http://www.w3c.es/divulgacion/guiasbreves/internacionalizacion
+  DIM linea AS String
+  
+  linea = textohtml & "<meta http-equiv=" & Chr$(34) & "Content-Type" & Chr$(34) & " content =" & Chr$(34) & "text/html;charset =utf-8" & Chr$(34) & " />" & Chr$(13)
+  RETURN linea
+
+  
+END
+
+
+'---------------------------------------------------
+PUBLIC FUNCTION parrafo(cadena AS String) AS String
+DIM a AS Integer
+DIM subcadena AS String
+DIM letra AS String
+
+inicio:
+FOR a = 1 TO Len(cadena)
+
+letra = Mid$(cadena, a, 1)
+IF letra = "\r" THEN 
+   subcadena &= "<BR>" & "\r"
+   ELSE 
+   IF letra = " " AND Mid$(cadena, a + 1, 1) = " " THEN 
+   letra = "&nbsp"
+   subcadena &= letra
+    ELSE 
+    subcadena &= letra
+    ENDIF
+  ENDIF  
+NEXT
+
+RETURN textohtml & subcadena
+  
+  
+END
+
+

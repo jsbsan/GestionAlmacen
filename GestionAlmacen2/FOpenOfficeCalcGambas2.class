@@ -1,0 +1,105 @@
+' Gambas class file
+
+PUBLIC SUB _new()
+
+END
+
+PUBLIC SUB Form_Open()
+GridView1.rows.count = 101
+GridView1.Columns.count = 20
+
+END
+
+PUBLIC SUB leerportapapeles_Click()
+DIM titulos AS Boolean
+
+IF CheckBox1.value = -1 THEN 
+FOpenOfficeCalcGambas2.GridView1.Header = 1
+titulos = -1
+ELSE 
+FOpenOfficeCalcGambas2.GridView1.Header = 0
+titulos = 0
+ENDIF
+GridView1.rows.count = 0
+GridView1.Columns.count = 0
+
+GridView1.rows.count = 50
+GridView1.Columns.count = 20
+ OpenOfficeCalcGambas2.leer(FOpenOfficeCalcGambas2.GridView1, titulos)
+
+
+
+END
+
+PUBLIC SUB Button2_Click()
+
+  ME.Close()
+  
+
+END
+
+PUBLIC SUB Button1_Click()
+DIM a AS Integer
+DIM repite AS Integer
+
+  IF CheckBox1.Value = TRUE THEN 
+     'la primera linea contiene titulos
+     a = 1
+     ENDIF 
+     
+     
+  FOR repite = a TO 100
+     IF comprobarvacio(repite) <> 1 THEN 
+          var.concepto_numero += 1
+              var.concepto_Obra.Add(FMain.ComboBoxObras.text)
+              var.concepto_id.add("concepto" & Str$(var.concepto_numero) & Str$(Now))
+              var.concepto_idudobra.add("concepto" & Str$(var.concepto_numero) & Str$(Now)) 
+              'unidad
+              var.concepto_ud.add(BC3aConceptos.convierteud(GridView1[repite, 0].text))
+              var.concepto_nombre.add(GridView1[repite, 1].text)
+              var.conceptotipo.Add("")
+              
+              IF Val(GridView1[repite, 2].text) = NULL THEN 
+              var.concepto_med.Add(0)
+              ELSE
+              var.concepto_med.add(Val(GridView1[repite, 2].text)) 
+              ENDIF 
+              
+              
+              IF Val(GridView1[repite, 3].text) = NULL THEN 
+              var.concepto_precio.Add(0)
+              ELSE 
+              var.concepto_precio.add(Val(GridView1[repite, 3].text))
+              ENDIF 
+              
+          ELSE 
+          GOTO finlectura
+          ENDIF 
+  NEXT 
+
+
+
+  finlectura:
+ ' AbreGuardaConcepto.salva()
+Message.info("Datos cargados")
+FMain.TS1[2].Enabled = TRUE
+IF fmain.ComboBoxObras.CounT = 0 THEN 
+     fmain.ComboBoxObras.Add(Upper$(var.concepto_Obra[0]))
+    END IF
+var.inicioconcepto = 0
+ME.Close
+END
+
+PUBLIC FUNCTION comprobarvacio(fila AS Integer) AS Integer
+ DIM b AS Integer
+ 
+  FOR b = 0 TO 3
+   IF GridView1[fila, b].text <> "" THEN 
+    RETURN 0
+   ENDIF 
+    
+  NEXT 
+  
+  RETURN 1
+
+END

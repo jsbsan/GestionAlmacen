@@ -1,0 +1,568 @@
+' Gambas module file
+
+
+'borrado de proveedores....
+
+PUBLIC SUB dibujogridProveedores()  
+DIM a AS Integer
+DIM numero AS Integer
+
+'FMain.GridViewProveedor.Clear
+FMain.GridViewProveedor.Rows.count = 0
+numero = 0 'contador de filas validas (sin estar borradas)
+
+FOR a = 0 TO var.Prov_numero - 1
+'PRINT var.Prov_id[a]; "IdB"; var.Prov_id[a] = "IdB"
+
+IF var.Prov_id[a] <> "IdB" THEN 
+      numero += 1
+      FMain.GridViewProveedor.Rows.count = numero 
+      FMain.GridViewProveedor[numero - 1, 0].text = var.Prov_id[a]
+      FMain.GridViewProveedor[numero - 1, 1].text = var.Prov_nombre[a]
+      FMain.GridViewProveedor[numero - 1, 2].text = var.Prov_Nif[a]
+      FMain.GridViewProveedor[numero - 1, 3].text = var.Prov_pc[a]
+      FMain.GridViewProveedor[numero - 1, 4].text = var.Prov_telf[a]
+      FMain.GridViewProveedor[numero - 1, 5].text = var.Prov_Fax[a] 
+      FMain.GridViewProveedor[numero - 1, 6].text = var.Prov_Movil[a]
+      FMain.GridViewProveedor[numero - 1, 7].text = var.Prov_Correo[a]
+      FMain.GridViewProveedor[numero - 1, 8].text = var.Prov_fp[a]
+      FMain.GridViewProveedor[numero - 1, 9].text = var.Prov_Fecha[a]
+      FMain.GridViewProveedor[numero - 1, 10].text = var.Prov_Direccion[a]
+      FMain.GridViewProveedor[numero - 1, 11].text = var.Prov_cp[a]
+      FMain.GridViewProveedor[numero - 1, 12].text = var.Prov_Ciudad[a] 
+      FMain.GridViewProveedor[numero - 1, 13].text = var.Prov_Provincia[a]
+      FMain.GridViewProveedor[numero - 1, 14].text = var.Prov_observaciones[a]
+      END IF
+NEXT
+
+fmain.GridViewProveedor.ScrollY = (numero - 1) * 100
+END
+
+
+
+
+'borrado de conceptos....
+
+PUBLIC SUB dibujogridconceptos(obra AS String)  
+DIM a AS Integer
+DIM numero AS Integer
+
+
+FMain.GridViewConceptos.Rows.count = 0
+numero = 0 'contador de filas validas (sin estar borradas)
+
+FOR a = 0 TO var.concepto_numero - 1
+'PRINT var.Prov_id[a]; "IdB"; var.Prov_id[a] = "IdB"
+
+IF var.concepto_id[a] <> "IdB" AND var.concepto_Obra[a] = obra THEN 
+      numero += 1
+      FMain.GridViewConceptos.Rows.count = numero 
+      FMain.GridViewConceptos[numero - 1, 0].text = var.concepto_id[a]
+      FMain.GridViewConceptos[numero - 1, 1].text = var.concepto_obra[a]
+      FMain.GridViewConceptos[numero - 1, 2].text = var.concepto_idudobra[a]
+      FMain.GridViewConceptos[numero - 1, 3].text = var.concepto_ud[a]
+      FMain.GridViewConceptos[numero - 1, 4].text = var.concepto_nombre[a]
+      FMain.GridViewConceptos[numero - 1, 5].text = redondea.numero(var.concepto_med[a])
+      FMain.GridViewConceptos[numero - 1, 5].Alignment = 2
+      FMain.GridViewConceptos[numero - 1, 6].text = redondea.numero(var.concepto_precio[a])
+      FMain.GridViewConceptos[numero - 1, 6].Alignment = 2
+      FMain.GridViewConceptos[numero - 1, 7].text = var.conceptotipo[a]
+      END IF
+NEXT
+
+fmain.GridViewConceptos.ScrollY = (numero - 1) * 100
+END
+
+'----------------------------------------------------------------
+
+PUBLIC SUB dibujogrid1()  
+DIM a AS Integer
+DIM numero AS Integer
+FfiltroProveedor.GridView1.columns.Count = 15
+FfiltroProveedor.GridView1.Rows.count = 0
+numero = 0 'contador de filas validas (sin estar borradas)
+
+FOR a = 0 TO var.prov_numero - 1
+'PRINT var.Prov_id[a]; "IdB"; var.Prov_id[a] = "IdB"
+
+IF var.concepto_id[a] <> "IdB" THEN 
+      numero = numero + 1
+      
+      
+       FfiltroProveedor.GridView1.Rows.count = numero 
+      FfiltroProveedor.GridView1[numero - 1, 0].text = var.Prov_id[a]
+      FfiltroProveedor.GridView1[numero - 1, 1].text = var.Prov_nombre[a]
+      FfiltroProveedor.GridView1[numero - 1, 2].text = var.Prov_Nif[a]
+      FfiltroProveedor.GridView1[numero - 1, 3].text = var.Prov_pc[a]
+      FfiltroProveedor.GridView1[numero - 1, 4].text = var.Prov_telf[a]
+      FfiltroProveedor.GridView1[numero - 1, 5].text = var.Prov_Fax[a] 
+      FfiltroProveedor.GridView1[numero - 1, 6].text = var.Prov_Movil[a]
+      FfiltroProveedor.GridView1[numero - 1, 7].text = var.Prov_Correo[a]
+      FfiltroProveedor.GridView1[numero - 1, 8].text = var.Prov_fp[a]
+      FfiltroProveedor.GridView1[numero - 1, 9].text = var.Prov_Fecha[a]
+      FfiltroProveedor.GridView1[numero - 1, 10].text = var.Prov_Direccion[a]
+      FfiltroProveedor.GridView1[numero - 1, 11].text = var.Prov_cp[a]
+      FfiltroProveedor.GridView1[numero - 1, 12].text = var.Prov_Ciudad[a] 
+      FfiltroProveedor.GridView1[numero - 1, 13].text = var.Prov_Provincia[a]
+      FfiltroProveedor.GridView1[numero - 1, 14].text = var.Prov_observaciones[a]
+      END IF
+NEXT
+
+END
+
+'filtro proveedor para facturas....
+
+
+PUBLIC SUB dibujogrid11()  
+DIM a AS Integer
+DIM numero AS Integer
+FfiltroProveedorFactura.GridView1.columns.Count = 15
+FfiltroProveedorFactura.GridView1.Rows.count = 0
+numero = 0 'contador de filas validas (sin estar borradas)
+
+FOR a = 0 TO var.prov_numero - 1
+'PRINT var.Prov_id[a]; "IdB"; var.Prov_id[a] = "IdB"
+
+IF var.concepto_id[a] <> "IdB" THEN 
+      numero = numero + 1
+      
+      
+       FfiltroProveedorFactura.GridView1.Rows.count = numero 
+      FfiltroProveedorFactura.GridView1[numero - 1, 0].text = var.Prov_id[a]
+      FfiltroProveedorFactura.GridView1[numero - 1, 1].text = var.Prov_nombre[a]
+      FfiltroProveedorFactura.GridView1[numero - 1, 2].text = var.Prov_Nif[a]
+      FfiltroProveedorFactura.GridView1[numero - 1, 3].text = var.Prov_pc[a]
+      FfiltroProveedorFactura.GridView1[numero - 1, 4].text = var.Prov_telf[a]
+      FfiltroProveedorFactura.GridView1[numero - 1, 5].text = var.Prov_Fax[a] 
+      FfiltroProveedorFactura.GridView1[numero - 1, 6].text = var.Prov_Movil[a]
+      FfiltroProveedorFactura.GridView1[numero - 1, 7].text = var.Prov_Correo[a]
+      FfiltroProveedorFactura.GridView1[numero - 1, 8].text = var.Prov_fp[a]
+      FfiltroProveedorFactura.GridView1[numero - 1, 9].text = var.Prov_Fecha[a]
+      FfiltroProveedorFactura.GridView1[numero - 1, 10].text = var.Prov_Direccion[a]
+      FfiltroProveedorFactura.GridView1[numero - 1, 11].text = var.Prov_cp[a]
+      FfiltroProveedorFactura.GridView1[numero - 1, 12].text = var.Prov_Ciudad[a] 
+      FfiltroProveedorFactura.GridView1[numero - 1, 13].text = var.Prov_Provincia[a]
+      FfiltroProveedorFactura.GridView1[numero - 1, 14].text = var.Prov_observaciones[a]
+      END IF
+NEXT
+END
+
+
+
+
+
+' - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+' albaran
+' - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+PUBLIC SUB dibujogridAlbaran(obra AS String)
+DIM a AS Integer
+DIM numero AS Integer
+
+'FMain.GridViewalbaran.Clear
+FMain.GridViewalbaran.Rows.count = 0
+numero = 0 'contador de filas validas (sin estar borradas)
+
+FOR a = 0 TO var.alb_numero - 1
+'PRINT var.Prov_id[a]; "IdB"; var.Prov_id[a] = "IdB"
+
+IF var.alb_id[a] <> "IdB" AND var.alb_idobra[a] = obra THEN 
+      numero += 1
+   fmain.gridviewalbaran.Rows.count = numero 
+   fmain.gridviewalbaran[numero - 1, 0].text = var.alb_idobra[a] 
+   fmain.gridviewalbaran[numero - 1, 1].text = var.alb_prov[a]
+   fmain.gridviewalbaran[numero - 1, 2].text = var.alb_id[a] 
+   fmain.gridviewalbaran[numero - 1, 3].text = var.alb_numeroprov[a] 
+   var.alb_valor[a] = buscar.sumadescompuesto(var.alb_id[a])
+   
+   fmain.gridviewalbaran[numero - 1, 4].text = Format(Round(var.alb_valor[a], -2), "#.#0")
+   fmain.GridViewAlbaran[numero - 1, 4].Alignment = 2
+   fmain.gridviewalbaran[numero - 1, 5].text = Format$(var.alb_fecha[a], "dd/mm/yyyy")
+   fmain.gridviewalbaran[numero - 1, 6].text = Format$(var.alb_fechaEnt[a], "dd/mm/yyyy")
+   fmain.gridviewalbaran[numero - 1, 7].text = var.alb_imp[a]
+
+      END IF
+NEXT
+fmain.GridViewalbaran.ScrollY = (numero - 1) * 100
+END
+
+'------------------------------------------------------------------------------
+PUBLIC SUB dibujogridconceptos2(obra AS String)  
+DIM a AS Integer
+DIM numero AS Integer
+
+ 'FfiltroConceptos.GridViewfiltroconcepto.Columns.count = 8
+ Titulos.filtroconceptos()
+ 
+ 
+ 
+FfiltroConceptos.GridViewfiltroconcepto.Rows.count = 0
+numero = 0 'contador de filas validas (sin estar borradas)
+
+FOR a = 0 TO var.concepto_numero - 1
+'PRINT var.Prov_id[a]; "IdB"; var.Prov_id[a] = "IdB"
+
+IF var.concepto_id[a] <> "IdB" THEN 
+      
+     IF var.concepto_obra[a] = obra THEN 
+     numero += 1
+      FfiltroConceptos.GridViewfiltroconcepto.Rows.count = numero 
+      FfiltroConceptos.GridViewfiltroconcepto[numero - 1, 0].text = var.concepto_id[a]
+      FfiltroConceptos.GridViewfiltroconcepto[numero - 1, 1].text = var.concepto_obra[a]
+      FfiltroConceptos.GridViewfiltroconcepto[numero - 1, 2].text = var.concepto_idudobra[a]
+      FfiltroConceptos.GridViewfiltroconcepto[numero - 1, 3].text = var.concepto_ud[a]
+      FfiltroConceptos.GridViewfiltroconcepto[numero - 1, 4].text = var.concepto_nombre[a]
+      FfiltroConceptos.GridViewfiltroconcepto[numero - 1, 5].text = redondea.numero(var.concepto_med[a])
+      FfiltroConceptos.GridViewfiltroconcepto[numero - 1, 6].text = redondea.numero(var.concepto_precio[a])
+      FfiltroConceptos.GridViewfiltroconcepto[numero - 1, 7].text = var.conceptotipo[a]
+      END IF
+      END IF
+NEXT
+END
+
+'--------------------------------------------------------------------------
+PUBLIC SUB dibujogridconceptosEntrada()  
+DIM a AS Integer
+DIM numero AS Integer
+
+Titulos.entradas()
+
+FentradasAlb.GridViewConceptosEntrada.Rows.count = 0
+numero = 0 'contador de filas validas (sin estar borradas)
+
+FOR a = 0 TO var.concepto_numero - 1
+'PRINT var.Prov_id[a]; "IdB"; var.Prov_id[a] = "IdB"
+
+IF var.concepto_id[a] <> "IdB" THEN 
+      numero += 1
+      FentradasAlb.GridViewConceptosEntrada.Rows.count = numero 
+      FentradasAlb.GridViewConceptosEntrada[numero - 1, 0].text = var.concepto_id[a]
+      FentradasAlb.GridViewConceptosEntrada[numero - 1, 1].text = var.concepto_obra[a]
+      FentradasAlb.GridViewConceptosEntrada[numero - 1, 2].text = var.concepto_idudobra[a]
+      FentradasAlb.GridViewConceptosEntrada[numero - 1, 3].text = var.concepto_ud[a]
+      FentradasAlb.GridViewConceptosEntrada[numero - 1, 4].text = var.concepto_nombre[a]
+      FentradasAlb.GridViewConceptosEntrada[numero - 1, 5].text = redondea.numero(var.concepto_med[a])
+      FentradasAlb.GridViewConceptosEntrada[numero - 1, 6].text = redondea.numero(var.concepto_precio[a])
+      FentradasAlb.GridViewConceptosEntrada[numero - 1, 7].text = var.conceptotipo[a]
+      END IF
+NEXT
+FentradasAlb.GridViewConceptosEntrada.ScrollY = (numero - 1) * 100
+END
+'-----------------------------------------------------------------------------------
+'relleno de grid de entradas de albaran
+
+PUBLIC SUB dibujogridEntradaAlbaran(idalbaran AS String)
+  
+  DIM a AS Integer
+DIM numero AS Integer
+DIM valoralbaran AS Float
+
+Titulos.entradas()
+valoralbaran = 0
+
+FentradasAlb.GridViewConceptosEntrada.Rows.count = 0
+
+numero = 0 'contador de filas validas (sin estar borradas)
+
+FOR a = 0 TO var.entrada_numero - 1
+'PRINT var.Prov_id[a]; "IdB"; var.Prov_id[a] = "IdB"
+
+IF var.entrada_idconcepto[a] <> "IdB" AND idalbaran = var.entrada_id[a] THEN 
+      numero += 1
+      FentradasAlb.GridViewConceptosEntrada.Rows.count = numero 
+      FentradasAlb.GridViewConceptosEntrada[numero - 1, 0].text = var.entrada_id[a]
+      FentradasAlb.GridViewConceptosEntrada[numero - 1, 1].text = var.entrada_idconcepto[a]
+      FentradasAlb.GridViewConceptosEntrada[numero - 1, 2].text = buscaObra(var.entrada_idconcepto[a])
+      FentradasAlb.GridViewConceptosEntrada[numero - 1, 3].text = buscaUd(var.entrada_idconcepto[a])
+      FentradasAlb.GridViewConceptosEntrada[numero - 1, 4].text = buscaDenoConcepto(var.entrada_idconcepto[a])
+      FentradasAlb.GridViewConceptosEntrada[numero - 1, 5].text = redondea.numero(var.entrada_medidaconcepto[a])
+      FentradasAlb.GridViewConceptosEntrada[numero - 1, 6].text = redondea.numero(var.entrada_precio[a])
+      FentradasAlb.GridViewConceptosEntrada[numero - 1, 7].text = var.entrada_tipoprecio[a]
+      FentradasAlb.GridViewConceptosEntrada[numero - 1, 8].text = buscaConceptoTipo(var.entrada_idconcepto[a])
+      valoralbaran += var.entrada_medidaconcepto[a] * var.entrada_precio[a]
+      END IF
+NEXT
+  
+  
+FentradasAlb.GridViewConceptosEntrada.ScrollY = (numero - 1) * 100
+FentradasAlb.label2valoracion.text = redondea.numero(valoralbaran)
+
+END
+
+
+'busqueda 
+PUBLIC SUB buscaObra(idconcepto AS String) AS String 'devuelve la obra
+  DIM a AS Integer
+FOR a = 0 TO var.concepto_numero - 1
+  IF var.concepto_id[a] = idconcepto THEN 
+      RETURN var.concepto_obra[a]
+  END IF
+NEXT
+Message.Info("No encuentro obra del concepto: " & idconcepto)  
+END
+
+PUBLIC SUB buscaUd(idconcepto AS String) AS String 'devuelve la unidad de concepto
+  DIM a AS Integer
+FOR a = 0 TO var.concepto_numero - 1
+  IF var.concepto_id[a] = idconcepto THEN 
+      RETURN var.concepto_ud[a]
+  END IF
+NEXT
+Message.Info("No encuentro unidad del concepto: " & idconcepto)  
+END
+
+PUBLIC SUB buscaConceptoTipo(idconcepto AS String) AS String
+  DIM a AS Integer
+FOR a = 0 TO var.concepto_numero - 1
+  IF var.concepto_id[a] = idconcepto THEN 
+      RETURN var.conceptotipo[a]
+  END IF
+NEXT
+Message.Info("No encuentro el tipo de concepto de: " & idconcepto)   
+  
+  
+  
+END
+
+
+PUBLIC SUB buscaDenoConcepto(idconcepto AS String) AS String 'devuelvo la denominacion del concepto
+  DIM a AS Integer
+FOR a = 0 TO var.concepto_numero - 1
+  IF var.concepto_id[a] = idconcepto THEN 
+      RETURN var.concepto_nombre[a]
+  END IF
+NEXT
+Message.Info("No encuentro descripcion del concepto: " & idconcepto)  
+  
+  
+END
+
+
+'-------------------------------------------------------------------------------------------------------------
+
+PUBLIC SUB dibujogridConceptosSalidas(obra AS String)
+  DIM a AS Integer
+  DIM c AS Integer
+  DIM lineas AS String
+  DIM numero AS Integer
+  DIM sumaentrada AS Float
+  DIM sumasalida AS Float
+  DIM validar AS Boolean
+   FMain.GridViewConceptosSalidas.Rows.count = 0
+  IF var.entrada_numero = 0 THEN
+     GOTO finnext
+     ENDIF 
+  
+  
+  FOR a = 0 TO var.concepto_numero - 1
+sumaentrada = 0
+         FOR c = 0 TO var.entrada_numero - 1
+         validar = var.entrada_idconcepto[c] <> "IdB" AND var.concepto_id[a] = var.entrada_idconcepto[c] 'AND var.concepto_Obra[a] = obra
+              IF validar THEN 
+                   sumaentrada += var.entrada_medidaconcepto[c]
+              ENDIF 
+          NEXT   
+
+IF sumaentrada = 0 THEN 
+  GOTO finnexta
+  ENDIF 
+        
+        IF var.conceptotipo[a] = "materiales" THEN 
+         IF var.concepto_id[a] <> "IdB" THEN 
+            
+            Lineas = var.concepto_id[a]
+            Lineas &= var.concepto_idudobra[a] 
+            Lineas &= var.concepto_nombre[a]
+            Lineas &= var.concepto_ud[a] 
+            Lineas &= var.concepto_med[a]
+            Lineas &= var.concepto_precio[a] 
+            'Lineas &= var.conceptomemoria[a]
+            Lineas &= var.conceptotipo[a] 
+            Lineas &= var.concepto_Obra[a]
+            
+                        
+               IF dentro(Upper$(var.concepto_Obra[a]), Upper$(obra)) THEN   
+
+                  'entradas de mediciones
+                  sumaentrada = 0
+                    FOR c = 0 TO var.entrada_numero - 1
+                       IF var.entrada_idconcepto[c] <> "IdB" AND var.concepto_id[a] = var.entrada_idconcepto[c] THEN 
+                       sumaentrada += var.entrada_medidaconcepto[c]
+                       ENDIF 
+                    NEXT
+                 
+                    'salidas anteriores de mediciones
+                    sumasalida = 0
+                     FOR c = 0 TO var.entrada_numero - 1
+                        IF var.entrada_idconcepto[c] <> "IdB" AND var.concepto_id[a] = var.entrada_idconcepto[c] THEN 
+                        sumasalida += var.entrada_salida[c]
+                        ENDIF 
+                     NEXT 
+                    
+                    
+                    IF (sumaentrada - sumasalida) = 0 THEN 
+                          'para que no escriba conceptos sin salidas
+                          
+                          ELSE 
+                           numero += 1
+                  FMain.GridViewConceptosSalidas.Rows.count = numero 
+                  FMain.GridViewConceptosSalidas[numero - 1, 0].text = var.concepto_id[a]
+                ' FMain.GridViewConceptosSalidas[numero - 1, 1].text = var.concepto_id[a]
+                  FMain.GridViewConceptosSalidas[numero - 1, 2].text = var.concepto_Obra[a]
+                  FMain.GridViewConceptosSalidas[numero - 1, 3].text = var.concepto_idudobra[a]
+                  FMain.GridViewConceptosSalidas[numero - 1, 4].text = var.concepto_ud[a] 
+                  FMain.GridViewConceptosSalidas[numero - 1, 5].text = var.concepto_nombre[a]
+                   FMain.GridViewConceptosSalidas[numero - 1, 6].text = redondea.numero(sumaentrada)
+                   FMain.GridViewConceptosSalidas[numero - 1, 6].Alignment = 2
+                  FMain.GridViewConceptosSalidas[numero - 1, 7].text = redondea.numero(sumasalida)
+                  FMain.GridViewConceptosSalidas[numero - 1, 7].Alignment = 2
+                    'pendiente
+                    FMain.GridViewConceptosSalidas[numero - 1, 8].text = redondea.numero(sumaentrada - sumasalida)
+                    FMain.GridViewConceptosSalidas[numero - 1, 8].Alignment = 2
+                    END IF
+                    
+                
+                    
+                    
+         END IF
+      END IF
+  ENDIF    
+  
+ 
+  
+  
+finnexta:
+  NEXT
+  
+    
+finnext:        
+END
+
+
+SUB dentro(frase AS String, patron AS String) AS Boolean
+  
+  RETURN InStr(frase, patron)
+  
+END
+
+'-------------------------------------------------------------
+'dibujo albaran filtrado por obra y proveedor para facturas
+'--------------------------------------------------------------
+PUBLIC SUB dibujogridAlbaranProveedorObra(proveedor AS String, obra AS String, grid AS GridView, fechalimiteimp AS Date) 
+DIM a AS Integer
+DIM numero AS Integer
+DIM validar AS Boolean
+
+'FMain.GridViewalbaran.Clear
+Grid.Rows.count = 0
+
+numero = 0 'contador de filas validas (sin estar borradas)
+
+FOR a = 0 TO var.alb_numero - 1
+'PRINT var.Prov_id[a]; "IdB"; var.Prov_id[a] = "IdB"
+
+IF Len(var.alb_imp[a]) > 0 THEN GOTO finnextalb
+
+'IF Mid$(var.alb_imp[a], 0, 2) = "Si" THEN GOTO finnextalb 'albaran imputado
+validar = var.alb_id[a] <> "IdB" AND proveedor = var.alb_prov[a] AND obra = var.alb_idobra[a] AND var.alb_fecha[a] <= fechalimiteimp
+
+IF validar THEN 
+   numero += 1
+   grid.Rows.count = numero 
+   grid[numero - 1, 0].text = var.alb_idobra[a] 'cuidado que estan ocultas
+   grid[numero - 1, 1].text = var.alb_prov[a] 'cuidado que estan ocultas
+   grid[numero - 1, 2].text = var.alb_id[a] 
+   grid[numero - 1, 3].text = var.alb_numeroprov[a] 
+   var.alb_valor[a] = buscar.sumadescompuesto(var.alb_id[a])
+   
+   grid[numero - 1, 4].text = var.alb_valor[a]
+   grid[numero - 1, 5].text = Format$(var.alb_fecha[a], "dd/mm/yyyy")
+   grid[numero - 1, 6].text = Format$(var.alb_fechaEnt[a], "dd/mm/yyyy")
+   grid[numero - 1, 7].text = var.alb_imp[a]
+
+      END IF
+finnextalb:
+
+NEXT
+
+OrdenacionGridview.ord_AZ(grid, 3)
+
+END
+
+'--------------------------------------- rellenar el grid de factura
+PUBLIC SUB dibujogridFactura(proveedor AS String, obra AS String)
+
+DIM a AS Integer
+DIM numero AS Integer
+
+FMain.GridViewfactura.Rows.count = 0
+numero = 0 'contador de filas validas (sin estar borradas)
+
+FOR a = 0 TO var.fact_numero - 1
+IF var.fact_id[a] <> "IdB" THEN 
+   IF var.fact_prov[a] = proveedor THEN 
+    IF var.fact_idobra[a] = obra THEN 
+      numero += 1
+   fmain.GridViewfactura.Rows.count = numero 
+   fmain.GridViewfactura[numero - 1, 0].text = var.fact_id[a] 
+   fmain.GridViewfactura[numero - 1, 1].text = var.fact_prov[a]
+   fmain.GridViewfactura[numero - 1, 2].text = var.fact_nprov[a] 
+   fmain.GridViewFactura[numero - 1, 3].text = var.fact_idobra[a] 
+   fmain.GridViewfactura[numero - 1, 4].text = Format$(var.fact_fecha[a], "dd/mm/yyyy")
+   fmain.GridViewfactura[numero - 1, 5].text = Format$(var.fact_fecha_imp[a], "dd/mm/yyyy")
+   fmain.GridViewfactura[numero - 1, 6].text = var.fact_valor[a]
+     END IF
+   END IF
+END IF
+NEXT
+
+
+END
+
+'dibujo los albaranes que esten asociados a la factura
+
+
+PUBLIC SUB dibujogridAlbaranProveedorObraimp(idfactura AS String, proveedor AS String, obra AS String, grid AS GridView, fechalimiteimp AS Date) 
+DIM a AS Integer
+DIM numero AS Integer
+DIM sumavalorfactura AS Float
+DIM validar AS Boolean
+
+sumavalorfactura = 0
+'FMain.GridViewalbaran.Clear
+Grid.Rows.count = 0
+numero = 0 'contador de filas validas (sin estar borradas)
+
+FOR a = 0 TO var.alb_numero - 1
+'PRINT var.Prov_id[a]; "IdB"; var.Prov_id[a] = "IdB"
+IF var.alb_imp[a] = "" THEN GOTO finnextalb 'albaran imputado
+
+IF Mid$(var.alb_imp[a], 4, Len(var.alb_imp[a])) = idfactura THEN 
+       validar = proveedor = var.alb_prov[a] AND obra = var.alb_idobra[a] AND var.alb_fecha[a] <= fechalimiteimp
+       IF validar THEN 
+        numero += 1
+        grid.Rows.count = numero 
+        grid[numero - 1, 0].text = var.alb_idobra[a] 
+        grid[numero - 1, 1].text = var.alb_prov[a]
+        grid[numero - 1, 2].text = var.alb_id[a] 
+        grid[numero - 1, 3].text = var.alb_numeroprov[a] 
+        'recalcula la suma
+          'var.alb_valor[a] = buscar.sumadescompuesto(var.alb_id[a])
+   
+        grid[numero - 1, 4].text = var.alb_valor[a]
+        grid[numero - 1, 5].text = Format$(var.alb_fecha[a], "dd/mm/yyyy")
+        grid[numero - 1, 6].text = Format$(var.alb_fechaEnt[a], "dd/mm/yyyy")
+        grid[numero - 1, 7].text = var.alb_imp[a]
+        sumavalorfactura += Escribe.comadecimal(CStr(var.alb_valor[a]))
+      END IF
+ENDIF
+finnextalb:
+fmain.ValueBoxValorFactura.value = sumavalorfactura
+
+
+NEXT
+
+OrdenacionGridview.ord_AZ(grid, 3)
+
+
+END

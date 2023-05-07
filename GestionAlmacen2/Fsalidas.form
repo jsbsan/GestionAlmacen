@@ -1,0 +1,20 @@
+# Gambas Form File 2.0
+
+{ Form Form
+  MoveScaled(0,0,76,44)
+  Text = ("")
+  { Label1 Label
+    MoveScaled(3,2,21,2)
+    Text = ("Salidas de materiales:")
+  }
+  { Button1 Button
+    MoveScaled(60,2,12,2)
+    Font = Font["Times,-1"]
+    Text = ("Aceptar")
+  }
+  { GridViewS GridView
+    MoveScaled(1,6,73,34)
+    Font = Font["Times,-1"]
+    Mode = Select.Single
+  }
+}

@@ -1,0 +1,1763 @@
+' Gambas class file
+PUBLIC SUB Form_Resize()
+
+  TextAreaInforme.x = 0 + 5 
+  textareainforme.y = 30
+  textareainforme.width = ME.Width - 10
+  textareainforme.height = ME.Height - 35
+END
+
+PUBLIC SUB Form_Open()
+DIM tipo AS String
+
+
+
+
+  IF ME.caption = "Proveedores" THEN 
+      generaProveedores
+      ENDIF 
+      
+tipo = "Conceptos"
+IF Mid(ME.caption, 1, Len(tipo)) = tipo THEN 
+     generaConceptos
+     END IF 
+      
+tipo = "Albaranes"
+IF Mid(ME.caption, 1, Len(tipo)) = tipo THEN 
+     generaAlbaranes
+     END IF 
+     
+ tipo = "Salidas"
+IF Mid(ME.caption, 1, Len(tipo)) = tipo THEN 
+     generaSalidas
+END IF 
+ 
+ 
+tipo = "Facturas"
+IF Mid(ME.caption, 1, Len(tipo)) = tipo THEN 
+     generaFacturas
+     END IF 
+    
+'informes provenientes de tab INFORMES
+tipo = "Descomposicion Albaranes" 
+IF Mid(ME.caption, 1, Len(tipo)) = tipo THEN 
+    generaraAlbaranesDescompuesto
+    ENDIF 
+    
+tipo = "Resumen Prov/Alb/Fact"
+IF Mid(ME.caption, 1, Len(tipo)) = tipo THEN 
+    generaraResumenProvAlbFact
+    ENDIF 
+
+tipo = "Descompuesto de facturas"
+IF Mid(ME.caption, 1, Len(tipo)) = tipo THEN 
+    generaraDescompuestoFactura
+    ENDIF 
+
+ tipo = "Resumen Mes "
+IF Mid(ME.caption, 1, Len(tipo)) = tipo THEN 
+    generaMesResumenAlbaranes_Facturas
+    ENDIF 
+
+ tipo = "Mes Descomposicion Albaranes " 
+ IF Mid(ME.caption, 1, Len(tipo)) = tipo THEN 
+    generaMesAlbaranes_Facturas
+    ENDIF 
+ 
+tipo = "Alquileres por Meses" 
+ IF Mid(ME.caption, 1, Len(tipo)) = tipo THEN 
+    generaMesalquileres
+    ENDIF 
+ 
+
+
+tipo = "Descomposicion Albaranes Por Dia"
+ IF Mid(ME.caption, 1, Len(tipo)) = tipo THEN 
+    generaDescompuestosAlbDia
+    ENDIF 
+
+
+ 
+END
+
+'--------------------------------------------------Generacion Listado -----------------------------
+'-----------------------------------------------------Proveedores------------------------------------
+'--------------------------------------------------------------------------------------------------
+
+
+PUBLIC SUB generaProveedores()
+ DIM columnas AS Integer
+ DIM a AS Integer
+ DIM b AS Integer
+ DIM fila AS Integer
+ DIM c AS Integer
+DIM numeracion AS NEW Integer[]
+DIM datos AS String 'cadena que contiene los datos a presentar
+DIM esquema AS String
+DIM datosproveedor AS String
+DIM tipos AS String
+'ordenar proveedores alfabeticamente.....
+numeracion = OrdenacionLista.listaOrd(var.Prov_nombre, var.Prov_numero)
+ TextAreaInforme.text = "Proveedores" & "\r"
+ TextAreaInforme.text &= "Listado generado en fecha: " & Format$(Now, "dddd yyyy/mm/dd hh:nn:ss") & "\r\r"
+  
+  esquema = "Nif:        Proveedor                       Fecha       FormaPago              P.c.                 Telf.      Fax Movil. Correo Direccion C.P. Ciudad Provincia Observaciones" 
+ 
+  
+  textareainforme.text &= Escribe.subraya(esquema) & "\r"
+  
+datosproveedor = ""  
+  FOR c = 0 TO var.Prov_numero - 1
+  a = numeracion[c]
+  
+  IF var.Prov_id[a] <> "IdB" THEN
+
+datos = var.Prov_Nif[a]
+datos &= "|" & var.Prov_nombre[a]
+datos &= "|" & Format$(var.Prov_Fecha[a], "dd/mm/yy")
+datos &= "|" & var.Prov_fp[a]
+datos &= "|" & var.Prov_pc[a]
+datos &= "|" & var.Prov_Telf[a]
+datos &= "|" & var.Prov_Fax[a]
+datos &= "|" & var.Prov_Movil[a] 
+datos &= "|" & var.Prov_Correo[a] 
+datos &= "|" & var.Prov_Direccion[a] 
+datos &= "|" & var.Prov_cp[a] 
+datos &= "|" & var.Prov_Ciudad[a] 
+datos &= "|" & var.Prov_Provincia[a]
+datos &= "|" & var.Prov_observaciones[a] 
+tipos = "                 "
+datosproveedor &= Escribe.esquemaGenerico(esquema, datos, TIPOS) & "\r" 
+
+    END IF
+   
+  NEXT 
+  
+  TextAreaInforme.text &= datosproveedor & "\r\r" & "Listado generado en fecha: " & Format$(Now, "dddd yyyy/mm/dd hh:nn:ss") 
+END
+
+
+'--------------------------------------------------Generacion Listado -----------------------------
+'-----------------------------------------------------Salidas/Entradas Almacen---------------------
+'--------------------------------------------------------------------------------------------------
+
+
+
+PUBLIC SUB generaSalidas()
+DIM a AS Integer
+ DIM b AS Integer
+ DIM fila AS Integer
+ DIM numeracion AS NEW Integer[]
+ DIM c AS Integer
+ DIM lista AS NEW String[]
+ DIM esquema AS String
+ DIM esquema2 AS String
+ DIM datos AS String 
+ DIM elementos AS Integer 'contine el numero de elmentos a listar (albaranes, proveedores)
+ DIM costeentrada AS Float
+ DIM costesalida AS Float
+ DIM anterior AS String 
+ DIM sumaentrada AS Float 
+DIM sumasalida AS Float
+DIM sumacosteentrada AS Float
+DIM sumacostesalida AS Float
+DIM validar AS Boolean
+' entradas de conceptos en albaran
+'PUBLIC entrada_numero AS Integer  
+'PUBLIC entrada_id AS NEW String[] ''debe de ser el numero id de albaran (que da automaticamente el programa)
+'PUBLIC entrada_idconcepto AS NEW String[] 'le ponga la medida del concepto que tiene el albaran
+'PUBLIC entrada_medidaconcepto AS NEW FLOAT[]  'le ponga la medida del concepto que tiene el albaran
+'PUBLIC entrada_precio AS NEW FLOAT[] 'precio del concepto
+'PUBLIC entrada_tipoprecio AS NEW String[] ' contrado, estimacion, oferta
+'PUBLIC entrada_salida AS NEW float[] 'cantidad de salida
+ 
+ DIM costetotalentrada AS Float 'v 0.0.8
+ DIM costetotalsalida AS Float ' v 0.0.8
+ DIM costatotalacopio AS Float ' v 0.0.8
+ 
+ 
+  'listar los concecptos con entradas / salidas
+  
+ 'Message.Info("Se lista los Entradas/Salidas de la obra actual ( " & FMain.ComboBoxObras.text & " )") 
+'ordenar alfabeticamente.....
+elementos = var.entrada_numero
+
+lista.Resize(elementos)
+
+esquema = "Id:        Ud.  Nombre                    Cant.Entrada     Cant.Salida   Cant.Acopio     Precio    Tipo       Coste_Entrada Coste_Salida   Coste_Acopio" 
+
+FOR a = 0 TO elementos - 1
+lista[a] = buscar.buscaIdUd(var.entrada_idconcepto[a]) & buscar.buscaDenoConcepto(var.entrada_idconcepto[a])
+NEXT 
+numeracion = OrdenacionLista.listaOrd(lista, elementos)
+
+
+ TextAreaInforme.text = "Entrada/Salidas de la obra " & FMain.ComboBoxObras.text & " (MATERIALES)\r"
+ TextAreaInforme.text &= "Listado generado en fecha: " & Format$(Now, "dddd yyyy/mm/dd hh:nn:ss") & "\r\r"
+ TextAreaInforme.text &= Escribe.subraya(esquema) & "\r"
+anterior = ""
+
+ FOR c = 0 TO elementos - 1
+   a = numeracion[c]
+  'deben de ser conceptos:
+ ' tipo materiales, la entrada no borrada, y  la obra la actual
+ validar = var.entrada_idconcepto[a] <> "IdB" AND buscar.buscaObra(var.entrada_idconcepto[a]) = FMain.ComboBoxObras.text AND buscar.buscatipoconcepto(var.entrada_idconcepto[a]) = "materiales"
+ 
+ 
+ 
+    IF validar THEN 
+       IF anterior = "" THEN 
+                   datos = buscar.buscaIdUd(var.entrada_idconcepto[a])
+                   datos &= "|" & buscar.buscaUd(var.entrada_idconcepto[a])
+                   datos &= "|" & buscar.buscaDenoConcepto(var.entrada_idconcepto[a])
+                    datos &= "|" & var.entrada_medidaconcepto[a]
+                    datos &= "|" & var.entrada_salida[a]
+                    datos &= "|" & Str$(var.entrada_medidaconcepto[a] - var.entrada_salida[a]) 'acopio dif entre entradas-salidas
+                    datos &= "|" & var.entrada_precio[a]
+                    datos &= "|" & var.entrada_tipoprecio[a]
+                    costeentrada = var.entrada_medidaconcepto[a] * var.entrada_precio[a]
+                    datos &= "|" & Str$(Round(costeentrada, -2)) 'Coste_Entrada
+                  costesalida = var.entrada_salida[a] * var.entrada_precio[a]
+                  datos &= "|" & Str$(Round(costesalida, -2)) ' Coste_Salida  
+                  datos &= "|" & Str$(costeentrada - costesalida) ' Coste_Acopio" 
+                  TextAreaInforme.text &= Escribe.esquemaGenerico(esquema, datos, "   #### ###  ") & "\r"
+                  
+                  anterior = buscar.buscaIdUd(var.entrada_idconcepto[a])
+                  sumaentrada += var.entrada_medidaconcepto[a]
+                  sumasalida += var.entrada_salida[a]
+                  sumacosteentrada += costeentrada
+                  sumacostesalida += costesalida
+                  GOTO primeraEntrada
+       ELSE 
+       'quiere decir que no es el primero que escribe
+         IF buscar.buscaIdUd(var.entrada_idconcepto[a]) = anterior THEN 
+              'escribo igual que antes
+                   datos = buscar.buscaIdUd(var.entrada_idconcepto[a])
+                   datos &= "|" & buscar.buscaUd(var.entrada_idconcepto[a])
+                   
+                   datos &= "|" & buscar.buscaDenoConcepto(var.entrada_idconcepto[a])
+                    datos &= "|" & var.entrada_medidaconcepto[a]
+                    datos &= "|" & var.entrada_salida[a]
+                    datos &= "|" & Str$(var.entrada_medidaconcepto[a] - var.entrada_salida[a]) 'acopio dif entre entradas-salidas
+                    datos &= "|" & var.entrada_precio[a]
+                    datos &= "|" & var.entrada_tipoprecio[a]
+                    costeentrada = var.entrada_medidaconcepto[a] * var.entrada_precio[a]
+                    datos &= "|" & Str$(Round(costeentrada, -2)) 'Coste_Entrada
+                  costesalida = var.entrada_salida[a] * var.entrada_precio[a]
+                  datos &= "|" & Str$(Round(costesalida, -2)) ' Coste_Salida  
+                  datos &= "|" & Str$(costeentrada - costesalida) ' Coste_Acopio" 
+                  TextAreaInforme.text &= Escribe.esquemaGenerico(esquema, datos, "   #### ###  ") & "\r"
+                  
+                  anterior = buscar.buscaIdUd(var.entrada_idconcepto[a])
+                  sumaentrada += var.entrada_medidaconcepto[a]
+                  sumasalida += var.entrada_salida[a]
+                  sumacosteentrada += costeentrada
+                  sumacostesalida += costesalida
+                  
+              ELSE 
+              
+              'escribo tutales
+              datos = Str$(sumaentrada)
+              datos &= "|" & Str$(sumasalida)
+              datos &= "|" & Str$(sumaentrada - sumasalida)
+              datos &= "|" & Str$(sumacosteentrada)
+              datos &= "|" & Str$(sumacostesalida)
+              datos &= "|" & Str$(sumacosteentrada - sumacostesalida)
+              esquema2 = "                                          ---------------- ------------- ----------------                     ------------- ------------   -------------"
+              TextAreaInforme.text &= esquema2 & "\r"
+              TextAreaInforme.text &= Escribe.esquemaGenerico(esquema2, datos, "######  ") & "\r" & "\r"
+              
+              'empiezo otro concepto
+                  anterior = buscar.buscaIdUd(var.entrada_idconcepto[a])
+
+              costetotalentrada += sumacosteentrada
+              costetotalsalida += sumacostesalida
+              costatotalacopio += sumacosteentrada - sumacostesalida
+
+
+                  sumaentrada = 0
+                  sumasalida = 0
+                  sumacosteentrada = 0
+                  sumacostesalida = 0
+              
+              'escribo concepto siguiente
+                datos = buscar.buscaIdUd(var.entrada_idconcepto[a])
+                   datos &= "|" & buscar.buscaUd(var.entrada_idconcepto[a])
+                   datos &= "|" & buscar.buscaDenoConcepto(var.entrada_idconcepto[a])
+                    datos &= "|" & var.entrada_medidaconcepto[a]
+                    datos &= "|" & var.entrada_salida[a]
+                    datos &= "|" & Str$(var.entrada_medidaconcepto[a] - var.entrada_salida[a]) 'acopio dif entre entradas-salidas
+                    datos &= "|" & var.entrada_precio[a]
+                    datos &= "|" & var.entrada_tipoprecio[a]
+                    costeentrada = var.entrada_medidaconcepto[a] * var.entrada_precio[a]
+                    datos &= "|" & Str$(Round(costeentrada, -2)) 'Coste_Entrada
+                  costesalida = var.entrada_salida[a] * var.entrada_precio[a]
+                  datos &= "|" & Str$(Round(costesalida, -2)) ' Coste_Salida  
+                  datos &= "|" & Str$(costeentrada - costesalida) ' Coste_Acopio" 
+                  TextAreaInforme.text &= Escribe.esquemaGenerico(esquema, datos, "   #### ###  ") & "\r"
+                  
+                  anterior = buscar.buscaIdUd(var.entrada_idconcepto[a])
+                  sumaentrada += var.entrada_medidaconcepto[a]
+                  sumasalida += var.entrada_salida[a]
+                  sumacosteentrada += costeentrada
+                  sumacostesalida += costesalida
+              ENDIF 
+       ENDIF 
+      END IF
+      
+primeraEntrada:
+NEXT
+
+IF anterior <> "" THEN 
+'imprimo totales en el ultimo 
+              datos = Str$(sumaentrada) 
+              datos &= "|" & Str$(sumasalida)
+              datos &= "|" & Str$(sumaentrada - sumasalida)
+              datos &= "|" & Str$(sumacosteentrada)
+              datos &= "|" & Str$(sumacostesalida)
+              datos &= "|" & Str$(sumacosteentrada - sumacostesalida)
+               esquema2 = "                                          ---------------- ------------- ----------------                     ------------- ------------   -------------"
+              TextAreaInforme.text &= esquema2 & "\r"
+              TextAreaInforme.text &= Escribe.esquemaGenerico(esquema2, datos, "######  ") & "\r"
+              
+              costetotalentrada += sumacosteentrada
+              costetotalsalida += sumacostesalida
+              costatotalacopio += sumacosteentrada - sumacostesalida
+
+ENDIF
+
+
+' debe de imprimir el total Coste Entrada, total Coste Salida, Total Coste En Acopio
+
+datos = Str$(costetotalentrada) 
+              datos &= "|" & Str$(costetotalsalida)
+              datos &= "|" & Str$(costatotalacopio)
+                esquema2 = "                                                                                                              ------------- ------------   -------------"
+  TextAreaInforme.text &= esquema2 & "\r"
+   TextAreaInforme.text &= "                                                                                                       TOTALES     ENTRADA     SALIDA          ACOPIO" & "\r"
+              TextAreaInforme.text &= Escribe.esquemaGenerico(esquema2, datos, "###  ") & "\r"
+              
+
+
+
+TextAreaInforme.text &= "\r\r" & "Entrada/Salidas de la obra " & FMain.ComboBoxObras.text & "\r" & "Listado generado en fecha: " & Format$(Now, " dddd yyyy/mm/dd hh: nn: ss ")
+
+END
+
+
+'--------------------------------------------------Generacion Listado -----------------------------
+'-----------------------------------------------------Conceptos-----------------------------------
+'--------------------------------------------------------------------------------------------------
+
+
+PUBLIC SUB generaConceptos()
+ DIM a AS Integer
+ DIM b AS Integer
+ DIM fila AS Integer
+ DIM numeracion AS NEW Integer[]
+ DIM c AS Integer
+ DIM lista AS NEW String[]
+ DIM esquema AS String
+ DIM datos AS String
+ 
+ 'Message.Info("Se lista los conceptos de la obra actual ( " & FMain.ComboBoxObras.text & " )") 
+'ordenar alfabeticamente.....
+lista.Resize(var.concepto_numero)
+
+FOR a = 0 TO var.concepto_numero - 1
+lista[a] = var.conceptotipo[a] & var.concepto_idudobra[a] & var.concepto_nombre[a]
+NEXT 
+
+numeracion = OrdenacionLista.listaOrd(lista, var.concepto_numero)
+
+ TextAreaInforme.text = "Conceptos de la obra " & FMain.ComboBoxObras.text & "\r"
+ TextAreaInforme.text &= "Listado generado en fecha: " & Format$(Now, "dddd yyyy/mm/dd hh:nn:ss") & "\r\r"
+
+esquema = "Tipo             Id:        Ud.  Nombre                    Medicion       Precio      " 
+
+ TextAreaInforme.text &= Escribe.subraya(esquema) & "\r"
+  FOR c = 0 TO var.concepto_numero - 1 
+    a = numeracion[c]
+  
+  
+  IF var.concepto_id[a] <> "IdB" AND FMain.ComboBoxObras.text = var.concepto_Obra[a] THEN
+        datos = var.conceptotipo[a] 'texto
+       datos &= "|" & var.concepto_idudobra[a] 'texto
+       datos &= "|" & var.concepto_ud[a] 'texto
+       datos &= "|" & var.concepto_nombre[a] 'texto
+       datos &= "|" & var.concepto_med[a] 'numero
+       datos &= "|" & var.concepto_precio[a] 'numero
+      
+          'tipo valido "   ##   "
+       TextAreaInforme.text &= Escribe.esquemaGenerico(esquema, datos, "    ##   ") & "\r"
+  
+    END IF
+   
+  NEXT 
+    TextAreaInforme.text &= "\r\r" & "Conceptos de la obra " & FMain.ComboBoxObras.text & "\r" & "Listado generado en fecha: " & Format$(Now, "dddd yyyy/mm/dd hh:nn:ss") 
+ END
+
+'--------------------------------------------------Generacion Listado -----------------------------
+'-----------------------------------------------------Albaranes------------------------------------
+'--------------------------------------------------------------------------------------------------
+
+PUBLIC SUB generaAlbaranes()
+'PUBLIC alb_id AS NEW String[]
+'PUBLIC alb_numeroprov AS NEW string[] 'numero del albaran dado por el proveedor
+'PUBLIC alb_prov AS NEW String[]
+'PUBLIC alb_fecha AS NEW date[] 'fecha del albaran
+'PUBLIC alb_idobra AS NEW String[]
+'PUBLIC alb_imp AS NEW String[]
+'PUBLIC alb_fechaEnt AS NEW date[] 'entrada en obra
+'PUBLIC alb_valor AS NEW float[]
+'PUBLIC albmemoria AS NEW Integer[]
+'PUBLIC alb_numero AS Integer '
+ DIM a AS Integer
+ DIM b AS Integer
+ DIM fila AS Integer
+ DIM numeracion AS NEW Integer[]
+ DIM c AS Integer
+ DIM lista AS NEW String[]
+ DIM esquema AS String
+  DIM datos AS String
+  DIM elementos AS Integer
+  'para subtotales
+DIM esquema2 AS String
+DIM validar AS Boolean
+DIM anterior AS String
+DIM SUBtotal AS Float
+DIM linea AS String
+  DIM sumaalbaran AS Float
+  
+ 'Message.Info("Se lista los albaranes de la obra actual ( " & FMain.ComboBoxObras.text & " )") 
+'ordenar alfabeticamente.....
+elementos = var.alb_numero 
+lista.Resize(elementos)
+
+FOR a = 0 TO elementos - 1
+  lista[a] = var.alb_prov[a] & var.alb_fecha[a] & var.alb_numeroprov[a] 'ordena primero por proveedor , fecha albaran y luego por numero de proveedor
+NEXT 
+
+numeracion = OrdenacionLista.listaOrd(lista, elementos)
+
+ TextAreaInforme.text = "Albaran de la obra " & FMain.ComboBoxObras.text & "\r"
+ TextAreaInforme.text &= "Listado generado en fecha: " & Format$(Now, "dddd yyyy/mm/dd hh:nn:ss") & "\r\r"
+
+esquema = "Proveedor       Numero    Valor        Fecha       FechaEnt    Imp" 
+ esquema2 = "                           --------------"
+TextAreaInforme.text &= Escribe.subraya(esquema) & "\r"
+
+  FOR c = 0 TO elementos - 1 
+    a = numeracion[c]
+  validar = var.alb_id[a] <> "IdB" AND FMain.ComboBoxObras.text = var.alb_idobra[a]
+  IF validar THEN
+         'imprimir un sumatorio por cada proveedor:
+         IF anterior = "" THEN 
+         datos = var.alb_prov[a] 'texto
+         datos &= "|" & var.alb_numeroprov[a] 'texto 
+         datos &= "|" & var.alb_valor[a] 'numero
+         datos &= "|" & Format$(var.alb_fecha[a], "dd/mm/yy") 'texto (fecha en texto)
+         datos &= "|" & Format$(var.alb_fechaEnt[a], "dd/mm/yy") 'texto (fecha en texto)
+         datos &= "|" & var.alb_imp[a] 'texto
+         TextAreaInforme.text &= Escribe.esquemaGenerico(esquema, datos, "  #        ") & "\r"
+         anterior = var.alb_prov[a]
+         sumaalbaran += var.alb_valor[a]
+         GOTO primeraalbaran
+         ELSE 
+         'quiere decir que no es el primera factura que imprime
+            IF anterior = var.alb_prov[a] THEN
+                     'estamos en el mismo proveedor
+                      datos = var.alb_prov[a] 'texto
+                      datos &= "|" & var.alb_numeroprov[a] 'texto 
+                      datos &= "|" & var.alb_valor[a] 'numero
+                      datos &= "|" & Format$(var.alb_fecha[a], "dd/mm/yy") 'texto (fecha en texto)
+                      datos &= "|" & Format$(var.alb_fechaEnt[a], "dd/mm/yy") 'texto (fecha en texto)
+                      datos &= "|" & var.alb_imp[a] 'texto
+                      TextAreaInforme.text &= Escribe.esquemaGenerico(esquema, datos, "  #        ") & "\r"
+                      anterior = var.alb_prov[a]
+                      sumaalbaran += var.alb_valor[a]
+                      GOTO primeraalbaran
+                      ELSE 
+                        'hemos cambiado de proveedor
+             ' tenemos que incluir el total de proveedor antes de pasar al nuevo, el subtotal
+                     datos = sumaalbaran
+                      
+                      linea = "             SUBTOTAL      --------------"
+                      TextAreaInforme.text &= linea & "\r"
+                      TextAreaInforme.text &= Escribe.esquemaGenerico(esquema2, datos, "#  ") & "\r" & "\r"
+                      SUBtotal += sumaalbaran
+                      'empiezo otro proveedor
+                      sumaalbaran = 0
+                      anterior = var.alb_valor[a]
+                      'escribo el siguiente proveedor
+                      datos = var.alb_prov[a] 'texto
+                      datos &= "|" & var.alb_numeroprov[a] 'texto 
+                      datos &= "|" & var.alb_valor[a] 'numero
+                      datos &= "|" & Format$(var.alb_fecha[a], "dd/mm/yy") 'texto (fecha en texto)
+                      datos &= "|" & Format$(var.alb_fechaEnt[a], "dd/mm/yy") 'texto (fecha en texto)
+                      datos &= "|" & var.alb_imp[a] 'texto
+                      TextAreaInforme.text &= Escribe.esquemaGenerico(esquema, datos, "  #        ") & "\r"
+                      anterior = var.alb_prov[a]
+                      sumaalbaran += var.alb_valor[a]
+         
+   ENDIF 
+   ENDIF 
+   END IF
+  
+  
+  primeraalbaran:
+  NEXT 
+  
+  IF anterior <> "" THEN
+             datos = sumaalbaran
+             linea = "             SUBTOTAL      --------------"
+             TextAreaInforme.text &= linea & "\r"
+                          TextAreaInforme.text &= Escribe.esquemaGenerico(esquema2, datos, "#  ") & "\r" & "\r"
+             SUBtotal += sumaalbaran
+             
+          'e imprimo el total
+                datos = SUBtotal
+            
+            linea = "                TOTAL      --------------"
+             TextAreaInforme.text &= linea & "\r"
+             TextAreaInforme.text &= Escribe.esquemaGenerico(esquema2, datos, "#  ") & "\r" & "\r"
+            
+   END IF
+   
+
+
+
+    TextAreaInforme.text &= "\r\r" & "Albaran de la obra " & FMain.ComboBoxObras.text & "\r" & "Listado generado en fecha: " & Format$(Now, "dddd yyyy/mm/dd hh:nn:ss") 
+END
+
+'--------------------------------------------------------------------------------------
+'------------------------------------- facturas ---------------------------------------
+'--------------------------------------------------------------------------------------
+
+PUBLIC SUB generaFacturas()
+  ' fact_id AS NEW String[] 'id dado por el programa a cada factura introducida
+' fact_prov AS NEW String[] 'nombre del proveedor de esta factura
+' fact_nprov AS NEW String[] 'numero de factura que da n ºfacturadadaproveedor   (nº de factura que le da el proveedor)
+' fact_idobra AS NEW String[] 'obra a la que pertenece la factura
+' fact_fecha AS NEW Date[] 'fecha de la factura (la que tiene la factura)
+' fact_fecha_imp AS NEW date[] 'fecha de imputacion factura
+' fact_valor AS NEW float[] ' suma de los valores de los albaranes de la factura
+' fact_numero AS Integer 'numero de facturas existentes    
+ DIM a AS Integer
+ DIM b AS Integer
+ DIM fila AS Integer
+ DIM numeracion AS NEW Integer[]
+ DIM c AS Integer
+ DIM lista AS NEW String[]
+ DIM esquema AS String
+ DIM datos AS String
+DIM elementos AS Integer
+'para subtotales
+DIM sumaproveedor AS Float
+DIM esquema2 AS String
+DIM validar AS Boolean
+DIM anterior AS String
+DIM SUBtotal AS Float
+DIM linea AS String
+
+ 'Message.Info("Se lista las facturas de la obra actual ( " & FMain.ComboBoxObras.text & " )") 
+'ordenar alfabeticamente.....
+
+elementos = var.fact_numero
+lista.Resize(elementos)
+
+
+'ordena los elementos 
+FOR a = 0 TO elementos - 1
+  lista[a] = var.fact_prov[a] & var.fact_fecha[a] & var.fact_nprov[a] 'ordena primero por proveedor, fecha factura y luego por numero de proveedor
+NEXT 
+
+numeracion = OrdenacionLista.listaOrd(lista, elementos)
+
+ TextAreaInforme.text = "Facturas de la obra " & FMain.ComboBoxObras.text & "\r"
+ TextAreaInforme.text &= "Listado generado en fecha: " & Format$(Now, "dddd yyyy/mm/dd hh:nn:ss") & "\r\r"
+
+esquema = "Proveedor       Numero    Fecha        Fecha_Imp       Importe            " 
+
+TextAreaInforme.text &= Escribe.subraya(esquema) & "\r"
+
+  FOR c = 0 TO elementos - 1 
+    a = numeracion[c]
+    validar = var.fact_id[a] <> "IdB" AND FMain.ComboBoxObras.text = var.fact_idobra[a] 
+    
+  IF validar THEN
+         'imprimir un sumatorio por cada proveedor:
+         IF anterior = "" THEN 
+                  datos = var.fact_prov[a] 'texto
+                  datos &= "|" & var.fact_nprov[a] 'texto 
+                  datos &= "|" & Format$(var.fact_fecha[a], "dd/mm/yy") 'texto (fecha en texto)
+                  datos &= "|" & Format$(var.fact_fecha_imp[a], "dd/mm/yy") 'texto (fecha en texto)
+                  datos &= "|" & var.fact_valor[a] 'valor
+                  TextAreaInforme.text &= Escribe.esquemaGenerico(esquema, datos, "    #  ") & "\r"
+                  sumaproveedor += var.fact_valor[a]
+                  anterior = var.fact_prov[a] 
+                  GOTO primeraFACTURA
+         ELSE 
+         'quiere decir que no es el primera factura que imprime
+            IF anterior = var.fact_prov[a] THEN
+                  'estamos en el mismo proveedor
+                   datos = var.fact_prov[a] 'texto
+                  datos &= "|" & var.fact_nprov[a] 'texto 
+                  datos &= "|" & Format$(var.fact_fecha[a], "dd/mm/yy") 'texto (fecha en texto)
+                  datos &= "|" & Format$(var.fact_fecha_imp[a], "dd/mm/yy") 'texto (fecha en texto)
+                  datos &= "|" & var.fact_valor[a] 'valor
+                  TextAreaInforme.text &= Escribe.esquemaGenerico(esquema, datos, "    #  ") & "\r"
+                  sumaproveedor += var.fact_valor[a]
+                  anterior = var.fact_prov[a] 
+                  GOTO primeraFACTURA
+            ELSE 
+             'hemos cambiado de proveedor
+             ' tenemos que incluir el total de proveedor antes de pasar al nuevo, el subtotal
+             datos = sumaproveedor
+          esquema2 = "                                                        ------------------"
+             linea = "                                         SUBTOTAL       ------------------"
+             TextAreaInforme.text &= linea & "\r"
+             TextAreaInforme.text &= Escribe.esquemaGenerico(esquema2, datos, "#  ") & "\r" & "\r"
+             SUBtotal += sumaproveedor
+            'empiezo otro proveedor
+            sumaproveedor = 0
+            anterior = var.fact_prov[a] 
+            
+            'escribo el siguiente proveedor con la 1º factura
+                  datos = var.fact_prov[a] 'texto
+                  datos &= "|" & var.fact_nprov[a] 'texto 
+                  datos &= "|" & Format$(var.fact_fecha[a], "dd/mm/yy") 'texto (fecha en texto)
+                  datos &= "|" & Format$(var.fact_fecha_imp[a], "dd/mm/yy") 'texto (fecha en texto)
+                  datos &= "|" & var.fact_valor[a] 'valor
+                  TextAreaInforme.text &= Escribe.esquemaGenerico(esquema, datos, "    #  ") & "\r"
+                  sumaproveedor += var.fact_valor[a]
+                  anterior = var.fact_prov[a] 
+   ENDIF 
+   ENDIF 
+   ENDIF 
+   
+primeraFACTURA:
+NEXT 
+
+
+IF anterior <> "" THEN 
+  'imprimo totales del ultimo proveedor
+             datos = sumaproveedor
+  esquema2 = "                                                        ------------------"
+     LINEA = "                                            SUBTOTAL    ------------------"
+             TextAreaInforme.text &= LINEA & "\r"
+             TextAreaInforme.text &= Escribe.esquemaGenerico(esquema2, datos, "#  ") & "\r" & "\r"
+             SUBtotal += sumaproveedor
+   'e imprimo el total de facturas
+             datos = SUBtotal
+   esquema2 = "                                                        ------------------"
+      LINEA = "                                            TOTAL       ------------------"
+             TextAreaInforme.text &= linea & "\r"
+             TextAreaInforme.text &= Escribe.esquemaGenerico(esquema2, datos, "#  ") & "\r" & "\r"
+            
+   END IF
+   
+   
+    TextAreaInforme.text &= "\r\r" & "Facturas la obra " & FMain.ComboBoxObras.text & "\r" & "Listado generado en fecha: " & Format$(Now, "dddd yyyy/mm/dd hh:nn:ss")   
+      
+      
+END
+
+
+
+
+PUBLIC SUB GridInforme_Click()
+
+  
+
+END
+
+PUBLIC SUB Button1_Click()
+
+  ME.CLOSE
+
+END
+
+'---------------------------------------------------------------
+'botones del informe
+'---------------------------------------------------------------
+
+PUBLIC SUB ToolButton3_Click()
+  Clipboard.Copy(TextAreaInforme.Text)
+  
+END
+
+
+
+PUBLIC SUB ToolButton1_Click()
+'guardar en formato txt
+DIM destino AS String
+DIM fecha AS String
+Dialog.Title = "Escriba  un nombre de archivo para guardar el texto"
+Dialog.Filter = ["", ""]
+Dialog.Path = User.Name 
+
+
+
+dialog.Filter = ["*.txt", "archivo de texto simple"]
+IF NOT Dialog.SaveFile() THEN
+  IF Right$(Dialog.Path, Len(".txt")) <> ".txt" THEN
+  destino = Dialog.Path & ".txt"
+  ELSE
+  destino = Dialog.Path 
+  END IF
+  
+   File.Save(destino, TextAreaInforme.text)
+   Message.info("Salvado correctamente")
+END IF
+  
+
+END
+
+'--------------------------------------------------Generacion Listado -----------------------------
+'------------------------------------------------Albaranes Descompuestos----------------------------
+'--------------------------------------------------------------------------------------------------
+
+PUBLIC SUB generaraAlbaranesDescompuesto()
+'PUBLIC alb_id AS NEW String[]
+'PUBLIC alb_numeroprov AS NEW string[] 'numero del albaran dado por el proveedor
+'PUBLIC alb_prov AS NEW String[]
+'PUBLIC alb_fecha AS NEW date[] 'fecha del albaran
+'PUBLIC alb_idobra AS NEW String[]
+'PUBLIC alb_imp AS NEW String[]
+'PUBLIC alb_fechaEnt AS NEW date[] 'entrada en obra
+'PUBLIC alb_valor AS NEW float[]
+'PUBLIC albmemoria AS NEW Integer[]
+'PUBLIC alb_numero AS Integer '
+ DIM a AS Integer
+ DIM b AS Integer
+ DIM fila AS Integer
+ DIM numeracion AS NEW Integer[]
+ DIM c AS Integer
+ DIM lista AS NEW String[]
+ DIM esquema AS String
+  DIM datos AS String
+  DIM elementos AS Integer
+  'para subtotales
+DIM esquema2 AS String
+DIM validar AS Boolean
+DIM anterior AS String
+DIM SUBtotal AS Float
+DIM linea AS String
+  DIM sumaalbaran AS Float
+  
+' Message.Info("Se lista los albaranes de la obra actual ( " & FMain.ComboBoxObras.text & " )") 
+'ordenar alfabeticamente.....
+elementos = var.alb_numero 
+lista.Resize(elementos)
+
+FOR a = 0 TO elementos - 1
+  lista[a] = var.alb_prov[a] & var.alb_fecha[a] & var.alb_numeroprov[a] 'ordena primero por proveedor, fecha y luego por numero de proveedor
+NEXT 
+
+numeracion = OrdenacionLista.listaOrd(lista, elementos)
+
+ TextAreaInforme.text = "Albaran de la obra " & FMain.ComboBoxObras.text & "\r"
+ TextAreaInforme.text &= "Listado generado en fecha: " & Format$(Now, "dddd yyyy/mm/dd hh:nn:ss") & "\r\r"
+
+esquema2 = "                           --------------"
+esquema = "Proveedor       Numero    Valor        Fecha       FechaEnt    Imp" 
+TextAreaInforme.text &= Escribe.subraya(esquema) & "\r"
+
+  FOR c = 0 TO elementos - 1 
+    a = numeracion[c]
+  validar = var.alb_id[a] <> "IdB" AND FMain.ComboBoxObras.text = var.alb_idobra[a]
+  IF validar THEN
+         'imprimir un sumatorio por cada proveedor:
+         IF anterior = "" THEN 
+         datos = var.alb_prov[a] 'texto
+         datos &= "|" & var.alb_numeroprov[a] 'texto 
+         datos &= "|" & var.alb_valor[a] 'numero
+         datos &= "|" & Format$(var.alb_fecha[a], "dd/mm/yy") 'texto (fecha en texto)
+         datos &= "|" & Format$(var.alb_fechaEnt[a], "dd/mm/yy") 'texto (fecha en texto)
+         datos &= "|" & var.alb_imp[a] 'texto
+         TextAreaInforme.text &= Escribe.esquemaGenerico(esquema, datos, "  #        ") & "\r"
+         anterior = var.alb_prov[a]
+         sumaalbaran += var.alb_valor[a]
+         TextAreaInforme.text &= DescompuestoAlbaran(var.alb_id[a])
+         GOTO primeraalbaran
+         ELSE 
+         'quiere decir que no es el primera factura que imprime
+            IF anterior = var.alb_prov[a] THEN
+                     'estamos en el mismo proveedor
+                      datos = var.alb_prov[a] 'texto
+                      datos &= "|" & var.alb_numeroprov[a] 'texto 
+                      datos &= "|" & var.alb_valor[a] 'numero
+                      datos &= "|" & Format$(var.alb_fecha[a], "dd/mm/yy") 'texto (fecha en texto)
+                      datos &= "|" & Format$(var.alb_fechaEnt[a], "dd/mm/yy") 'texto (fecha en texto)
+                      datos &= "|" & var.alb_imp[a] 'texto
+                      TextAreaInforme.text &= Escribe.esquemaGenerico(esquema, datos, "  #        ") & "\r"
+                      anterior = var.alb_prov[a]
+                      sumaalbaran += var.alb_valor[a]
+                      TextAreaInforme.text &= DescompuestoAlbaran(var.alb_id[a])
+                      GOTO primeraalbaran
+                      ELSE 
+                        'hemos cambiado de proveedor
+             ' tenemos que incluir el total de proveedor antes de pasar al nuevo, el subtotal
+                     datos = sumaalbaran
+                     
+                      linea = "             SUBTOTAL      --------------"
+                      TextAreaInforme.text &= linea & "\r"
+                      TextAreaInforme.text &= Escribe.esquemaGenerico(esquema2, datos, "#  ") & "\r" & "\r"
+                      SUBtotal += sumaalbaran
+                      'empiezo otro proveedor
+                      sumaalbaran = 0
+                      anterior = var.alb_valor[a]
+                      'escribo el siguiente proveedor
+                      datos = var.alb_prov[a] 'texto
+                      datos &= "|" & var.alb_numeroprov[a] 'texto 
+                      datos &= "|" & var.alb_valor[a] 'numero
+                      datos &= "|" & Format$(var.alb_fecha[a], "dd/mm/yy") 'texto (fecha en texto)
+                      datos &= "|" & Format$(var.alb_fechaEnt[a], "dd/mm/yy") 'texto (fecha en texto)
+                      datos &= "|" & var.alb_imp[a] 'texto
+                      TextAreaInforme.text &= Escribe.esquemaGenerico(esquema, datos, "  #        ") & "\r"
+                      anterior = var.alb_prov[a]
+                      sumaalbaran += var.alb_valor[a]
+                      TextAreaInforme.text &= DescompuestoAlbaran(var.alb_id[a])
+   ENDIF 
+   ENDIF 
+   END IF
+  
+  
+  primeraalbaran:
+  NEXT 
+  
+  IF anterior <> "" THEN
+             datos = sumaalbaran
+           linea = "             SUBTOTAL      --------------"
+             TextAreaInforme.text &= linea & "\r"
+             TextAreaInforme.text &= Escribe.esquemaGenerico(esquema2, datos, "#  ") & "\r" & "\r"
+             SUBtotal += sumaalbaran
+          'e imprimo el total
+                datos = SUBtotal
+            
+            linea = "                TOTAL      --------------"
+             TextAreaInforme.text &= linea & "\r"
+             TextAreaInforme.text &= Escribe.esquemaGenerico(esquema2, datos, "#  ") & "\r" & "\r"
+   END IF
+    TextAreaInforme.text &= "\r\r" & "Albaran de la obra " & FMain.ComboBoxObras.text & "\r" & "Listado generado en fecha: " & Format$(Now, "dddd yyyy/mm/dd hh:nn:ss") 
+END
+
+
+PUBLIC FUNCTION DescompuestoAlbaran(idalbaran AS String) AS String
+  DIM LINEa AS String
+  DIM ESQUEMA AS String
+  DIM A AS Integer
+  DIM DATOS AS String
+ '"idAlb" buscar.AlbaranSimple(GridViewAlbaran[GridViewalbaran.ROW, 2].TEXT)
+  esquema = "                                                                     Ud  Concepto                                Medida      Precio      Total        TipoPrecio  TipoConcepto" 
+  
+  LINEa = Escribe.subraya(esquema) & "\r"
+ 
+  'LINEa = ESQUEMA & "\r"
+      
+  FOR a = 0 TO var.entrada_numero - 1
+'PRINT var.Prov_id[a]; "IdB"; var.Prov_id[a] = "IdB"
+
+IF var.entrada_idconcepto[a] <> "IdB" AND idalbaran = var.entrada_id[a] THEN 
+      
+      datos = buscar.buscaUd(var.entrada_idconcepto[a])
+      datos &= "|" & buscar.buscaDenoConcepto(var.entrada_idconcepto[a])
+      datos &= "|" & var.entrada_medidaconcepto[a]
+      datos &= "|" & var.entrada_precio[a]
+      datos &= "|" & Str$(var.entrada_medidaconcepto[a] * var.entrada_precio[a])
+      datos &= "|" & var.entrada_tipoprecio[a]
+      datos &= "|" & buscar.buscatipoconcepto(var.entrada_idconcepto[a])
+      LINEa &= Escribe.esquemaGenerico(esquema, datos, "  ###               ") & "\r"
+      END IF
+NEXT
+  
+  RETURN linea
+  
+END
+
+
+'-------------------------------------------------------------------------------------------
+' Resumen Prov. Alb. Fact y saldos de obra
+'-------------------------------------------------------------------------------------------
+SUB generaraResumenProvAlbFact()
+ DIM a AS Integer
+ DIM b AS Integer
+ DIM fila AS Integer
+ DIM numeracion AS NEW Integer[]
+ DIM c AS Integer
+ DIM lista AS NEW String[]
+ DIM esquema AS String
+  DIM datos AS String
+  DIM elementos AS Integer
+  'para subtotales
+DIM esquema2 AS String
+DIM validar AS Boolean
+DIM anterior AS String
+DIM SUBtotal AS Float
+DIM linea AS String
+ 
+'para fecha
+  DIM hastafecha AS Date
+  'for next
+  DIM c1 AS Integer
+  DIM provedorC AS String
+  DIM sumafactura AS Float
+  DIM sumaalbaran AS Float
+  DIM SUBtotalalbaran AS Float
+  DIM SUBtotalfactura AS Float
+  
+
+'por cada proveedor de una determinada obra hay que:
+'una columna sumando los albaranes
+'otra columnas sumando las factura
+'imprimir un sumatorio parcial por cada proveedor y total por Obra
+'discrimirnar hasta una fecha (de entrada en obra) no la que venga en factura o albaran
+
+numeracion = OrdenacionLista.listaOrd(var.Prov_nombre, var.Prov_numero)
+
+ hastafecha = Preguntarhastafecha()
+ TextAreaInforme.text = "Informe de Proveedores / Albaranes / Facturas / Saldos hasta la fecha " & Str$(hastafecha) & "\r"
+ TextAreaInforme.text &= "Listado generado el " & Format$(Now, "dddd yyyy/mm/dd hh:nn:ss") & "\r\r"
+  
+  esquema = "Nif:        Proveedor          Albaranes         Facturas          Saldos        " 
+  textareainforme.text &= Escribe.subraya(esquema) & "\r"
+  
+  FOR c = 0 TO var.Prov_numero - 1
+  a = numeracion[c]
+  provedorC = var.Prov_id[a]
+  
+  IF var.Prov_id[a] <> "IdB" THEN
+        'lee todos los albaranes,que no esten borrados
+        ', los que sean del proveedor 
+        'y meno o igual de fecha'
+        'los que sean de la obra
+        ' le suma su valor
+        sumaalbaran = 0
+        FOR c1 = 0 TO var.alb_numero - 1
+         validar = var.alb_prov[c1] = var.Prov_nombre[a] AND var.alb_fechaEnt[c1] <= hastafecha AND var.alb_id[c1] <> "IdB" AND FMain.LabelidObraInforme.text = var.alb_idobra[c1]
+              IF validar THEN 
+              sumaalbaran += var.alb_valor[c1]
+              END IF
+        NEXT 
+          
+          
+          
+          
+          ' lee todas las facturas, que no esten borrados, las que sean del proveedor y menor o igual de fecha, le suma su valor
+            sumafactura = 0
+            FOR c1 = 0 TO var.fact_numero - 1
+            validar = var.fact_prov[c1] = var.Prov_nombre[a] AND var.fact_fecha_imp[c1] <= hastafecha AND var.fact_id[c1] <> "IdB" AND FMain.LabelidObraInforme.text = var.fact_idobra[c1]
+              IF validar THEN 
+               sumafactura += var.fact_valor[c1]
+              END IF
+             NEXT 
+          
+            datos = var.Prov_Nif[a]
+            datos &= "|" & var.Prov_nombre[a]
+            datos &= "|" & Str$(sumaalbaran)
+            datos &= "|" & Str$(sumafactura)
+            datos &= "|" & Str$(sumaalbaran - sumafactura)
+          SUBtotalalbaran += sumaalbaran ' no poner &= que no son cadenas de caracteres
+          SUBtotalfactura += sumafactura ' no poner &= que no son cadenas de caracteres
+        '  TextAreaInforme.text &= "          Subtotal             ------------------  ---------------  -----------     " & "\r"
+          
+          TextAreaInforme.text &= Escribe.esquemaGenerico(esquema, datos, "  ###  ") & "\r" '& "\r"
+          
+  
+ENDIF 
+
+NEXT 
+
+'imprimo totales
+datos = Str$(SUBtotalalbaran)
+datos &= "|" & Str$(SUBtotalfactura)
+datos &= "|" & Str$(SUBtotalalbaran - SUBtotalfactura)
+            
+'hay que imprimir totales
+TextAreaInforme.text &= "             Totales          ------------------  ---------------  -----------     " & "\r"
+esquema2 = "                                ---------------  -------------    ------------     " 
+          TextAreaInforme.text &= Escribe.esquemaGenerico(esquema2, datos, "###  ") & "\r" & "\r"
+          
+
+
+TextAreaInforme.text &= "\r\r" & "Informe de Proveedores / Albaranes / Facturas / Saldos hasta la fecha " & Str$(hastafecha) & "\r"
+TextAreaInforme.text &= "Listado generado el " & Format$(Now, "dddd yyyy/mm/dd hh:nn:ss") 
+ 
+END 
+
+
+
+'funcion preguntar hasta que fecha
+PUBLIC FUNCTION Preguntarhastafecha() AS Date
+  
+  var.fechaincluida = Val(FMain.LabelFechaTrabajoInforme.text)
+  
+  Ffechadia.ShowModal
+  
+  RETURN var.fechaincluida
+  
+END
+
+'-------------------------------------------------------------------------------------
+'                              Descompuesto de Factura
+'-------------------------------------------------------------------------------------
+
+SUB generaraDescompuestoFactura()
+' fact_id AS NEW String[] 'id dado por el programa a cada factura introducida
+' fact_prov AS NEW String[] 'nombre del proveedor de esta factura
+' fact_nprov AS NEW String[] 'numero de factura que da n ºfacturadadaproveedor   (nº de factura que le da el proveedor)
+' fact_idobra AS NEW String[] 'obra a la que pertenece la factura
+' fact_fecha AS NEW Date[] 'fecha de la factura (la que tiene la factura)
+' fact_fecha_imp AS NEW date[] 'fecha de imputacion factura
+' fact_valor AS NEW float[] ' suma de los valores de los albaranes de la factura
+' fact_numero AS Integer 'numero de facturas existentes    
+ DIM a AS Integer
+ DIM b AS Integer
+ DIM fila AS Integer
+ DIM numeracion AS NEW Integer[]
+ DIM c AS Integer
+ DIM lista AS NEW String[]
+ DIM esquema AS String
+ DIM datos AS String
+DIM elementos AS Integer
+'para subtotales
+DIM sumaproveedor AS Float
+DIM esquema2 AS String
+DIM validar AS Boolean
+DIM anterior AS String
+DIM SUBtotal AS Float
+DIM linea AS String
+DIM hastafecha AS Date
+
+ 'Message.Info("Se lista las facturas de la obra actual ( " & FMain.ComboBoxObras.text & " )") 
+ hastafecha = Preguntarhastafecha()
+
+'ordenar alfabeticamente.....
+elementos = var.fact_numero
+lista.Resize(elementos)
+
+'ordena los elementos 
+FOR a = 0 TO elementos - 1
+  lista[a] = var.fact_prov[a] & var.fact_fecha[a] & var.fact_nprov[a] 'ordena primero por proveedor y luego por numero de proveedor
+NEXT 
+
+numeracion = OrdenacionLista.listaOrd(lista, elementos)
+
+ TextAreaInforme.text = "Facturas de la obra " & FMain.ComboBoxObras.text & "\r"
+ TextAreaInforme.text &= "Listado generado en fecha: " & Format$(Now, "dddd yyyy/mm/dd hh:nn:ss") & ". Hasta la fecha " & Str$(hastafecha) & "\r\r"
+
+esquema = "Proveedor       Numero    Fecha        Fecha_Imp       Importe            " 
+
+TextAreaInforme.text &= esquema & "\r"
+
+  FOR c = 0 TO elementos - 1 
+    a = numeracion[c]
+    validar = var.fact_id[a] <> "IdB" AND FMain.ComboBoxObras.text = var.fact_idobra[a] AND var.fact_fecha_imp[a] <= hastafecha 
+    
+  IF validar THEN
+         'imprimir un sumatorio por cada proveedor:
+         IF anterior = "" THEN 
+                  datos = var.fact_prov[a] 'texto
+                  datos &= "|" & var.fact_nprov[a] 'texto 
+                  datos &= "|" & Format$(var.fact_fecha[a], "dd/mm/yy") 'texto (fecha en texto)
+                  datos &= "|" & Format$(var.fact_fecha_imp[a], "dd/mm/yy") 'texto (fecha en texto)
+                  datos &= "|" & var.fact_valor[a] 'valor
+                  TextAreaInforme.text &= Escribe.esquemaGenerico(esquema, datos, "    #  ") & "\r"
+                  sumaproveedor += var.fact_valor[a]
+                  anterior = var.fact_prov[a] 
+                   TextAreaInforme.text &= descompuestoFActura(var.fact_id[a], var.fact_prov[a], hastafecha, var.fact_idobra[a])
+                  GOTO primeraFACTURA
+         ELSE 
+         'quiere decir que no es el primera factura que imprime
+            IF anterior = var.fact_prov[a] THEN
+                  'estamos en el mismo proveedor
+                   datos = var.fact_prov[a] 'texto
+                  datos &= "|" & var.fact_nprov[a] 'texto 
+                  datos &= "|" & Format$(var.fact_fecha[a], "dd/mm/yy") 'texto (fecha en texto)
+                  datos &= "|" & Format$(var.fact_fecha_imp[a], "dd/mm/yy") 'texto (fecha en texto)
+                  datos &= "|" & var.fact_valor[a] 'valor
+                  TextAreaInforme.text &= Escribe.esquemaGenerico(esquema, datos, "    #  ") & "\r"
+                  sumaproveedor += var.fact_valor[a]
+                  anterior = var.fact_prov[a] 
+                  TextAreaInforme.text &= descompuestoFActura(var.fact_id[a], var.fact_prov[a], hastafecha, var.fact_idobra[a])
+                  GOTO primeraFACTURA
+            ELSE 
+             'hemos cambiado de proveedor
+             ' tenemos que incluir el total de proveedor antes de pasar al nuevo, el subtotal
+             datos = sumaproveedor
+          esquema2 = "                                                        ------------------"
+             linea = "                                         SUBTOTAL       ------------------"
+             TextAreaInforme.text &= linea & "\r"
+             TextAreaInforme.text &= Escribe.esquemaGenerico(esquema2, datos, "#  ") & "\r" & "\r"
+             SUBtotal += sumaproveedor
+            'empiezo otro proveedor
+            sumaproveedor = 0
+            anterior = var.fact_prov[a] 
+            
+            'escribo el siguiente proveedor con la 1º factura
+                  datos = var.fact_prov[a] 'texto
+                  datos &= "|" & var.fact_nprov[a] 'texto 
+                  datos &= "|" & Format$(var.fact_fecha[a], "dd/mm/yy") 'texto (fecha en texto)
+                  datos &= "|" & Format$(var.fact_fecha_imp[a], "dd/mm/yy") 'texto (fecha en texto)
+                  datos &= "|" & var.fact_valor[a] 'valor
+                  TextAreaInforme.text &= Escribe.esquemaGenerico(esquema, datos, "    #  ") & "\r"
+                  sumaproveedor += var.fact_valor[a]
+                  anterior = var.fact_prov[a] 
+                  TextAreaInforme.text &= descompuestoFActura(var.fact_id[a], var.fact_prov[a], hastafecha, var.fact_idobra[a])
+
+   ENDIF 
+   ENDIF 
+   ENDIF 
+   
+primeraFACTURA:
+NEXT 
+
+
+IF anterior <> "" THEN 
+  'imprimo totales del ultimo proveedor
+             datos = sumaproveedor
+  esquema2 = "                                                        ------------------"
+     LINEA = "                                            SUBTOTAL    ------------------"
+             TextAreaInforme.text &= LINEA & "\r"
+             TextAreaInforme.text &= Escribe.esquemaGenerico(esquema2, datos, "#  ") & "\r" & "\r"
+             SUBtotal += sumaproveedor
+   'e imprimo el total de facturas
+             datos = SUBtotal
+   esquema2 = "                                                        ------------------"
+      LINEA = "                                            TOTAL       ------------------"
+             TextAreaInforme.text &= linea & "\r"
+             TextAreaInforme.text &= Escribe.esquemaGenerico(esquema2, datos, "#  ") & "\r" & "\r"
+            
+   END IF
+   
+TextAreaInforme.text &= "Facturas de la obra " & FMain.ComboBoxObras.text & "\r"
+TextAreaInforme.text &= "Listado generado en fecha: " & Format$(Now, "dddd yyyy/mm/dd hh:nn:ss") & ". Hasta la fecha " & Str$(hastafecha) & "\r\r"
+      
+  
+END
+
+'-----------------------------------------------------------------------------------------
+'----------------------------------- alb aranes que contiene una factura -----------------
+'-----------------------------------------------------------------------------------------
+
+
+SUB descompuestoFActura(Idfactura AS String, idproveedor AS String, fechaincluida AS Date, idobra AS String) AS String
+ DIM a AS Integer
+ DIM b AS Integer
+ DIM fila AS Integer
+ DIM numeracion AS NEW Integer[]
+ DIM c AS Integer
+ DIM lista AS NEW String[]
+ DIM esquema AS String
+ DIM datos AS String
+ DIM elementos AS Integer
+  'para subtotales
+DIM esquema2 AS String
+DIM validar AS Boolean
+DIM anterior AS String
+DIM SUBtotal AS Float
+DIM linea AS String
+ DIM sumaalbaran AS Float
+ DIM descompuestotexto AS String
+ DIM contador AS Integer 'cuenta cuantos albaranes estan inclido en la factura
+ 
+ 
+ elementos = var.alb_numero 
+lista.Resize(elementos)
+
+FOR a = 0 TO elementos - 1
+  lista[a] = var.alb_prov[a] & Str$(var.alb_fechaEnt[a]) & var.alb_numeroprov[a]   'ordena primero por proveedor y luego por numero de proveedor
+NEXT 
+
+numeracion = OrdenacionLista.listaOrd(lista, elementos)
+
+
+esquema2 = "                                                                   Albaran      Valor        Fecha       FechaEnt    Imp" 
+descompuestotexto = esquema2 & "\r"
+
+  FOR c = 0 TO elementos - 1 
+    a = numeracion[c]
+    ' Comprobar que: que no este borrado, que este imputado a la factura,
+    ' que el proveedor coincida, y que la fecha de imputacion sea inferior o igual a la fechaincluida
+  validar = var.alb_id[a] <> "IdB" AND idproveedor = var.alb_prov[a] AND Mid$(var.alb_imp[a], 4, Len(var.alb_imp[a])) = idfactura AND fechaincluida >= var.alb_fechaEnt[a] AND idobra = var.alb_idobra[a]
+  
+  
+  
+  
+  IF validar THEN
+         datos = var.alb_numeroprov[a] 'texto
+         datos &= "|" & var.alb_valor[a] 'numero
+         datos &= "|" & Format$(var.alb_fecha[a], "dd/mm/yy") 'texto (fecha en texto)
+         datos &= "|" & Format$(var.alb_fechaEnt[a], "dd/mm/yy") 'texto (fecha en texto)
+         datos &= "|" & var.alb_imp[a] 'texto
+         descompuestotexto &= Escribe.esquemaGenerico(esquema2, datos, " #        ") & "\r"
+         contador += 1
+         END IF
+         
+  NEXT 
+
+IF contador > 0 THEN 
+    RETURN descompuestotexto 
+    ELSE 
+    RETURN ""
+    ENDIF 
+
+  
+END
+
+
+
+
+PUBLIC SUB ToolButtonHtml_Click()
+'EMPEZAMOS..... utilizamos caracteres internacionalizacion UTF-8
+DIM destino AS String
+DIM a AS Integer
+convertirHTML.textohtml = "<?xml version=" & Chr$(34) & "1.0" & Chr$(34) & " encoding=" & Chr$(34) & "UTF-8" & Chr$(34) & "?>" & Chr$(13)
+convertirHTML.textohtml = convertirHTML.textohtml & "<!DOCTYPE html PUBLIC " & Chr$(34) & "-//W3C//DTD XHTML 1.1//EN" & Chr$(34) & Chr$(13)
+convertirHTML.textohtml = convertirHTML.textohtml & " " & Chr$(34) & "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd" & Chr$(34) & ">" & Chr$(13)
+  
+  convertirHTML.textohtml = convertirHTML.textohtml & "<HTML xmlns=" & Chr$(34) & "http://www.w3.org/1999/xhtml" & Chr$(34) & " xml:lang =" & Chr$(34) & "es" & Chr$(34) & ">" & Chr$(13)
+  
+  convertirHTML.textohtml = convertirHTML.textohtml & "</HEAD>" & Chr$(13)
+  
+  convertirHTML.textohtml = convertirHTML.caracteresUTF8_2()
+  
+  convertirHTML.textohtml = convertirHTML.textohtml & "</HEAD>" & Chr$(13)
+   
+
+  convertirHTML.textohtml = convertirHTML.textohtml & "<BODY>"
+  convertirHTML.textohtml = convertirHTML.textohtml & "<font size=" & Chr$(34) & "1" & Chr$(34) & ">"
+
+    convertirHTML.textohtml = convertirHTML.textohtml & "<font face=" & Chr$(34) & "Courier New" & Chr$(34) & ">"
+    
+  convertirHTML.textohtml = convertirHTML.Parrafo(TextAreaInforme.text)
+  
+  convertirHTML.textohtml = convertirHTML.textohtml & "</font></font>"
+ convertirHTML.textohtml = convertirHTML.textohtml & "</BODY>"
+
+ convertirHTML.textohtml = convertirHTML.textohtml & " </HTML>"
+
+ 
+inicio:
+    
+
+     
+destino = "/home/" & User.name & "/listado.html"  
+  
+   File.Save(destino, convertirHTML.textohtml) 
+
+  EXEC ["firefox", destino]
+  
+fins:
+
+END
+'--------------------------------------------------------------------------------
+'----- DATOS DEL MES ---------------------------------
+'--------------------------------------------------------------------------------
+PUBLIC SUB generaMesResumenAlbaranes_Facturas()
+ DIM a AS Integer
+ DIM b AS Integer
+ DIM fila AS Integer
+ DIM numeracion AS NEW Integer[]
+ DIM c AS Integer
+ DIM lista AS NEW String[]
+ DIM esquema AS String
+  DIM datos AS String
+  DIM elementos AS Integer
+  'para subtotales
+DIM esquema2 AS String
+DIM validar AS Boolean
+DIM anterior AS String
+DIM SUBtotal AS Float
+DIM linea AS String
+ 
+'para fecha
+  DIM hastafecha AS Date
+  'for next
+  DIM c1 AS Integer
+  DIM provedorC AS String
+  DIM sumafactura AS Float
+  DIM sumaalbaran AS Float
+  DIM SUBtotalalbaran AS Float
+  DIM SUBtotalfactura AS Float
+  DIM mes AS String
+  
+
+'por cada proveedor de una determinada obra hay que:
+'una columna sumando los albaranes
+'otra columnas sumando las factura
+'imprimir un sumatorio parcial por cada proveedor y total por Obra
+'discrimirnar hasta una fecha (de entrada en obra) no la que venga en factura o albaran
+
+numeracion = OrdenacionLista.listaOrd(var.Prov_nombre, var.Prov_numero)
+
+ mes = Preguntarhastafecha()
+ TextAreaInforme.text = "Informe de Proveedores / Albaranes / Facturas / Saldos del Mes: " & Upper$(Format$(var.fechaincluida, "mmmmm/yyyy")) & "\r"
+ TextAreaInforme.text &= "Listado generado el " & Format$(Now, "dddd yyyy/mm/dd hh:nn:ss") & "\r\r"
+  
+  esquema = "Nif:        Proveedor          Albaranes         Facturas          Saldos        " 
+  textareainforme.text &= Escribe.subraya(esquema) & "\r"
+  
+  FOR c = 0 TO var.Prov_numero - 1
+  a = numeracion[c]
+  provedorC = var.Prov_id[a]
+  
+  IF var.Prov_id[a] <> "IdB" THEN
+        'lee todos los albaranes,que no esten borrados
+        ', los que sean del proveedor 
+        'y meno o igual de fecha'
+        'los que sean de la obra
+        ' le suma su valor
+        sumaalbaran = 0
+        FOR c1 = 0 TO var.alb_numero - 1
+        
+         validar = var.alb_prov[c1] = var.Prov_nombre[a] AND Format$(var.alb_fechaEnt[c1], "yyyy/mm") = Format$(var.fechaincluida, "yyyy/mm") AND var.alb_id[c1] <> "IdB" AND FMain.LabelidObraInforme.text = var.alb_idobra[c1]
+              IF validar THEN 
+              sumaalbaran += var.alb_valor[c1]
+              END IF
+        NEXT 
+          
+          
+          
+          
+          ' lee todas las facturas, que no esten borrados, las que sean del proveedor y menor o igual de fecha, le suma su valor
+            sumafactura = 0
+            FOR c1 = 0 TO var.fact_numero - 1
+            validar = var.fact_prov[c1] = var.Prov_nombre[a] AND Format$(var.fact_fecha_imp[c1], "yyyy/mm") = Format$(var.fechaincluida, "yyyy/mm") AND var.fact_id[c1] <> "IdB" AND FMain.LabelidObraInforme.text = var.fact_idobra[c1]
+              IF validar THEN 
+               sumafactura += var.fact_valor[c1]
+              END IF
+             NEXT 
+          
+            datos = var.Prov_Nif[a]
+            datos &= "|" & var.Prov_nombre[a]
+            datos &= "|" & Str$(sumaalbaran)
+            datos &= "|" & Str$(sumafactura)
+            datos &= "|" & Str$(sumaalbaran - sumafactura)
+          SUBtotalalbaran += sumaalbaran ' no poner &= que no son cadenas de caracteres
+          SUBtotalfactura += sumafactura ' no poner &= que no son cadenas de caracteres
+        '  TextAreaInforme.text &= "          Subtotal             ------------------  ---------------  -----------     " & "\r"
+          
+          TextAreaInforme.text &= Escribe.esquemaGenerico(esquema, datos, "  ###  ") & "\r" '& "\r"
+          
+  
+ENDIF 
+NEXT 
+
+'imprimo totales
+datos = Str$(SUBtotalalbaran)
+datos &= "|" & Str$(SUBtotalfactura)
+datos &= "|" & Str$(SUBtotalalbaran - SUBtotalfactura)
+            
+'hay que imprimir totales
+TextAreaInforme.text &= "             Totales          ------------------  ---------------  -----------     " & "\r"
+esquema2 = "                                ---------------  -------------    ------------     " 
+          TextAreaInforme.text &= Escribe.esquemaGenerico(esquema2, datos, "###  ") & "\r" & "\r"
+          
+
+
+TextAreaInforme.text &= "\r\r" & "Informe de Proveedores / Albaranes / Facturas / Saldos del Mes: " & Upper$(Format$(var.fechaincluida, "mmmmm/yyyy")) & "\r"
+TextAreaInforme.text &= "Listado generado el " & Format$(Now, "dddd yyyy/mm/dd hh:nn:ss") 
+ 
+END 
+
+
+PUBLIC SUB generaMesAlbaranes_Facturas()
+DIM a AS Integer
+ DIM b AS Integer
+ DIM fila AS Integer
+ DIM numeracion AS NEW Integer[]
+ DIM c AS Integer
+ DIM lista AS NEW String[]
+ DIM esquema AS String
+  DIM datos AS String
+  DIM elementos AS Integer
+  'para subtotales
+DIM esquema2 AS String
+DIM validar AS Boolean
+DIM anterior AS String
+DIM SUBtotal AS Float
+DIM linea AS String
+  DIM sumaalbaran AS Float
+  DIM mes AS String
+  
+' Message.Info("Se lista los albaranes de la obra actual ( " & FMain.ComboBoxObras.text & " )") 
+'ordenar alfabeticamente.....
+elementos = var.alb_numero 
+lista.Resize(elementos)
+ mes = Preguntarhastafecha()
+ 
+FOR a = 0 TO elementos - 1
+  lista[a] = var.alb_prov[a] & var.alb_fecha[a] & var.alb_numeroprov[a] 'ordena primero por proveedor y luego por numero de proveedor
+NEXT 
+
+numeracion = OrdenacionLista.listaOrd(lista, elementos)
+
+ TextAreaInforme.text = "Albaranes de la obra " & FMain.ComboBoxObras.text & " Mes: " & Upper$(Format$(var.fechaincluida, "mmmm/yyyy")) & "\r"
+ TextAreaInforme.text &= "Listado generado en fecha: " & Format$(Now, "dddd yyyy/mm/dd hh:nn:ss") & "\r\r"
+
+esquema2 = "                           --------------"
+esquema = "Proveedor       Numero    Valor        Fecha       FechaEnt    Imp" 
+TextAreaInforme.text &= Escribe.subraya(esquema) & "\r"
+
+  FOR c = 0 TO elementos - 1 
+    a = numeracion[c]
+  validar = var.alb_id[a] <> "IdB" AND FMain.ComboBoxObras.text = var.alb_idobra[a] AND Format$(var.fechaincluida, "mmmm/yyyy") = Format$(var.alb_fechaEnt[a], "mmmm/yyyy")
+  
+  
+  
+  IF validar THEN
+         'imprimir un sumatorio por cada proveedor:
+         IF anterior = "" THEN 
+         datos = var.alb_prov[a] 'texto
+         datos &= "|" & var.alb_numeroprov[a] 'texto 
+         datos &= "|" & var.alb_valor[a] 'numero
+         datos &= "|" & Format$(var.alb_fecha[a], "dd/mm/yy") 'texto (fecha en texto)
+         datos &= "|" & Format$(var.alb_fechaEnt[a], "dd/mm/yy") 'texto (fecha en texto)
+         datos &= "|" & var.alb_imp[a] 'texto
+         TextAreaInforme.text &= Escribe.esquemaGenerico(esquema, datos, "  #        ") & "\r"
+         anterior = var.alb_prov[a]
+         sumaalbaran += var.alb_valor[a]
+         TextAreaInforme.text &= DescompuestoAlbaran(var.alb_id[a])
+         GOTO primeraalbaran
+         ELSE 
+         'quiere decir que no es el primera factura que imprime
+            IF anterior = var.alb_prov[a] THEN
+                     'estamos en el mismo proveedor
+                      datos = var.alb_prov[a] 'texto
+                      datos &= "|" & var.alb_numeroprov[a] 'texto 
+                      datos &= "|" & var.alb_valor[a] 'numero
+                      datos &= "|" & Format$(var.alb_fecha[a], "dd/mm/yy") 'texto (fecha en texto)
+                      datos &= "|" & Format$(var.alb_fechaEnt[a], "dd/mm/yy") 'texto (fecha en texto)
+                      datos &= "|" & var.alb_imp[a] 'texto
+                      TextAreaInforme.text &= Escribe.esquemaGenerico(esquema, datos, "  #        ") & "\r"
+                      anterior = var.alb_prov[a]
+                      sumaalbaran += var.alb_valor[a]
+                      TextAreaInforme.text &= DescompuestoAlbaran(var.alb_id[a])
+                      GOTO primeraalbaran
+                      ELSE 
+                        'hemos cambiado de proveedor
+             ' tenemos que incluir el total de proveedor antes de pasar al nuevo, el subtotal
+                     datos = sumaalbaran
+                     
+                      linea = "             SUBTOTAL      --------------"
+                      TextAreaInforme.text &= linea & "\r"
+                      TextAreaInforme.text &= Escribe.esquemaGenerico(esquema2, datos, "#  ") & "\r" & "\r"
+                      SUBtotal += sumaalbaran
+                      'empiezo otro proveedor
+                      sumaalbaran = 0
+                      anterior = var.alb_valor[a]
+                      'escribo el siguiente proveedor
+                      datos = var.alb_prov[a] 'texto
+                      datos &= "|" & var.alb_numeroprov[a] 'texto 
+                      datos &= "|" & var.alb_valor[a] 'numero
+                      datos &= "|" & Format$(var.alb_fecha[a], "dd/mm/yy") 'texto (fecha en texto)
+                      datos &= "|" & Format$(var.alb_fechaEnt[a], "dd/mm/yy") 'texto (fecha en texto)
+                      datos &= "|" & var.alb_imp[a] 'texto
+                      TextAreaInforme.text &= Escribe.esquemaGenerico(esquema, datos, "  #        ") & "\r"
+                      anterior = var.alb_prov[a]
+                      sumaalbaran += var.alb_valor[a]
+                      TextAreaInforme.text &= DescompuestoAlbaran(var.alb_id[a])
+   ENDIF 
+   ENDIF 
+   END IF
+  
+  
+  primeraalbaran:
+  NEXT 
+  
+  IF anterior <> "" THEN
+             datos = sumaalbaran
+           linea = "             SUBTOTAL      --------------"
+             TextAreaInforme.text &= linea & "\r"
+             TextAreaInforme.text &= Escribe.esquemaGenerico(esquema2, datos, "#  ") & "\r" & "\r"
+             SUBtotal += sumaalbaran
+          'e imprimo el total
+                datos = SUBtotal
+            
+            linea = "                TOTAL      --------------"
+             TextAreaInforme.text &= linea & "\r"
+             TextAreaInforme.text &= Escribe.esquemaGenerico(esquema2, datos, "#  ") & "\r" & "\r"
+   END IF
+   
+   TextAreaInforme.text &= "Albaranes de la obra " & FMain.ComboBoxObras.text & " Mes: " & Upper$(Format$(var.fechaincluida, "mmmm/yyyy")) & "\r"
+    TextAreaInforme.text &= "Listado generado en fecha: " & Format$(Now, "dddd yyyy/mm/dd hh:nn:ss")   
+  
+  
+END
+
+'------------------------------------------------------------------------------------------------------------------------------------------------
+' informe de alquileres por mes
+'----------------------------------------------------------------------------------------
+PUBLIC SUB generaMesalquileres()
+  DIM a AS Integer
+ DIM b AS Integer
+ DIM fila AS Integer
+ DIM numeracion AS NEW Integer[]
+ DIM c AS Integer
+ DIM lista AS NEW String[]
+ DIM esquema AS String
+  DIM datos AS String
+  DIM elementos AS Integer
+  'para subtotales
+DIM esquema2 AS String
+DIM validar AS Boolean
+DIM anterior AS String
+DIM SUBtotal AS Float
+DIM linea AS String
+  DIM sumaalbaran AS Float
+  DIM mes AS String
+  
+' Message.Info("Se lista los albaranes de la obra actual ( " & FMain.ComboBoxObras.text & " )") 
+'ordenar alfabeticamente.....
+elementos = var.alb_numero 
+lista.Resize(elementos)
+ mes = Preguntarhastafecha()
+ 
+FOR a = 0 TO elementos - 1
+  lista[a] = var.alb_prov[a] & var.alb_numeroprov[a] 'ordena primero por proveedor y luego por numero de proveedor
+NEXT 
+
+numeracion = OrdenacionLista.listaOrd(lista, elementos)
+
+ TextAreaInforme.text = "Albaranes de la obra " & FMain.ComboBoxObras.text & " Mes: " & Upper$(Format$(var.fechaincluida, "mmmm/yyyy")) & "\r"
+ TextAreaInforme.text &= "Listado generado en fecha: " & Format$(Now, "dddd yyyy/mm/dd hh:nn:ss") & "\r\r"
+
+esquema2 = "                           --------------"
+esquema = "Proveedor       Numero    Valor        Fecha       FechaEnt    Imp" 
+TextAreaInforme.text &= Escribe.subraya(esquema) & "\r"
+
+  FOR c = 0 TO elementos - 1 
+    a = numeracion[c]
+  validar = var.alb_id[a] <> "IdB" AND Fmain.ComboBoxObras.text = var.alb_idobra[a] AND Format$(var.fechaincluida, "mmmm/yyyy") = Format$(var.alb_fechaEnt[a], "mmmm/yyyy") AND DescompuestoAlbaranAlquileres(var.alb_id[a]) = "maq.med.aux"
+  
+  PRINT DescompuestoAlbaranAlquileres(var.alb_id[a])
+  IF validar THEN
+         'imprimir un sumatorio por cada proveedor:
+         IF anterior = "" THEN 
+         datos = var.alb_prov[a] 'texto
+         datos &= "|" & var.alb_numeroprov[a] 'texto 
+         datos &= "|" & var.alb_valor[a] 'numero
+         datos &= "|" & Format$(var.alb_fecha[a], "dd/mm/yy") 'texto (fecha en texto)
+         datos &= "|" & Format$(var.alb_fechaEnt[a], "dd/mm/yy") 'texto (fecha en texto)
+         datos &= "|" & var.alb_imp[a] 'texto
+
+         TextAreaInforme.text &= Escribe.esquemaGenerico(esquema, datos, "  #        ") & "\r"
+         anterior = var.alb_prov[a]
+         sumaalbaran += var.alb_valor[a]
+         TextAreaInforme.text &= DescompuestoAlbaran(var.alb_id[a])
+         GOTO primeraalbaran
+         ELSE 
+         'quiere decir que no es el primera factura que imprime
+            IF anterior = var.alb_prov[a] THEN
+                     'estamos en el mismo proveedor
+                      datos = var.alb_prov[a] 'texto
+                      datos &= "|" & var.alb_numeroprov[a] 'texto 
+                      datos &= "|" & var.alb_valor[a] 'numero
+                      datos &= "|" & Format$(var.alb_fecha[a], "dd/mm/yy") 'texto (fecha en texto)
+                      datos &= "|" & Format$(var.alb_fechaEnt[a], "dd/mm/yy") 'texto (fecha en texto)
+                      datos &= "|" & var.alb_imp[a] 'texto
+                      TextAreaInforme.text &= Escribe.esquemaGenerico(esquema, datos, "  #        ") & "\r"
+                      anterior = var.alb_prov[a]
+                      sumaalbaran += var.alb_valor[a]
+                      TextAreaInforme.text &= DescompuestoAlbaran(var.alb_id[a])
+                      GOTO primeraalbaran
+                      ELSE 
+                        'hemos cambiado de proveedor
+             ' tenemos que incluir el total de proveedor antes de pasar al nuevo, el subtotal
+                     datos = sumaalbaran
+                     
+                      linea = "             SUBTOTAL      --------------"
+                      TextAreaInforme.text &= linea & "\r"
+                      TextAreaInforme.text &= Escribe.esquemaGenerico(esquema2, datos, "#  ") & "\r" & "\r"
+                      SUBtotal += sumaalbaran
+                      'empiezo otro proveedor
+                      sumaalbaran = 0
+                      anterior = var.alb_valor[a]
+                      'escribo el siguiente proveedor
+                      datos = var.alb_prov[a] 'texto
+                      datos &= "|" & var.alb_numeroprov[a] 'texto 
+                      datos &= "|" & var.alb_valor[a] 'numero
+                      datos &= "|" & Format$(var.alb_fecha[a], "dd/mm/yy") 'texto (fecha en texto)
+                      datos &= "|" & Format$(var.alb_fechaEnt[a], "dd/mm/yy") 'texto (fecha en texto)
+                      datos &= "|" & var.alb_imp[a] 'texto
+                      TextAreaInforme.text &= Escribe.esquemaGenerico(esquema, datos, "  #        ") & "\r"
+                      anterior = var.alb_prov[a]
+                      sumaalbaran += var.alb_valor[a]
+                      TextAreaInforme.text &= DescompuestoAlbaran(var.alb_id[a])
+   ENDIF 
+   ENDIF 
+   END IF
+  
+  
+  primeraalbaran:
+  NEXT 
+  
+  IF anterior <> "" THEN
+             datos = sumaalbaran
+           linea = "             SUBTOTAL      --------------"
+             TextAreaInforme.text &= linea & "\r"
+             TextAreaInforme.text &= Escribe.esquemaGenerico(esquema2, datos, "#  ") & "\r" & "\r"
+             SUBtotal += sumaalbaran
+          'e imprimo el total
+                datos = SUBtotal
+            
+            linea = "                TOTAL      --------------"
+             TextAreaInforme.text &= linea & "\r"
+             TextAreaInforme.text &= Escribe.esquemaGenerico(esquema2, datos, "#  ") & "\r" & "\r"
+   END IF
+   
+   TextAreaInforme.text &= "Albaranes de la obra " & FMain.ComboBoxObras.text & " Mes: " & Upper$(Format$(var.fechaincluida, "mmmm/yyyy")) & "\r"
+    TextAreaInforme.text &= "Listado generado en fecha: " & Format$(Now, "dddd yyyy/mm/dd hh:nn:ss")   
+  
+  
+  
+END
+
+'comprobar que el descompuesto del albaran contiene materiales alquilados
+FUNCTION DescompuestoAlbaranAlquileres(idalbaran AS String) AS String
+  DIM A AS Integer
+      
+FOR a = 0 TO var.entrada_numero - 1
+  IF var.entrada_idconcepto[a] <> "IdB" AND idalbaran = var.entrada_id[a] AND buscar.buscatipoconcepto(var.entrada_idconcepto[a]) = "maq.med.aux" THEN
+           RETURN "maq.med.aux"
+     
+      END IF
+NEXT
+  
+  RETURN "no"
+  
+END
+
+
+
+'-----------------------------------------------------------------------------------------------------------------------
+'listado de albaranes por dia....
+'----------------------------------------------------------------------------------------
+
+PUBLIC SUB generaDescompuestosAlbDia()
+  DIM a AS Integer
+ DIM b AS Integer
+ DIM fila AS Integer
+ DIM numeracion AS NEW Integer[]
+ DIM c AS Integer
+ DIM lista AS NEW String[]
+ DIM esquema AS String
+  DIM datos AS String
+  DIM elementos AS Integer
+  'para subtotales
+DIM esquema2 AS String
+DIM validar AS Boolean
+DIM anterior AS String
+DIM SUBtotal AS Float
+DIM linea AS String
+  DIM sumaalbaran AS Float
+  
+  DIM fecha_dia AS String
+
+
+elementos = var.alb_numero 
+lista.Resize(elementos)
+ 
+fecha_dia = Preguntarhastafecha()
+
+FOR a = 0 TO elementos - 1
+  lista[a] = var.alb_prov[a] & var.alb_fecha[a] & var.alb_numeroprov[a] 'ordena primero por proveedor, fecha y luego por numero de proveedor
+NEXT 
+
+numeracion = OrdenacionLista.listaOrd(lista, elementos)
+
+ TextAreaInforme.text = "Albaran de la obra " & FMain.ComboBoxObras.text & ". Albaranes de fecha: " & fecha_dia & "\r"
+ TextAreaInforme.text &= "Listado generado en fecha: " & Format$(Now, "dddd yyyy/mm/dd hh:nn:ss") & "\r\r"
+
+esquema2 = "                           --------------"
+esquema = "Proveedor       Numero    Valor        Fecha       FechaEnt    Imp" 
+TextAreaInforme.text &= Escribe.subraya(esquema) & "\r"
+
+  FOR c = 0 TO elementos - 1 
+    a = numeracion[c]
+  validar = var.alb_id[a] <> "IdB" AND FMain.ComboBoxObras.text = var.alb_idobra[a] AND fecha_dia = var.alb_fecha[a]
+  
+  'PRINT fecha_dia, var.alb_fecha[a]
+  
+  IF validar THEN
+         'imprimir un sumatorio por cada proveedor:
+         IF anterior = "" THEN 
+         datos = var.alb_prov[a] 'texto
+         datos &= "|" & var.alb_numeroprov[a] 'texto 
+         datos &= "|" & var.alb_valor[a] 'numero
+         datos &= "|" & Format$(var.alb_fecha[a], "dd/mm/yy") 'texto (fecha en texto)
+         datos &= "|" & Format$(var.alb_fechaEnt[a], "dd/mm/yy") 'texto (fecha en texto)
+         datos &= "|" & var.alb_imp[a] 'texto
+         TextAreaInforme.text &= Escribe.esquemaGenerico(esquema, datos, "  #        ") & "\r"
+         anterior = var.alb_prov[a]
+         sumaalbaran += var.alb_valor[a]
+         TextAreaInforme.text &= DescompuestoAlbaran(var.alb_id[a])
+         GOTO primeraalbaran
+         ELSE 
+         'quiere decir que no es el primera factura que imprime
+            IF anterior = var.alb_prov[a] THEN
+                     'estamos en el mismo proveedor
+                      datos = var.alb_prov[a] 'texto
+                      datos &= "|" & var.alb_numeroprov[a] 'texto 
+                      datos &= "|" & var.alb_valor[a] 'numero
+                      datos &= "|" & Format$(var.alb_fecha[a], "dd/mm/yy") 'texto (fecha en texto)
+                      datos &= "|" & Format$(var.alb_fechaEnt[a], "dd/mm/yy") 'texto (fecha en texto)
+                      datos &= "|" & var.alb_imp[a] 'texto
+                      TextAreaInforme.text &= Escribe.esquemaGenerico(esquema, datos, "  #        ") & "\r"
+                      anterior = var.alb_prov[a]
+                      sumaalbaran += var.alb_valor[a]
+                      TextAreaInforme.text &= DescompuestoAlbaran(var.alb_id[a])
+                      GOTO primeraalbaran
+                      ELSE 
+                        'hemos cambiado de proveedor
+             ' tenemos que incluir el total de proveedor antes de pasar al nuevo, el subtotal
+                     datos = sumaalbaran
+                     
+                      linea = "             SUBTOTAL      --------------"
+                      TextAreaInforme.text &= linea & "\r"
+                      TextAreaInforme.text &= Escribe.esquemaGenerico(esquema2, datos, "#  ") & "\r" & "\r"
+                      SUBtotal += sumaalbaran
+                      'empiezo otro proveedor
+                      sumaalbaran = 0
+                      anterior = var.alb_valor[a]
+                      'escribo el siguiente proveedor
+                      datos = var.alb_prov[a] 'texto
+                      datos &= "|" & var.alb_numeroprov[a] 'texto 
+                      datos &= "|" & var.alb_valor[a] 'numero
+                      datos &= "|" & Format$(var.alb_fecha[a], "dd/mm/yy") 'texto (fecha en texto)
+                      datos &= "|" & Format$(var.alb_fechaEnt[a], "dd/mm/yy") 'texto (fecha en texto)
+                      datos &= "|" & var.alb_imp[a] 'texto
+                      TextAreaInforme.text &= Escribe.esquemaGenerico(esquema, datos, "  #        ") & "\r"
+                      anterior = var.alb_prov[a]
+                      sumaalbaran += var.alb_valor[a]
+                      TextAreaInforme.text &= DescompuestoAlbaran(var.alb_id[a])
+   ENDIF 
+   ENDIF 
+   END IF
+  
+  
+  primeraalbaran:
+  NEXT 
+  
+  IF anterior <> "" THEN
+             datos = sumaalbaran
+           linea = "             SUBTOTAL      --------------"
+             TextAreaInforme.text &= linea & "\r"
+             TextAreaInforme.text &= Escribe.esquemaGenerico(esquema2, datos, "#  ") & "\r" & "\r"
+             SUBtotal += sumaalbaran
+          'e imprimo el total
+                datos = SUBtotal
+            
+            linea = "                TOTAL      --------------"
+             TextAreaInforme.text &= linea & "\r"
+             TextAreaInforme.text &= Escribe.esquemaGenerico(esquema2, datos, "#  ") & "\r" & "\r"
+   END IF
+    TextAreaInforme.text &= "\r\r" & "Albaran de la obra " & FMain.ComboBoxObras.text & "\r" & "Listado generado en fecha: " & Format$(Now, "dddd yyyy/mm/dd hh:nn:ss") 
+  
+END
+
+
+
+

@@ -1,0 +1,144 @@
+' Gambas module file
+
+'Sistema de comprobacion de version actualizada
+
+PUBLIC SUB Update(ruta AS String, archivo_update AS String, programa AS String, version_actual AS String)
+  'descargo archivo con la informacion de la actualizacion 
+  'desde ruta
+  ' ejmplo de ruta: http://www.jusabejusabe.webcindario.com/index.html
+
+  ' 
+  DIM arr_cadenas AS String[] 
+  DIM a AS String
+ DIM cadenas AS String
+ DIM salida AS String 'texto que contiene la salida que genera el comando
+ DIM comando AS String
+ DIM c AS String
+  DIM genera_salida AS String
+ DIM contador AS Integer
+ DIM contador2 AS Integer
+DIM lectura AS String[]
+
+'si existe borro el archivo archivo.update 
+'comando = "cd " & User.home
+ 'ejecuta_comando(comando) 'v.008 ' para que este en el mismo directorio que donde se ejecute el programa principal
+
+
+
+
+
+comando = "rm " & User.home & "/" & archivo_update
+ ejecuta_comando(comando) 'v.008
+ 
+comando = "wget -o " & User.home & "/" & "reporte.txt " & ruta & archivo_update
+  ejecuta_comando(comando)
+ 
+comando = "mv reporte.txt " & User.Home 'nueva linea
+ejecuta_comando(comando) 'nueva linea 
+ 
+lectura = Split(File.LOAD(User.home & "/reporte.txt"), "\n")
+
+FUpdate.TextArea1.text = ""
+
+FOR contador = 0 TO lectura.Count - 1 
+FUpdate.TextArea1.text &= lectura[contador] & "\n"
+NEXT
+  
+ 
+ 
+'carga archivo update, para procesarlo 
+
+ TRY arr_cadenas = Split(File.LOAD(User.home & "/" & archivo_update), "\n")
+
+IF ERROR THEN 
+      Message.Info("Error producido en la lectura del archivo de update. Debes de ejecutar el programa .gambas en el directorio /home/usuario ")
+      GOTO fin
+      END IF
+      
+' una vez descargado hay que leer el archivo de version
+'0: [version del programa]
+'1: nos indica el numero de la version
+'2: [nombre programa]
+'3: contiene el nombre del programa
+'4: [archivos a descargar]
+'5: archivo a descargar 1
+'6: archivo a descargar 2...
+
+
+
+'compara a que programa se refiere el archivo update
+IF arr_cadenas[3] <> programa THEN 
+   Message.Error(("El archivo de actualizacion no hace referencia a este programa"))
+   GOTO FIN 
+   END IF 
+
+' compara la version del archivo en el servidor con la del programa actual
+IF arr_cadenas[1] = version_actual THEN 
+    Message.Info(("ya tienes la version mas actualizada"))
+    ELSE 
+    IF arr_cadenas[1] > version_actual THEN 
+     FUpdate.ToolButton1.text = ("version en el servidor es mas actual.Descargandola en la ruta /home/usuario...")
+     ' nota importante:
+     ' para que puedas ejecutar la linea anterior sin error deben de ser publicos los formularios
+     ' en el menu: 
+     ' Proyecto / Propiedades / Opciones / Los controles de formulario son publicos / 
+     ' elige Si
+     FOR contador = 5 TO arr_cadenas.Count - 1
+     
+     comando = "wget  -o " & User.home & "/" & "reporte.txt " & ruta & "/" & arr_cadenas[contador]
+       ejecuta_comando(comando)
+       
+       lectura = Split(File.LOAD(User.home & "/reporte.txt"), "\n")
+       
+       FUpdate.TextArea1.text &= "\n"
+        FOR contador2 = 0 TO lectura.Count - 1 
+          FUpdate.TextArea1.text &= lectura[contador] & "\n"
+        NEXT
+       
+       
+       
+     NEXT
+ELSE 
+  Message.Info(("la version del servidor es mas antigua"))
+     
+    END IF
+
+
+   END IF
+    
+
+
+ 
+
+
+ 
+
+  
+  
+
+
+'FMain.Textarea1.Text = cadenas
+
+' nota importante:
+' para que puedas ejecutar sin error esta linea debes en el menu: 
+' Proyecto / Propiedades / Opciones / Los controles de formulario son publicos / Si
+
+  
+fin:
+
+comando = "rm " & archivo_update 'borra el archivo update descargado"
+ ejecuta_comando(comando) 'v.008
+  
+END
+
+
+PUBLIC SUB ejecuta_comando(comando AS String)
+ DIM hproc AS Process
+  
+  hproc = SHELL comando 
+ 'espero mientras se ejecuta el comando shell
+ DO WHILE hproc.state = process.running
+ WAIT 0.1
+ LOOP 
+  
+END

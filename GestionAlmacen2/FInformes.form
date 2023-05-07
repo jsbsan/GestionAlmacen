@@ -1,0 +1,35 @@
+# Gambas Form File 2.0
+
+{ Form Form
+  MoveScaled(0,0,65,26)
+  Text = ("")
+  AutoResize = True
+  { ToolButton1 ToolButton
+    MoveScaled(1,0,10,3)
+    Text = ("a  .TXT")
+    Picture = Picture["icon:/16/new"]
+    Border = True
+  }
+  { ToolButtonHtml ToolButton
+    MoveScaled(13,0,15,3)
+    Text = ("a  .HTML")
+    Picture = Picture["icon:/16/html"]
+    Border = True
+  }
+  { ToolButton3 ToolButton
+    MoveScaled(30,0,18,3)
+    Text = ("al Portapapeles")
+    Picture = Picture["icon:/16/copy"]
+    Border = True
+  }
+  { Button1 Button
+    MoveScaled(50,0,14,3)
+    Text = ("Salir")
+  }
+  { TextAreaInforme TextArea
+    MoveScaled(0,4,64,13)
+    Font = Font["Courier,-2"]
+    Text = ("")
+    ReadOnly = True
+  }
+}

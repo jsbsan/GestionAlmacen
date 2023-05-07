@@ -1,0 +1,22 @@
+' Gambas class file
+
+
+PUBLIC SUB Form_Open()
+
+  arbol.rellena()
+  
+
+END
+
+PUBLIC SUB Form_Resize()
+
+ TreeView1.width = ME.Width - 10
+  TreeView1.height = ME.Height - 65
+END
+
+PUBLIC SUB actualizar_arbol_Click()
+
+  TreeView1.Clear
+  arbol.rellena()
+
+END

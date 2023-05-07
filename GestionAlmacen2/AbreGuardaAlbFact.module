@@ -1,0 +1,291 @@
+' Gambas module file
+PUBLIC SUB abrir()
+DIM c AS String
+DIM arr_cadenas AS String[]
+DIM a AS Integer
+DIM b AS Integer
+DIM codigofinline AS String
+codigofinline = "|"
+Dialog.Title = "Seleccione un archivo para abrir"
+Dialog.Filter = ["", ""]
+Dialog.Path = User.Name
+Dialog.Filter = ["*.albfact", "Datos de Albaranes y Facturas"]
+
+IF NOT Dialog.OpenFile() THEN
+  TRY arr_cadenas = Split(File.LOAD(Dialog.Path), codigofinline)
+  
+  IF ERROR THEN 
+      Message.Info("Error producido en la lectura del archivo")
+      GOTO finabreconcepto
+      END IF
+  
+  
+  
+  
+  IF arr_cadenas[0] = "v0.0.1" THEN 
+       FMain.TextBoxRutaAlbFact.text = Dialog.Path
+        var.alb_numero = Val(arr_cadenas[2]) 'numero de conceptos que contiene el archivo
+          b = 2
+        'amplio memoria de los albaranes
+     'redimensiono
+    var.alb_id.Resize(var.alb_numero) 'id automatico del programa
+    var.alb_numeroprov.resize(var.alb_numero) 'numro que tiene el albaran (lo pone el proveedor)
+    var.alb_prov.resize(var.alb_numero)  'proveedor de este albaran
+    var.alb_fecha.resize(var.alb_numero) 'fecha del albaran
+    var.alb_idobra.Resize(var.alb_numero) 
+    var.alb_imp.Resize(var.alb_numero)
+    var.alb_fechaEnt.resize(var.alb_numero)   'entrada en obra
+    var.albmemoria.resize(var.alb_numero)
+    var.alb_valor.resize(var.alb_numero)
+    'escribo datos de proveedores
+        FOR a = 0 TO var.alb_numero - 1
+          b += 1
+          var.alb_id[a] = arr_cadenas[b]
+          b += 1
+          var.alb_numeroprov[a] = arr_cadenas[b]
+          b += 1
+          var.alb_prov[a] = arr_cadenas[b]
+          b += 1 
+          var.alb_fecha[a] = arr_cadenas[b]
+          b += 1
+          var.alb_idobra[a] = arr_cadenas[b]
+          b += 1
+          var.alb_imp[a] = arr_cadenas[b] 
+          b += 1
+          var.alb_fechaEnt[a] = arr_cadenas[b]
+          b += 1
+          var.albmemoria[a] = arr_cadenas[b]
+          b += 1
+          var.alb_valor[a] = arr_cadenas[b]
+     NEXT
+     'entradas de conceptos en albaranes
+     b += 1
+     var.entrada_numero = Val(arr_cadenas[b]) 
+     
+     
+     'conceptos dentro de albaranes
+        var.entrada_id.resize(var.entrada_numero)
+        var.entrada_idconcepto.resize(var.entrada_numero)
+        var.entrada_medidaconcepto.resize(var.entrada_numero) 'le ponga la medida del concepto que tiene el albaran
+        var.entrada_precio.resize(var.entrada_numero) 'precio del cooncepto
+        var.entrada_tipoprecio.resize(var.entrada_numero) ' contrado, estimacion, oferta
+        var.entrada_memoria.resize(var.entrada_numero)   
+        var.entrada_salida.Resize(var.entrada_numero)   
+        
+        FOR a = 0 TO var.entrada_numero - 1
+          b += 1
+          var.entrada_id[a] = arr_cadenas[b]
+           b += 1
+          var.entrada_idconcepto[a] = arr_cadenas[b]
+           b += 1
+          var.entrada_medidaconcepto[a] = arr_cadenas[b]
+           b += 1
+          var.entrada_precio[a] = arr_cadenas[b]
+           b += 1
+          var.entrada_tipoprecio[a] = arr_cadenas[b]
+           b += 1
+          var.entrada_memoria[a] = arr_cadenas[b]
+           b += 1
+          var.entrada_salida[a] = arr_cadenas[b]
+     NEXT
+
+'facturas
+    
+    b += 1
+    var.fact_numero = Val(arr_cadenas[b]) 
+    
+    var.fact_id.Resize(var.fact_numero) 'id dado por el programa a cada factura introducida
+    var.fact_prov.Resize(var.fact_numero) 'nombre del proveedor de esta factura
+    var.fact_nprov.Resize(var.fact_numero) 'numero de factura que da n ºfacturadadaproveedor   (nº de factura que le da el proveedor)
+    var.fact_idobra.Resize(var.fact_numero) 'obra a la que pertenece la factura
+    var.fact_fecha.Resize(var.fact_numero) 'fecha de la factura (la que tiene la factura)
+    var.fact_fecha_imp.Resize(var.fact_numero) 'fecha de imputacion factura
+    var.fact_valor.Resize(var.fact_numero)
+    
+    
+    
+    
+    
+      FOR a = 0 TO var.fact_numero - 1
+      b += 1
+        var.fact_id[a] = arr_cadenas[b]
+           b += 1
+          var.fact_prov[a] = arr_cadenas[b]
+           b += 1
+          var.fact_nprov[a] = arr_cadenas[b]
+           b += 1
+          var.fact_idobra[a] = arr_cadenas[b]
+           b += 1
+          var.fact_fecha[a] = arr_cadenas[b]
+           b += 1 
+            var.fact_fecha_imp[a] = arr_cadenas[b]
+           b += 1
+            var.fact_valor[a] = arr_cadenas[b]
+NEXT 
+   
+
+
+
+
+
+     '------------------------------------------------------------------
+     ' final de lectura de archivo
+     '-------------------------------------------------------------------
+     
+     FMain.TS1[2].Enabled = TRUE
+     FMain.TS1[3].Enabled = TRUE 'albaranes
+     FMain.TS1[4].Enabled = TRUE 'salidas
+     FMain.TS1[5].Enabled = TRUE 'facturas
+     
+      Message.Info("Archivo leido", "Aceptar") 
+      
+      
+      'muestro en albaranes, facturas, salidas
+      
+       'BorradosDatosIniciales.dibujogridconceptos()
+      
+      
+      
+      ELSE
+      Message.Error("Archivo no compatible con esta version", "Aceptar")
+      GOTO finabreconcepto
+      ENDIF 
+
+END IF
+finabreconcepto:
+END
+
+'--------------------------------------------------------------------------------
+PUBLIC SUB salva(OPTIONAL ruta AS String, OPTIONAL sobreescribe AS String)
+DIM lineas AS String
+DIM destino AS String
+DIM numArchivo AS Integer
+DIM a AS Integer
+DIM codigofinline AS String
+DIM cuentaAlbaranes AS Integer
+
+inicio:
+var.esperaalb = "si"
+
+IF ruta = "" THEN 
+  destino = ruta
+  Dialog.Title = "Escriba  un nombre de archivo para guardar los datos de albaranes y facturas"
+  Dialog.Filter = ["", ""]
+  Dialog.Path = User.Name
+  Dialog.Filter = ["*.albfact", "Datos de Albaranes y Facturas"]
+  a = Dialog.SaveFile()
+  IF a = -1 THEN GOTO fins
+     IF Right$(Dialog.Path, Len(".albfact")) <> ".albfact" THEN
+    destino = Dialog.Path & ".albfact"
+    ELSE
+    destino = Dialog.Path
+    END IF
+
+ELSE
+
+destino = ruta
+END IF
+
+
+  IF sobreescribe = "sobreescribe" THEN GOTO finsobreescribe
+
+
+'Comprueba si existe el archivo, en tal caso pide confirmacion de sobreescritura
+  IF AbreGuardaProveedores.compruebaexistencia(DESTINO, "Albaranes") = 2 THEN 
+  GOTO inicio
+  END IF
+  
+finsobreescribe:
+
+
+  codigofinline = "|"
+  lineas = "v0.0.1" & codigofinline 'informo version
+  Lineas &= "gestionalmacen.090409" & codigofinline ' programa que ha echo el archivo
+  
+  
+  'guardo eñ numero de los albaranes no borrados
+  cuentaAlbaranes = 0
+  FOR a = 0 TO var.alb_numero - 1
+  IF var.alb_id[a] <> "IdB" THEN cuentaAlbaranes += 1
+  NEXT 
+   
+  Lineas &= Str$(cuentaAlbaranes) & codigofinline 'numero de albaranes que contiene el archivo sin estar borrados
+  
+  'escribo datos de proveedores
+    FOR a = 0 TO var.alb_numero - 1
+      'PRINT var.Prov_id[a]; "IdB"; var.Prov_id[a] = "IdB"
+        IF var.alb_id[a] <> "IdB" THEN 
+          'los datos borrados no los salvo
+            Lineas &= var.alb_id[a] & codigofinline '= "Idalb" & Str$(Now)
+            Lineas &= var.alb_numeroprov[a] & codigofinline ' = fmain.textboxnalb.text
+            Lineas &= var.alb_prov[a] & codigofinline '= fmain.ComboBoxALBPROV.text 'proveedor de este albaran
+            Lineas &= var.alb_fecha[a] & codigofinline '= fmain.ValueBoxFAlb.value 'fecha del albaran
+            Lineas &= var.alb_idobra[a] & codigofinline '= fmain.ComboBoxObraAlbaran.text
+            Lineas &= var.alb_imp[a] & codigofinline ' = fmain.LabelImputadoAlb.text
+            Lineas &= var.alb_fechaEnt[a] & codigofinline
+            Lineas &= var.albmemoria[a] & codigofinline
+            Lineas &= var.alb_valor[a] & codigofinline
+          END IF
+      NEXT
+
+'guardo las entradas de conceptos en los albaranes
+  Lineas &= Str$(var.entrada_numero) & codigofinline
+  FOR a = 0 TO var.entrada_numero - 1
+    'almacenos datos
+   Lineas &= var.entrada_id[a] & codigofinline ' = idalbaran 'debe de ser el numero id de albaran (que da automaticamente el programa)
+    Lineas &= var.entrada_idconcepto[a] & codigofinline '= idconcepto
+    'procedente del formulario entradaconceptoMedicion
+    
+    Lineas &= var.entrada_medidaconcepto[a] & codigofinline '= var.FentradaconceptoMedion   'le ponga la medida del concepto que tiene el albaran
+    Lineas &= var.entrada_precio[a] & codigofinline '= var.FentradaconceptoMedionPrecio 'precio del cooncepto
+    Lineas &= var.entrada_tipoprecio[a] & codigofinline ' = VAR.FentradaconceptoPrecoTipo
+    Lineas &= var.entrada_memoria[a] & codigofinline ' = VAR.FentradaconceptoPrecoTipo
+    Lineas &= var.entrada_salida[a] & codigofinline
+    NEXT 
+
+
+'guardo las facturas
+
+
+
+'las facturas no se pueden borrar, con lo cual no se pueden quitar borradas
+
+
+   Lineas &= Str$(var.fact_numero) & codigofinline
+  FOR a = 0 TO var.fact_numero - 1
+   'almacenos datos
+    Lineas &= var.fact_id[a] & codigofinline ' = "Idfac" & Str$(Now) 'LabelIdFactura.text 'contiene el id de la factura dado por el programa
+    Lineas &= var.fact_prov[a] & codigofinline '= fmain.Comboboxprovfact.text 'contiene el proveedor 'nombre del proveedor de esta factura
+    Lineas &= var.fact_nprov[a] & codigofinline '= fmain.textboxnfactura.text 'contiene el numero de factura que le da el proveedor 'numero de factura que da n ºfacturadadaproveedor   (nº de factura que le da el proveedor)
+    Lineas &= var.fact_idobra[a] & codigofinline ' = fmain.ComboBoxObraFactura.text 'obra de la factura 'obra a la que pertenece la factura
+    Lineas &= var.fact_fecha[a] & codigofinline '= fmain.ValueBoxFFact.value ' fecha factura 'fecha de la factura (la que tiene la factura)
+    Lineas &= var.fact_fecha_imp[a] & codigofinline '= fmain.ValueBoxFImp.value 'fecha de imputacion'fecha de imputacion factura
+    Lineas &= var.fact_valor[a] & codigofinline ' = 0 ' suma de los valores de los albaranes de la factura
+NEXT 
+
+' - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+' ' PASO A GUARDAR LOS DATOS
+' - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+    IF destino = "" THEN 
+        Message.Info("No se pudo guardar")
+        GOTO fins
+        ENDIF 
+        
+    File.Save(destino, lineas)
+     
+    FMain.TextBoxRutaAlbFact.text = destino
+    
+    
+     IF sobreescribe = "sobreescribe" THEN 
+    FMain.ProgressBarGuardar.value = FMain.ProgressBarGuardar.value + 0.33
+    GOTO fins
+    ENDIF 
+    
+     IF ruta <> "" THEN  
+     Message.Info("Archivo salvado", "Aceptar")
+     ENDIF 
+    
+    
+fins:
+var.esperaalb = ""
+END
